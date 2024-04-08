@@ -47,5 +47,8 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.timber)
     implementation(libs.koin.android)
+    implementation(libs.retrofit)
+    implementation(libs.okHttp)
+    implementation(libs.okHttpLogger)
     testImplementation(libs.junit)
 }
