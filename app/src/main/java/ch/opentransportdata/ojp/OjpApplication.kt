@@ -1,7 +1,9 @@
 package ch.opentransportdata.ojp
 
 import android.app.Application
+import ch.opentransportdata.ojp.di.dataSourceModule
 import ch.opentransportdata.ojp.di.networkModule
+import ch.opentransportdata.ojp.di.repositoryModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 import timber.log.Timber
@@ -16,7 +18,7 @@ class OjpApplication : Application() {
         initializeLogging()
         startKoin {
             androidContext(this@OjpApplication)
-            modules(listOf(networkModule))
+            modules(listOf(networkModule, repositoryModule, dataSourceModule))
         }
     }
 

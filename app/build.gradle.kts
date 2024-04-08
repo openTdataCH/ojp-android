@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.tikRetrofit)
     implementation(libs.tikAnnotation)
     implementation(libs.tikConverters)
+    implementation(libs.joda)
 
     testImplementation(libs.junit)
 }
