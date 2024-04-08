@@ -1,6 +1,8 @@
 package ch.opentransportdata.ojp.di
 
 import ch.opentransportdata.ojp.BuildConfig
+import ch.opentransportdata.ojp.di.interceptor.TokenInterceptor
+import ch.opentransportdata.ojp.domain.usecase.Initializer
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
@@ -19,6 +21,7 @@ val networkModule = module {
     single(named("ojpHttpClient")) { provideOkHttpClient(get(), get()) }
     single(named("ojpRetrofit")) { provideRetrofit(get(named("ojpHttpClient")), get(), get()) }
     single { provideTikXml() }
+    single<TokenInterceptor> { TokenInterceptor(get()) }
 }
 
 fun provideLoggingInterceptor(): HttpLoggingInterceptor {
@@ -32,9 +35,10 @@ fun provideLoggingInterceptor(): HttpLoggingInterceptor {
     return loggingInterceptor
 }
 
-fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, tokenInterceptor: TokenInterceptor): OkHttpClient {
     return OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
+        .addInterceptor(tokenInterceptor)
         .readTimeout(15000, TimeUnit.MILLISECONDS)
         .build()
 }
