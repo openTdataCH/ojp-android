@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit
  */
 val networkModule = module {
     single { provideLoggingInterceptor() }
-    single(named("ojpHttpClient")) { provideOkHttpClient(get()) }
-    single(named("ojpRetrofit")) { provideRetrofit(get(named("ojpHttpClient")), get()) }
+    single(named("ojpHttpClient")) { provideOkHttpClient(get(), get()) }
+    single(named("ojpRetrofit")) { provideRetrofit(get(named("ojpHttpClient")), get(), get()) }
     single { provideTikXml() }
 }
 
@@ -39,8 +39,9 @@ fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClien
         .build()
 }
 
-fun provideRetrofit(ojpHttpClient: OkHttpClient, tikXml: TikXml): Retrofit {
+fun provideRetrofit(ojpHttpClient: OkHttpClient, tikXml: TikXml, initializer: Initializer): Retrofit {
     return Retrofit.Builder()
+        .baseUrl(initializer.baseUrl)
         .client(ojpHttpClient)
         .addConverterFactory(TikXmlConverterFactory.create(tikXml))
         .build()
