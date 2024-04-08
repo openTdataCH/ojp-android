@@ -1,6 +1,9 @@
 package ch.opentransportdata.ojp.di
 
 import ch.opentransportdata.ojp.BuildConfig
+import com.tickaroo.tikxml.TikXml
+import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter
+import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
@@ -14,7 +17,8 @@ import java.util.concurrent.TimeUnit
 val networkModule = module {
     single { provideLoggingInterceptor() }
     single(named("ojpHttpClient")) { provideOkHttpClient(get()) }
-    single(named("ojpRetrofit")) { provideRetrofit(get(named("ojpHttpClient"))) }
+    single(named("ojpRetrofit")) { provideRetrofit(get(named("ojpHttpClient")), get()) }
+    single { provideTikXml() }
 }
 
 fun provideLoggingInterceptor(): HttpLoggingInterceptor {
@@ -35,8 +39,16 @@ fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClien
         .build()
 }
 
-fun provideRetrofit(ojpHttpClient: OkHttpClient): Retrofit {
+fun provideRetrofit(ojpHttpClient: OkHttpClient, tikXml: TikXml): Retrofit {
     return Retrofit.Builder()
         .client(ojpHttpClient)
+        .addConverterFactory(TikXmlConverterFactory.create(tikXml))
+        .build()
+}
+
+fun provideTikXml(): TikXml {
+    return TikXml.Builder()
+        .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
+        .exceptionOnUnreadXml(false)
         .build()
 }

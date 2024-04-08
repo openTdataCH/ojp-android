@@ -10,6 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            setUrl("http://oss.sonatype.org/content/repositories/snapshots")
+            isAllowInsecureProtocol = true
+        }
     }
 }
 

@@ -50,5 +50,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.okHttp)
     implementation(libs.okHttpLogger)
+    implementation(libs.tikRetrofit)
+    implementation(libs.tikAnnotation)
+    implementation(libs.tikConverters)
+
     testImplementation(libs.junit)
 }
