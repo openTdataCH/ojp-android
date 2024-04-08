@@ -46,5 +46,6 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.timber)
+    implementation(libs.koin.android)
     testImplementation(libs.junit)
 }

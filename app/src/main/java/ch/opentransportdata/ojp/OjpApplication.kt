@@ -1,6 +1,8 @@
 package ch.opentransportdata.ojp
 
 import android.app.Application
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.GlobalContext.startKoin
 import timber.log.Timber
 
 /**
@@ -11,6 +13,9 @@ class OjpApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         initializeLogging()
+        startKoin {
+            androidContext(this@OjpApplication)
+        }
     }
 
     private fun initializeLogging() {
