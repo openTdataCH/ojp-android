@@ -3,12 +3,19 @@ package ch.opentransportdata.ojp.di
 import ch.opentransportdata.ojp.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
+val networkModule = module {
+    single { provideLoggingInterceptor() }
+    single(named("ojpHttpClient")) { provideOkHttpClient(get()) }
+    single(named("ojpRetrofit")) { provideRetrofit(get(named("ojpHttpClient"))) }
+}
 
 fun provideLoggingInterceptor(): HttpLoggingInterceptor {
     val loggingInterceptor = HttpLoggingInterceptor()
