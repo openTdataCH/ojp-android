@@ -17,7 +17,7 @@ import org.joda.time.LocalDateTime
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-class RemoteOjpDataSourceImpl(
+internal class RemoteOjpDataSourceImpl(
     private val ojpService: OjpService,
     private val initializer: Initializer
 ) : RemoteOjpDataSource {

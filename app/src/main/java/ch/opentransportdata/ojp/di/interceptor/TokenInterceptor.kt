@@ -7,7 +7,7 @@ import okhttp3.Response
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-class TokenInterceptor(private val initializer: Initializer) : Interceptor {
+internal class TokenInterceptor(private val initializer: Initializer) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         return chain.proceed(

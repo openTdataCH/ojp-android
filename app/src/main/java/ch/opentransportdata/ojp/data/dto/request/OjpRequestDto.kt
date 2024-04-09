@@ -7,7 +7,7 @@ import com.tickaroo.tikxml.annotation.Xml
  * Created by Michael Ruppen on 08.04.2024
  */
 @Xml(name = "OJPRequest")
-data class OjpRequestDto(
+internal data class OjpRequestDto(
     @Element(name = "siri:ServiceRequest")
     val serviceRequest: ServiceRequestDto?
 )

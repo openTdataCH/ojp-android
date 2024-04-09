@@ -11,7 +11,7 @@ import java.math.RoundingMode
  * Created by Vasile on 08.04.2024
  */
 
-object GeoLocationUtil {
+internal object GeoLocationUtil {
     fun initWithGeoLocationAndBoxSize(
         longitude: Double,
         latitude: Double,

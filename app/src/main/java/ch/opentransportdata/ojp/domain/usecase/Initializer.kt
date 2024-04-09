@@ -6,7 +6,7 @@ import ch.opentransportdata.ojp.domain.model.SdkConfig
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-class Initializer(private val sdkConfig: SdkConfig) {
+internal class Initializer(private val sdkConfig: SdkConfig) {
 
     lateinit var baseUrl: String
     lateinit var endpoint: String

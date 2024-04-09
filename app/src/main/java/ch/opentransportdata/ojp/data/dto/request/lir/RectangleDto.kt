@@ -7,7 +7,7 @@ import com.tickaroo.tikxml.annotation.Xml
  * Created by Michael Ruppen on 08.04.2024
  */
 @Xml(name = "Rectangle")
-data class RectangleDto(
+internal data class RectangleDto(
     @Element(name = "UpperLeft")
     val upperLeft: PointDto,
 

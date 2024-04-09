@@ -13,7 +13,7 @@ import com.tickaroo.tikxml.annotation.Xml
     name = "OJP",
     writeNamespaces = ["http://www.vdv.de/ojp", "siri=http://www.siri.org.uk/siri", "xsi=http://www.w3.org/2001/XMLSchema-instance", "xsd=http://www.w3.org/2001/XMLSchema"]
 )
-data class OjpDto(
+internal data class OjpDto(
     @Element(name = "OJPRequest")
     val ojpRequest: OjpRequestDto? = null,
 

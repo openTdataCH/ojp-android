@@ -7,6 +7,6 @@ import org.koin.dsl.module
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-val repositoryModule = module {
+internal val repositoryModule = module {
     singleOf(::OjpRepositoryImpl)
 }
