@@ -10,14 +10,14 @@ class Initializer(private val sdkConfig: SdkConfig) {
 
     lateinit var baseUrl: String
     lateinit var endpoint: String
-    lateinit var accessToken: String
-    lateinit var requestorReference: String
+    lateinit var requesterReference: String
+    lateinit var httpHeaders: HashMap<String, String>
 
     fun init() {
         baseUrl = sdkConfig.baseUrl
         endpoint = sdkConfig.endpoint
-        accessToken = sdkConfig.accessToken
-        requestorReference = sdkConfig.requestorReference + "_" + ANDROID_SDK + "_" + BuildConfig.VERSION_NAME
+        requesterReference = sdkConfig.requesterReference + "_" + ANDROID_SDK + "_" + BuildConfig.VERSION_NAME
+        httpHeaders = sdkConfig.httpHeaders
     }
 
     companion object {

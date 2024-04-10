@@ -36,7 +36,7 @@ class RemoteOjpDataSourceImpl(
             ojpRequest = OjpRequestDto(
                 serviceRequest = ServiceRequestDto(
                     requestTimestamp = requestTime.toInstantString(),
-                    requestorRef = initializer.requestorReference,
+                    requestorRef = initializer.requesterReference,
                     locationInformationRequest = LocationInformationRequestDto(
                         requestTimestamp = requestTime.toInstantString(),
                         initialInput = InitialInputDto(name = term),
@@ -62,7 +62,7 @@ class RemoteOjpDataSourceImpl(
                 ojpRequest = OjpRequestDto(
                     serviceRequest = ServiceRequestDto(
                         requestTimestamp = requestTime.toInstantString(),
-                        requestorRef = initializer.requestorReference,
+                        requestorRef = initializer.requesterReference,
                         locationInformationRequest = LocationInformationRequestDto(
                             requestTimestamp = requestTime.toInstantString(),
                             initialInput = InitialInputDto(
