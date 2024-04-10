@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.dokka)
 }
 
 android {
@@ -54,6 +55,7 @@ dependencies {
     implementation(libs.tikAnnotation)
     implementation(libs.tikConverters)
     implementation(libs.joda)
+    implementation(libs.dokka)
 
     testImplementation(libs.junit)
 }

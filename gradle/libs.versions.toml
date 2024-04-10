@@ -9,6 +9,7 @@ retrofit2 = "2.9.0"
 okHttp = "4.12.0"
 tikXml = "0.9.0_13-SNAPSHOT"
 jodaTime = "2.12.6"
+dokka = "1.9.20"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -22,10 +23,12 @@ tikAnnotation = { module = "com.tickaroo.tikxml:annotation", version.ref = "tikX
 tikConverters = { module = "com.tickaroo.tikxml:converter-htmlescape", version.ref = "tikXml" }
 tikRetrofit = { module = "com.tickaroo.tikxml:retrofit-converter", version.ref = "tikXml" }
 joda = { module = "joda-time:joda-time", version.ref = "jodaTime" }
+dokka = { module = "org.jetbrains.dokka:android-documentation-plugin", version.ref = "dokka" }
 
 [plugins]
 androidLibrary = { id = "com.android.library", version.ref = "agp"}
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 
