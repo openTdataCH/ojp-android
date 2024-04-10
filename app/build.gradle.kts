@@ -41,6 +41,9 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    tasks.dokkaHtml {
+        outputDirectory.set(file("$rootDir/docs/html"))
+    }
 }
 
 dependencies {
