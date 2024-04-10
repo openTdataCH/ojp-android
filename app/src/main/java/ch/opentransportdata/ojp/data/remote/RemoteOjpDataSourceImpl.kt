@@ -1,6 +1,6 @@
 package ch.opentransportdata.ojp.data.remote
 
-import ch.bls.ojp.utils.toInstantString
+import ch.opentransportdata.ojp.utils.toInstantString
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
