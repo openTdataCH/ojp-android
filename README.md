@@ -32,21 +32,16 @@ dependencies {
 ```
 ## Usage
 ### Initializing
-- Base URL
-- Endpoint
-- Requester Reference
-- HTTP Headers
+Initialize the SDK with your custom configuration:
 
 ```
-OjpSdk.initializeSDK(
-	sdkConfig = SdkConfig(
-	    baseUrl = "Your Base URL",
-	    endpoint = "Your Endpoint",
-	    requesterReference = "Your Requester Reference",
-	    httpHeaders = hashMapOf(
-            "Authorization" to "Bearer myAccessToken",
-            "Custom-Header" to "CustomValue"
-        )
+OjpSdk(
+    baseUrl = "Your Base URL",
+    endpoint = "Your Endpoint",
+    requesterReference = "Your Requester Reference",
+    httpHeaders = hashMapOf(
+    	"Authorization" to "Bearer myAccessToken",
+    	"Custom-Header" to "CustomValue"
     )
 )   
 ```
