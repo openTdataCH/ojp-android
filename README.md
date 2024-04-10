@@ -27,23 +27,26 @@ allprojects {
 - Now you can add the OJP dependency:
 ```
 dependencies {
-    implementation 'com.github.vasile:jitpack-android-example:1.0.0'
+    implementation 'com.github.team-odmch:ojp-android:0.0.1'
 }
 ```
 ## Usage
 ### Initializing
 - Base URL
 - Endpoint
-- Access Token
 - Requester Reference
+- HTTP Headers
 
 ```
 OjpSdk.initializeSDK(
 	sdkConfig = SdkConfig(
-	baseUrl = "Your Base URL",
-	endpoint = "Your Endpoint",
-	accessToken = "Your Access Token",
-	requesterReference = "Your Requester Reference"
+	    baseUrl = "Your Base URL",
+	    endpoint = "Your Endpoint",
+	    requesterReference = "Your Requester Reference",
+	    httpHeaders = hashMapOf(
+            "Authorization" to "Bearer myAccessToken",
+            "Custom-Header" to "CustomValue"
+        )
     )
 )   
 ```
