@@ -5,8 +5,8 @@ import ch.opentransportdata.ojp.di.context.OjpKoinContext
 import ch.opentransportdata.ojp.domain.model.Response
 import ch.opentransportdata.ojp.domain.model.SdkConfig
 import ch.opentransportdata.ojp.domain.usecase.Initializer
-import ch.opentransportdata.ojp.domain.usecase.RequestLocationByCoordinates
-import ch.opentransportdata.ojp.domain.usecase.RequestLocationBySearchTerm
+import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
+import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
 import org.koin.core.parameter.parametersOf
 
 /**
@@ -20,17 +20,16 @@ object OjpSdk {
         OjpKoinContext.koin.get<Initializer> { parametersOf(sdkConfig) }.init()
     }
 
-    suspend fun requestLocationByCoordinates(
+    suspend fun requestLocationsFromCoordinates(
         longitude: Double,
         latitude: Double,
         onlyStation: Boolean
     ): Response<List<PlaceResultDto>> {
-        return OjpKoinContext.koin.get<RequestLocationByCoordinates>().invoke(longitude, latitude, onlyStation)
+        return OjpKoinContext.koin.get<RequestLocationsFromCoordinates>().invoke(longitude, latitude, onlyStation)
     }
 
-    suspend fun requestLocationBySearchTerm(term: String, onlyStation: Boolean): Response<List<PlaceResultDto>> {
-        return OjpKoinContext.koin.get<RequestLocationBySearchTerm>().invoke(term, onlyStation)
+    suspend fun requestLocationsFromSearchTerm(term: String, onlyStation: Boolean): Response<List<PlaceResultDto>> {
+        return OjpKoinContext.koin.get<RequestLocationsFromSearchTerm>().invoke(term, onlyStation)
     }
-
 
 }

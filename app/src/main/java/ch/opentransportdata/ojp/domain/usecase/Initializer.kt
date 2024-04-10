@@ -11,14 +11,13 @@ class Initializer(private val sdkConfig: SdkConfig) {
     lateinit var baseUrl: String
     lateinit var endpoint: String
     lateinit var accessToken: String
-    lateinit var requestReference: String
-
+    lateinit var requestorReference: String
 
     fun init() {
         baseUrl = sdkConfig.baseUrl
         endpoint = sdkConfig.endpoint
         accessToken = sdkConfig.accessToken
-        requestReference = sdkConfig.requestReference + "_" + ANDROID_SDK + "_" + BuildConfig.VERSION_NAME
+        requestorReference = sdkConfig.requestorReference + "_" + ANDROID_SDK + "_" + BuildConfig.VERSION_NAME
     }
 
     companion object {

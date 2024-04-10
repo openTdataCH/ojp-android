@@ -12,7 +12,7 @@ class OjpRepositoryImpl(
     private val remoteDataSource: RemoteOjpDataSource,
 ) : OjpRepository {
 
-    override suspend fun locationBySearchTerm(term: String, onlyStation: Boolean): Response<List<PlaceResultDto>> {
+    override suspend fun placeResultsFromSearchTerm(term: String, onlyStation: Boolean): Response<List<PlaceResultDto>> {
         return try {
             val response = remoteDataSource.searchLocationBySearchTerm(term, onlyStation).ojpResponse
             val result = response?.serviceDelivery?.locationInformation?.placeResults ?: emptyList()
@@ -23,7 +23,7 @@ class OjpRepositoryImpl(
         }
     }
 
-    override suspend fun locationByCoordinates(
+    override suspend fun placeResultsFromCoordinates(
         longitude: Double,
         latitude: Double,
         onlyStation: Boolean

@@ -1,8 +1,8 @@
 package ch.opentransportdata.ojp.di
 
 import ch.opentransportdata.ojp.domain.usecase.Initializer
-import ch.opentransportdata.ojp.domain.usecase.RequestLocationByCoordinates
-import ch.opentransportdata.ojp.domain.usecase.RequestLocationBySearchTerm
+import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
+import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -12,6 +12,6 @@ import org.koin.dsl.module
  */
 val useCaseModule = module {
     singleOf(::Initializer)
-    factoryOf(::RequestLocationBySearchTerm)
-    factoryOf(::RequestLocationByCoordinates)
+    factoryOf(::RequestLocationsFromSearchTerm)
+    factoryOf(::RequestLocationsFromCoordinates)
 }
