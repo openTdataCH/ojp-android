@@ -63,3 +63,15 @@ dependencies {
 
     testImplementation(libs.junit)
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("ojpSdk") {
+                groupId = "ch.opentransportdata"
+                artifactId = "ojp-sdk"
+                version = "0.0.1"
+            }
+        }
+    }
+}
