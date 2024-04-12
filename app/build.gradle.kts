@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.tikRetrofit)
     implementation(libs.tikAnnotation)
     implementation(libs.tikConverters)
+    kapt(libs.tikProcessor) //needed for TypeAdapter creation
     implementation(libs.joda)
     implementation(libs.dokka)
 
