@@ -6,6 +6,7 @@ import ch.opentransportdata.ojp.domain.model.Response
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
+import timber.log.Timber
 
 /**
  * Created by Michael Ruppen on 08.04.2024
@@ -23,6 +24,7 @@ class OjpSdk(
 ) {
 
     init {
+        Timber.i("Initialize SDK")
         OjpKoinContext.koinApp.koin.get<Initializer>().init(baseUrl, endpoint, requesterReference, httpHeaders)
     }
 
