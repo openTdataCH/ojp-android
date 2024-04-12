@@ -7,6 +7,8 @@ plugins {
     `maven-publish`
 }
 
+val versionName = "0.0.1"
+
 android {
     namespace = "ch.opentransportdata.ojp"
     compileSdk = 34
@@ -16,7 +18,7 @@ android {
         lint.targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        this.buildConfigField("String", "VERSION_NAME", "\"0.0.1\"")
+        this.buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
 
     }
 
@@ -68,13 +70,25 @@ dependencies {
     testImplementation(libs.junit)
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("ojpSdk") {
-                groupId = "ch.opentransportdata"
-                artifactId = "ojp-sdk"
-                version = "0.0.1"
+publishing {
+    publications {
+        val sdkGroupId = "com.github.openTdataCH"
+        val sdkArtifactId = "ojp-android"
+
+        create<MavenPublication>("debugOjpSdk") {
+            groupId = sdkGroupId
+            artifactId = sdkArtifactId
+            version = "$versionName-debug"
+            afterEvaluate {
+                from(components["debug"])
+            }
+        }
+        create<MavenPublication>("releaseOjpSdk") {
+            groupId = sdkGroupId
+            artifactId = sdkArtifactId
+            version = versionName
+            afterEvaluate {
+                from(components["release"])
             }
         }
     }
