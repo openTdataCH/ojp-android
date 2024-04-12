@@ -4,6 +4,7 @@ import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.remote.RemoteOjpDataSource
 import ch.opentransportdata.ojp.domain.model.Response
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
+import timber.log.Timber
 
 /**
  * Created by Michael Ruppen on 08.04.2024
@@ -19,6 +20,7 @@ class OjpRepositoryImpl(
             Response.Success(result)
         } catch (e: Exception) {
             //TODO: Implement errors
+            Timber.e(e, "Error creating request or receiving response")
             Response.Error(IllegalStateException("Request did not work", e))
         }
     }
@@ -34,6 +36,7 @@ class OjpRepositoryImpl(
             Response.Success(result)
         } catch (e: Exception) {
             //TODO: Implement errors
+            Timber.e(e, "Error creating request or receiving response")
             Response.Error(IllegalStateException("Request did not work", e))
         }
     }

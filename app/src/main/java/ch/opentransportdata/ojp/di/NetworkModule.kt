@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.di
 
 import ch.opentransportdata.ojp.BuildConfig
+import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.di.interceptor.TokenInterceptor
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import com.tickaroo.tikxml.TikXml
@@ -22,6 +23,7 @@ val networkModule = module {
     single(named("ojpRetrofit")) { provideRetrofit(get(named("ojpHttpClient")), get(), get()) }
     single { provideTikXml() }
     single<TokenInterceptor> { TokenInterceptor(get()) }
+    single { provideOjpService(get(named("ojpRetrofit"))) }
 }
 
 fun provideLoggingInterceptor(): HttpLoggingInterceptor {
@@ -56,4 +58,8 @@ fun provideTikXml(): TikXml {
         .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
         .exceptionOnUnreadXml(false)
         .build()
+}
+
+fun provideOjpService(retrofit: Retrofit): OjpService {
+    return retrofit.create(OjpService::class.java)
 }

@@ -6,6 +6,7 @@ import ch.opentransportdata.ojp.domain.model.Response
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
+import timber.log.Timber
 
 /**
  * Created by Michael Ruppen on 08.04.2024
@@ -23,7 +24,8 @@ class OjpSdk(
 ) {
 
     init {
-        OjpKoinContext.koin.get<Initializer>().init(baseUrl, endpoint, requesterReference, httpHeaders)
+        Timber.i("Initialize SDK")
+        OjpKoinContext.koinApp.koin.get<Initializer>().init(baseUrl, endpoint, requesterReference, httpHeaders)
     }
 
     suspend fun requestLocationsFromCoordinates(
@@ -31,11 +33,11 @@ class OjpSdk(
         latitude: Double,
         onlyStation: Boolean
     ): Response<List<PlaceResultDto>> {
-        return OjpKoinContext.koin.get<RequestLocationsFromCoordinates>().invoke(longitude, latitude, onlyStation)
+        return OjpKoinContext.koinApp.koin.get<RequestLocationsFromCoordinates>().invoke(longitude, latitude, onlyStation)
     }
 
     suspend fun requestLocationsFromSearchTerm(term: String, onlyStation: Boolean): Response<List<PlaceResultDto>> {
-        return OjpKoinContext.koin.get<RequestLocationsFromSearchTerm>().invoke(term, onlyStation)
+        return OjpKoinContext.koinApp.koin.get<RequestLocationsFromSearchTerm>().invoke(term, onlyStation)
     }
 
 }
