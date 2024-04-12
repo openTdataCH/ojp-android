@@ -23,7 +23,7 @@ class OjpSdk(
 ) {
 
     init {
-        OjpKoinContext.koin.get<Initializer>().init(baseUrl, endpoint, requesterReference, httpHeaders)
+        OjpKoinContext.koinApp.koin.get<Initializer>().init(baseUrl, endpoint, requesterReference, httpHeaders)
     }
 
     suspend fun requestLocationsFromCoordinates(
@@ -31,11 +31,11 @@ class OjpSdk(
         latitude: Double,
         onlyStation: Boolean
     ): Response<List<PlaceResultDto>> {
-        return OjpKoinContext.koin.get<RequestLocationsFromCoordinates>().invoke(longitude, latitude, onlyStation)
+        return OjpKoinContext.koinApp.koin.get<RequestLocationsFromCoordinates>().invoke(longitude, latitude, onlyStation)
     }
 
     suspend fun requestLocationsFromSearchTerm(term: String, onlyStation: Boolean): Response<List<PlaceResultDto>> {
-        return OjpKoinContext.koin.get<RequestLocationsFromSearchTerm>().invoke(term, onlyStation)
+        return OjpKoinContext.koinApp.koin.get<RequestLocationsFromSearchTerm>().invoke(term, onlyStation)
     }
 
 }
