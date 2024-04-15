@@ -3,7 +3,11 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.dokka)
+    `maven-publish`
 }
+
+val versionName = "0.0.1"
 
 android {
     namespace = "ch.opentransportdata.ojp"
@@ -14,7 +18,7 @@ android {
         lint.targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        this.buildConfigField("String", "VERSION_NAME", "\"0.0.1\"")
+        this.buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
 
     }
 
@@ -23,7 +27,7 @@ android {
             isMinifyEnabled = false
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -35,10 +39,16 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
+        freeCompilerArgs = listOf(
+            "-Xstring-concat=inline"
+        )
     }
 
     buildFeatures {
         buildConfig = true
+    }
+    tasks.dokkaHtml {
+        outputDirectory.set(file("$rootDir/docs/html"))
     }
 }
 
@@ -53,7 +63,33 @@ dependencies {
     implementation(libs.tikRetrofit)
     implementation(libs.tikAnnotation)
     implementation(libs.tikConverters)
+    kapt(libs.tikProcessor) //needed for TypeAdapter creation
     implementation(libs.joda)
+    implementation(libs.dokka)
 
     testImplementation(libs.junit)
+}
+
+publishing {
+    publications {
+        val sdkGroupId = "com.github.openTdataCH"
+        val sdkArtifactId = "ojp-android"
+
+        create<MavenPublication>("debugOjpSdk") {
+            groupId = sdkGroupId
+            artifactId = sdkArtifactId
+            version = "$versionName-debug"
+            afterEvaluate {
+                from(components["debug"])
+            }
+        }
+        create<MavenPublication>("releaseOjpSdk") {
+            groupId = sdkGroupId
+            artifactId = sdkArtifactId
+            version = versionName
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }

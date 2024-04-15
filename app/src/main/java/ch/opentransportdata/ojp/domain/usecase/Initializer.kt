@@ -1,24 +1,27 @@
 package ch.opentransportdata.ojp.domain.usecase
 
 import ch.opentransportdata.ojp.BuildConfig
-import ch.opentransportdata.ojp.domain.model.SdkConfig
 
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-internal class Initializer(private val sdkConfig: SdkConfig) {
+internal class Initializer {
 
     lateinit var baseUrl: String
     lateinit var endpoint: String
-    lateinit var accessToken: String
-    lateinit var requestReference: String
+    lateinit var requesterReference: String
+    lateinit var httpHeaders: HashMap<String, String>
 
-
-    fun init() {
-        baseUrl = sdkConfig.baseUrl
-        endpoint = sdkConfig.endpoint
-        accessToken = sdkConfig.accessToken
-        requestReference = sdkConfig.requestReference + "_" + ANDROID_SDK + "_" + BuildConfig.VERSION_NAME
+    fun init(
+        baseUrl: String,
+        endpoint: String,
+        requesterReference: String,
+        httpHeaders: HashMap<String, String>,
+    ) {
+        this.baseUrl = baseUrl
+        this.endpoint = endpoint
+        this.requesterReference = requesterReference + "_" + ANDROID_SDK + "_" + BuildConfig.VERSION_NAME
+        this.httpHeaders = httpHeaders
     }
 
     companion object {

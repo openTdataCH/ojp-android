@@ -10,8 +10,7 @@ import org.koin.dsl.koinApplication
  * Created by Michael Ruppen on 08.04.2024
  */
 internal object OjpKoinContext {
-    private val koinApp = koinApplication {
+    val koinApp = koinApplication {
         modules(listOf(dataSourceModule, networkModule, repositoryModule, useCaseModule))
     }
-    val koin = koinApp.koin
 }

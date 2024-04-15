@@ -1,4 +1,4 @@
-package ch.bls.ojp.utils
+package ch.opentransportdata.ojp.utils
 
 import org.joda.time.DateTimeZone
 import org.joda.time.Instant

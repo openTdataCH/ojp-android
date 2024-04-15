@@ -1,6 +1,5 @@
 package ch.opentransportdata.ojp.data.remote
 
-import ch.bls.ojp.utils.toInstantString
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
@@ -10,9 +9,11 @@ import ch.opentransportdata.ojp.data.dto.request.lir.LocationInformationRequestD
 import ch.opentransportdata.ojp.data.dto.request.lir.RestrictionsDto
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.utils.GeoLocationUtil.initWithGeoLocationAndBoxSize
+import ch.opentransportdata.ojp.utils.toInstantString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDateTime
+import timber.log.Timber
 
 /**
  * Created by Michael Ruppen on 08.04.2024
@@ -27,7 +28,6 @@ internal class RemoteOjpDataSourceImpl(
     private val url: String
         get() = initializer.baseUrl + initializer.endpoint
 
-
     override suspend fun searchLocationBySearchTerm(term: String, onlyStation: Boolean): OjpDto = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
         val restrictionType = if (onlyStation) "stop" else "-"
@@ -36,7 +36,7 @@ internal class RemoteOjpDataSourceImpl(
             ojpRequest = OjpRequestDto(
                 serviceRequest = ServiceRequestDto(
                     requestTimestamp = requestTime.toInstantString(),
-                    requestorRef = initializer.requestReference,
+                    requestorRef = initializer.requesterReference,
                     locationInformationRequest = LocationInformationRequestDto(
                         requestTimestamp = requestTime.toInstantString(),
                         initialInput = InitialInputDto(name = term),
@@ -50,6 +50,7 @@ internal class RemoteOjpDataSourceImpl(
             )
         )
 
+        Timber.d("Request object: $request")
         return@withContext ojpService.locationInformationRequest(url, request)
     }
 
@@ -62,7 +63,7 @@ internal class RemoteOjpDataSourceImpl(
                 ojpRequest = OjpRequestDto(
                     serviceRequest = ServiceRequestDto(
                         requestTimestamp = requestTime.toInstantString(),
-                        requestorRef = initializer.requestReference,
+                        requestorRef = initializer.requesterReference,
                         locationInformationRequest = LocationInformationRequestDto(
                             requestTimestamp = requestTime.toInstantString(),
                             initialInput = InitialInputDto(
@@ -80,6 +81,7 @@ internal class RemoteOjpDataSourceImpl(
                 )
             )
 
+            Timber.d("Request object: $request")
             return@withContext ojpService.locationInformationRequest(url, request)
         }
 }
