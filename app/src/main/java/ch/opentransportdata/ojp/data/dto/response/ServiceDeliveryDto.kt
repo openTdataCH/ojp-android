@@ -8,7 +8,7 @@ import com.tickaroo.tikxml.annotation.Xml
  * Created by Michael Ruppen on 08.04.2024
  */
 @Xml(name = "ServiceDelivery")
-data class ServiceDeliveryDto(
+internal data class ServiceDeliveryDto(
     @PropertyElement(name = "siri:ResponseTimestamp")
     val responseTimestamp: String? = null,
 

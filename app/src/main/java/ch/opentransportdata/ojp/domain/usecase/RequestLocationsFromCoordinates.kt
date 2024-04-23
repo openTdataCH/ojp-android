@@ -8,7 +8,7 @@ import ch.opentransportdata.ojp.domain.repository.OjpRepository
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-class RequestLocationsFromCoordinates(
+internal class RequestLocationsFromCoordinates(
     private val ojpRepository: OjpRepository
 ) {
 

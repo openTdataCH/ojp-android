@@ -9,7 +9,7 @@ import com.tickaroo.tikxml.annotation.Xml
  * Created by Michael Ruppen on 08.04.2024
  */
 @Xml(name = "OJPLocationInformationRequest")
-data class LocationInformationRequestDto(
+internal data class LocationInformationRequestDto(
     @PropertyElement(name = "siri:RequestTimestamp")
     val requestTimestamp: String,
 

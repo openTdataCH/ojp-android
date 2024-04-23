@@ -8,7 +8,7 @@ import retrofit2.http.Url
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-interface OjpService {
+internal interface OjpService {
 
     @POST
     suspend fun locationInformationRequest(

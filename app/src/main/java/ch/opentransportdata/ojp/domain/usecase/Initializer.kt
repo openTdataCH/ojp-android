@@ -5,7 +5,7 @@ import ch.opentransportdata.ojp.BuildConfig
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-class Initializer {
+internal class Initializer {
 
     lateinit var baseUrl: String
     lateinit var endpoint: String

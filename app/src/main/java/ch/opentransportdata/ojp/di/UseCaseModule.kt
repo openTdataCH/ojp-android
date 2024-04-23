@@ -10,7 +10,7 @@ import org.koin.dsl.module
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-val useCaseModule = module {
+internal val useCaseModule = module {
     singleOf(::Initializer)
     factoryOf(::RequestLocationsFromSearchTerm)
     factoryOf(::RequestLocationsFromCoordinates)

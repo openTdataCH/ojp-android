@@ -9,7 +9,7 @@ import timber.log.Timber
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-class OjpRepositoryImpl(
+internal class OjpRepositoryImpl(
     private val remoteDataSource: RemoteOjpDataSource,
 ) : OjpRepository {
 

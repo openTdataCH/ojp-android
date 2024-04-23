@@ -8,7 +8,7 @@ import com.tickaroo.tikxml.annotation.Xml
  * Created by Michael Ruppen on 08.04.2024
  */
 @Xml(name = "Restrictions")
-data class RestrictionsDto(
+internal data class RestrictionsDto(
     @PropertyElement(name = "Type")
     val type: String,
 
