@@ -60,6 +60,6 @@ internal fun provideTikXml(): TikXml {
         .build()
 }
 
-fun provideOjpService(retrofit: Retrofit): OjpService {
+internal fun provideOjpService(retrofit: Retrofit): OjpService {
     return retrofit.create(OjpService::class.java)
 }
