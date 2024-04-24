@@ -18,4 +18,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "OJP Android SDK"
-include(":app")
+include(":sdk")
