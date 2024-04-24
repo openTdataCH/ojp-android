@@ -3,7 +3,9 @@ package ch.opentransportdata.ojp.di
 import ch.opentransportdata.ojp.BuildConfig
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.di.interceptor.TokenInterceptor
+import ch.opentransportdata.ojp.domain.model.PtMode
 import ch.opentransportdata.ojp.domain.usecase.Initializer
+import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
@@ -56,6 +58,7 @@ internal fun provideRetrofit(ojpHttpClient: OkHttpClient, tikXml: TikXml, initia
 internal fun provideTikXml(): TikXml {
     return TikXml.Builder()
         .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
+        .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
         .exceptionOnUnreadXml(false)
         .build()
 }

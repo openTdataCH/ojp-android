@@ -15,6 +15,6 @@ data class PlaceDto(
     @Element(name = "GeoPosition")
     val position: GeoPositionDto,
     @Element(name = "Mode")
-    val mode: Mode,
+    val mode: ModeDto,
 )
 
