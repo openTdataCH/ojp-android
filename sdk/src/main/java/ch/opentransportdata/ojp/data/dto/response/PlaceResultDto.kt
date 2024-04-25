@@ -13,4 +13,7 @@ data class PlaceResultDto(
     val place: PlaceDto,
     @PropertyElement(name = "Probability")
     val probability: String,
-)
+) {
+
+    var distance: Double = -1.0
+}
