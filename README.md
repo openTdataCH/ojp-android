@@ -61,7 +61,7 @@ requestLocationsFromCoordinates(longitude = 5.6, latitude = 2.3)
 ```
 
 ## Documentation
-[Documentation of the Android SDK](https://github.com/openTdataCH/ojp-android/)
+[Documentation of the Android SDK](https://opentdatach.github.io/ojp-android/)
 
 ## Contributing
 Contributions are welcomed. Feel free to create an issue or a feature request, or fork the project and submit a pull request.
