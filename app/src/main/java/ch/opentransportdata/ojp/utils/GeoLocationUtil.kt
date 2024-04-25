@@ -54,7 +54,7 @@ internal object GeoLocationUtil {
         return initWithBBOXCoordinates(boxXMin = boxXMin, boxYMin = boxYMin, boxXMax = boxXMax, boxYMax = boxYMax)
     }
 
-    private fun distanceBetweenGeoPoints(
+    fun distanceBetweenGeoPoints(
         point1Latitude: Double?,
         point1Longitude: Double?,
         point2Latitude: Double?,
