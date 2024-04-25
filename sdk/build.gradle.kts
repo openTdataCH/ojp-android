@@ -49,6 +49,7 @@ android {
     }
     tasks.dokkaHtml {
         outputDirectory.set(file("$rootDir/docs/html"))
+        moduleName.set("OJP Android SDK")
     }
 }
 
