@@ -1,4 +1,4 @@
-package ch.opentransportdata.ui.theme
+package ch.opentransportdata.presentation.theme
 
 import android.app.Activity
 import android.os.Build

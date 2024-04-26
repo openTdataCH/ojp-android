@@ -52,6 +52,7 @@ android {
 
 dependencies {
 
+    implementation(project(":sdk"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
@@ -60,6 +61,10 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    implementation(libs.navigation)
+    implementation(libs.accompanist.permission)
+    implementation(libs.play.services)
+    implementation(libs.viewModel.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
