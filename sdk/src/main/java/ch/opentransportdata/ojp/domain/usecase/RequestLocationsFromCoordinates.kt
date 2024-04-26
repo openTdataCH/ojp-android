@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.domain.usecase
 
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Response
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import ch.opentransportdata.ojp.utils.GeoLocationUtil
@@ -16,10 +17,10 @@ internal class RequestLocationsFromCoordinates(
     suspend operator fun invoke(
         longitude: Double,
         latitude: Double,
-        onlyStation: Boolean = false
+        restrictions: List<PlaceTypeRestriction>
     ): Response<List<PlaceResultDto>> {
         return when (val response =
-            ojpRepository.placeResultsFromCoordinates(longitude = longitude, latitude = latitude, onlyStation = onlyStation)) {
+            ojpRepository.placeResultsFromCoordinates(longitude = longitude, latitude = latitude, restrictions = restrictions)) {
             is Response.Success -> {
                 val sortedList = sortByDistance(longitude, latitude, response.data)
                 Response.Success(sortedList)
@@ -39,8 +40,8 @@ internal class RequestLocationsFromCoordinates(
             it.distance = GeoLocationUtil.distanceBetweenGeoPoints(
                 originLatitude,
                 originLongitude,
-                it.place.position.latitude,
-                it.place.position.longitude
+                it.place.position?.latitude,
+                it.place.position?.longitude
             )
         }
 

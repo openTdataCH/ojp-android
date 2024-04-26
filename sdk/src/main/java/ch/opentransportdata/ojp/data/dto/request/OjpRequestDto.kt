@@ -9,5 +9,5 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "OJPRequest")
 internal data class OjpRequestDto(
     @Element(name = "siri:ServiceRequest")
-    val serviceRequest: ServiceRequestDto?
+    val serviceRequest: ServiceRequestDto
 )

@@ -2,6 +2,7 @@ package ch.opentransportdata.ojp.data.repository
 
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.remote.RemoteOjpDataSource
+import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Response
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import timber.log.Timber
@@ -13,9 +14,12 @@ internal class OjpRepositoryImpl(
     private val remoteDataSource: RemoteOjpDataSource,
 ) : OjpRepository {
 
-    override suspend fun placeResultsFromSearchTerm(term: String, onlyStation: Boolean): Response<List<PlaceResultDto>> {
+    override suspend fun placeResultsFromSearchTerm(
+        term: String,
+        restrictions: List<PlaceTypeRestriction>
+    ): Response<List<PlaceResultDto>> {
         return try {
-            val response = remoteDataSource.searchLocationBySearchTerm(term, onlyStation).ojpResponse
+            val response = remoteDataSource.searchLocationBySearchTerm(term, restrictions).ojpResponse
             val result = response?.serviceDelivery?.locationInformation?.placeResults ?: emptyList()
             Response.Success(result)
         } catch (e: Exception) {
@@ -28,10 +32,10 @@ internal class OjpRepositoryImpl(
     override suspend fun placeResultsFromCoordinates(
         longitude: Double,
         latitude: Double,
-        onlyStation: Boolean
+        restrictions: List<PlaceTypeRestriction>
     ): Response<List<PlaceResultDto>> {
         return try {
-            val response = remoteDataSource.searchLocationByCoordinates(longitude, latitude, onlyStation).ojpResponse
+            val response = remoteDataSource.searchLocationByCoordinates(longitude, latitude, restrictions).ojpResponse
             val result = response?.serviceDelivery?.locationInformation?.placeResults ?: emptyList()
             Response.Success(result)
         } catch (e: Exception) {

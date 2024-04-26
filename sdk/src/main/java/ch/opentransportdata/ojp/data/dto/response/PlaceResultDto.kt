@@ -11,9 +11,11 @@ import com.tickaroo.tikxml.annotation.Xml
 data class PlaceResultDto(
     @Element(name = "Place")
     val place: PlaceDto,
+    @PropertyElement(name = "Complete")
+    val complete: Boolean,
     @PropertyElement(name = "Probability")
-    val probability: String,
+    val probability: Double?,
 ) {
 
-    var distance: Double = -1.0
+    var distance: Double = Double.MAX_VALUE
 }

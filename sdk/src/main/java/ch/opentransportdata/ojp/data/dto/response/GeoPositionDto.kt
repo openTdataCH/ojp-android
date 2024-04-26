@@ -9,7 +9,7 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "GeoPosition")
 data class GeoPositionDto(
     @PropertyElement(name = "siri:Longitude")
-    val longitude: Double?,
+    val longitude: Double,
     @PropertyElement(name = "siri:Latitude")
-    val latitude: Double?
+    val latitude: Double
 )

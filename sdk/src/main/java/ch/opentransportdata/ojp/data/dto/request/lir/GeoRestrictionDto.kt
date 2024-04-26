@@ -9,5 +9,5 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "GeoRestriction")
 internal data class GeoRestrictionDto(
     @Element(name = "Rectangle")
-    val rectangle: RectangleDto
+    val rectangle: RectangleDto?
 )

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import ch.opentransportdata.data.DefaultLocationTracker
 import ch.opentransportdata.ojp.OjpSdk
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Response
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +36,7 @@ class LirViewModel : ViewModel() {
                 "Bearer eyJvcmciOiI2M2Q4ODhiMDNmZmRmODAwMDEzMDIwODkiLCJpZCI6IjUzYzAyNWI2ZTRhNjQyOTM4NzMxMDRjNTg2ODEzNTYyIiwiaCI6Im11cm11cjEyOCJ9"
             )
         ),
-        requesterReference = "DemoApp",
+        requesterReference = "OJP_Demo",
     )
 
     fun initLocationTracker(context: Context) {
@@ -65,7 +66,9 @@ class LirViewModel : ViewModel() {
 
                 else -> {
                     when (val result = ojpSdk.requestLocationsFromCoordinates(
-                        longitude = currentLocation.longitude, latitude = currentLocation.latitude, onlyStation = true
+                        longitude = currentLocation.longitude,
+                        latitude = currentLocation.latitude,
+                        restrictions = listOf(PlaceTypeRestriction.STOP)
                     )) {
                         is Response.Success -> state.value = state.value.copy(results = result.data.map { it })
 
@@ -85,7 +88,8 @@ class LirViewModel : ViewModel() {
     fun fetchLocations(input: String) {
         state.value = state.value.copy(inputValue = input)
         viewModelScope.launch {
-            when (val result = ojpSdk.requestLocationsFromSearchTerm(term = input, onlyStation = true)) {
+            when (val result =
+                ojpSdk.requestLocationsFromSearchTerm(term = input, restrictions = listOf(PlaceTypeRestriction.STOP))) {
                 is Response.Success -> state.value = state.value.copy(results = result.data)
                 is Response.Error -> Log.e(TAG, "Error fetching data: ${result.error}")
             }

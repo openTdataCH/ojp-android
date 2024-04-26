@@ -10,10 +10,10 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "ServiceDelivery")
 internal data class ServiceDeliveryDto(
     @PropertyElement(name = "siri:ResponseTimestamp")
-    val responseTimestamp: String? = null,
+    val responseTimestamp: String,
 
     @PropertyElement(name = "siri:ProducerRef")
-    val producerRef: String? = null,
+    val producerRef: String?,
 
     @Element(name = "OJPLocationInformationDelivery")
     val locationInformation: LocationInformationResponseDto,

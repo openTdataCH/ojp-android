@@ -9,5 +9,5 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "OJPResponse")
 internal data class OjpResponseDto(
     @Element(name = "siri:ServiceDelivery")
-    val serviceDelivery: ServiceDeliveryDto?
+    val serviceDelivery: ServiceDeliveryDto
 )
