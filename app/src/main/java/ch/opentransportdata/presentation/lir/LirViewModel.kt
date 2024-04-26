@@ -89,7 +89,7 @@ class LirViewModel : ViewModel() {
         state.value = state.value.copy(inputValue = input)
         viewModelScope.launch {
             when (val result =
-                ojpSdk.requestLocationsFromSearchTerm(term = input, restrictions = listOf(PlaceTypeRestriction.STOP))) {
+                ojpSdk.requestLocationsFromSearchTerm(term = input, restrictions = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.TOPOGRAPHIC_PLACE))) {
                 is Response.Success -> state.value = state.value.copy(results = result.data)
                 is Response.Error -> Log.e(TAG, "Error fetching data: ${result.error}")
             }

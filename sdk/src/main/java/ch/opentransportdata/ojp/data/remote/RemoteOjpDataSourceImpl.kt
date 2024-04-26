@@ -1,12 +1,10 @@
 package ch.opentransportdata.ojp.data.remote
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
+import ch.opentransportdata.ojp.data.dto.converter.PlaceTypeRestrictionConverter
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
-import ch.opentransportdata.ojp.data.dto.request.lir.GeoRestrictionDto
-import ch.opentransportdata.ojp.data.dto.request.lir.InitialInputDto
-import ch.opentransportdata.ojp.data.dto.request.lir.LocationInformationRequestDto
-import ch.opentransportdata.ojp.data.dto.request.lir.RestrictionsDto
+import ch.opentransportdata.ojp.data.dto.request.lir.*
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.utils.GeoLocationUtil.initWithGeoLocationAndBoxSize
@@ -42,7 +40,7 @@ internal class RemoteOjpDataSourceImpl(
                             requestTimestamp = requestTime.toInstantString(),
                             initialInput = InitialInputDto(name = term),
                             restrictions = RestrictionsDto(
-                                types = restrictions.first(),
+                                types = restrictions.map { RestrictionType(PlaceTypeRestrictionConverter().write(it)) },
                                 numberOfResults = numberOfResults,
                                 ptModeIncluded = true
                             )
@@ -76,7 +74,7 @@ internal class RemoteOjpDataSourceImpl(
                                 )
                             ),
                             restrictions = RestrictionsDto(
-                                types = restrictions.first(),
+                                types = restrictions.map { RestrictionType(PlaceTypeRestrictionConverter().write(it)) },
                                 numberOfResults = numberOfResults,
                                 ptModeIncluded = true
                             )

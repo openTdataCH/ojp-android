@@ -1,7 +1,8 @@
 package ch.opentransportdata.ojp.data.dto.request.lir
 
-import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
+import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
+import com.tickaroo.tikxml.annotation.TextContent
 import com.tickaroo.tikxml.annotation.Xml
 
 
@@ -10,12 +11,19 @@ import com.tickaroo.tikxml.annotation.Xml
  */
 @Xml(name = "Restrictions")
 internal data class RestrictionsDto(
-    @PropertyElement(name = "Type")
-    val types: PlaceTypeRestriction,
+    @Element(name = "Type")
+    val types: List<RestrictionType>,
 
     @PropertyElement(name = "NumberOfResults")
     val numberOfResults: Int,
 
     @PropertyElement(name = "IncludePtModes")
     val ptModeIncluded: Boolean
+)
+
+//workaround for tikXml: https://github.com/Tickaroo/tikxml/issues/46
+@Xml
+internal data class RestrictionType(
+    @TextContent
+    val type: String
 )
