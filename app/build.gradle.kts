@@ -1,25 +1,23 @@
 plugins {
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.dokka)
-    `maven-publish`
 }
 
-val versionName = "0.0.1"
-
 android {
-    namespace = "ch.opentransportdata.ojp"
+    namespace = "ch.opentransportdata"
     compileSdk = 34
 
     defaultConfig {
+        applicationId = "ch.opentransportdata"
         minSdk = 23
-        lint.targetSdk = 34
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        this.buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
-
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -27,70 +25,47 @@ android {
             isMinifyEnabled = false
         }
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
-        freeCompilerArgs = listOf(
-            "-Xstring-concat=inline"
-        )
     }
-
     buildFeatures {
+        compose = true
         buildConfig = true
     }
-    tasks.dokkaHtml {
-        outputDirectory.set(file("$rootDir/docs/html"))
-        moduleName.set("OJP Android SDK")
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
 dependencies {
 
+    implementation(project(":sdk"))
     implementation(libs.core.ktx)
-    implementation(libs.timber)
-    implementation(libs.koin.android)
-    implementation(libs.retrofit)
-    implementation(libs.okHttp)
-    implementation(libs.okHttpLogger)
-    implementation(libs.tikRetrofit)
-    implementation(libs.tikAnnotation)
-    implementation(libs.tikConverters)
-    kapt(libs.tikProcessor) //needed for TypeAdapter creation
-    implementation(libs.joda)
-    implementation(libs.dokka)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
+    implementation(libs.navigation)
+    implementation(libs.accompanist.permission)
+    implementation(libs.play.services)
+    implementation(libs.viewModel.compose)
 
     testImplementation(libs.junit)
-}
-
-publishing {
-    publications {
-        val sdkGroupId = "com.github.openTdataCH"
-        val sdkArtifactId = "ojp-android"
-
-        create<MavenPublication>("debugOjpSdk") {
-            groupId = sdkGroupId
-            artifactId = sdkArtifactId
-            version = "$versionName-debug"
-            afterEvaluate {
-                from(components["debug"])
-            }
-        }
-        create<MavenPublication>("releaseOjpSdk") {
-            groupId = sdkGroupId
-            artifactId = sdkArtifactId
-            version = versionName
-            afterEvaluate {
-                from(components["release"])
-            }
-        }
-    }
+    debugImplementation(libs.ui.tooling)
 }
