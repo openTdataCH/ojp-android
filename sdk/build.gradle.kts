@@ -79,7 +79,7 @@ publishing {
         create<MavenPublication>("debugOjpSdk") {
             groupId = sdkGroupId
             artifactId = sdkArtifactId
-            version = "$versionName-debug"
+            version = versionName
             afterEvaluate {
                 from(components["debug"])
             }
