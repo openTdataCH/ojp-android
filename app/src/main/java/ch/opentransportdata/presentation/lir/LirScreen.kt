@@ -69,7 +69,8 @@ fun LirScreenComposable(
                 LazyColumn {
                     items(
                         items = state.value.results,
-                        key = { item -> item.place.name.stationName + item.place.position.longitude + item.place.position.latitude + item.distance }) { item ->
+                        key = { item -> item.place.name?.stationName + item.place.position?.longitude + item.place.position?.latitude + item.distance }
+                    ) { item ->
                         ListItem(
                             headlineContent = {
                                 Text(

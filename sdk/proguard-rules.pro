@@ -19,6 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#Needed for minify to work properly for integrators (else can cause a classDuplicationError with different dependencies)
+-repackageclasses 'ch.opentransportdata.ojp'
+-allowaccessmodification
+-keeppackagenames doNotKeepAThing
+
 -keep class ch.opentransportdata.ojp.domain.model.** { *; }
 -keep class ch.opentransportdata.ojp.OjpSdk{ *; }
 -keep class ch.opentransportdata.ojp.data.dto.response.** { *; }

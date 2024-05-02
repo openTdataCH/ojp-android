@@ -9,8 +9,8 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(writeNamespaces = ["siri=http://www.siri.org.uk/siri"])
 internal data class PointDto(
     @PropertyElement(name = "siri:Longitude")
-    val longitude: String,
+    val longitude: Double,
 
     @PropertyElement(name = "siri:Latitude")
-    val latitude: String
+    val latitude: Double
 )

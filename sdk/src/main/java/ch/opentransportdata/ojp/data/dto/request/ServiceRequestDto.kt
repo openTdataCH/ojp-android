@@ -11,11 +11,11 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "ServiceRequest")
 internal data class ServiceRequestDto(
     @PropertyElement(name = "siri:RequestTimestamp")
-    val requestTimestamp: String?,
+    val requestTimestamp: String,
 
     @PropertyElement(name = "siri:RequestorRef")
-    val requestorRef: String?,
+    val requestorRef: String,
 
     @Element(name = "OJPLocationInformationRequest")
-    val locationInformationRequest: LocationInformationRequestDto? = null
+    val locationInformationRequest: LocationInformationRequestDto
 )

@@ -27,8 +27,8 @@ internal object GeoLocationUtil {
         boxWidth: Double,
         boxHeightParam: Double? = null
     ): RectangleDto {
-        val geoPositionShiftLongitude = GeoPositionDto(geoPosition.longitude!! + 1, geoPosition.latitude)
-        val geoPositionShiftLatitude = GeoPositionDto(geoPosition.longitude, geoPosition.latitude!! + 1)
+        val geoPositionShiftLongitude = GeoPositionDto(geoPosition.longitude + 1, geoPosition.latitude)
+        val geoPositionShiftLatitude = GeoPositionDto(geoPosition.longitude, geoPosition.latitude + 1)
 
         val longitudeDegreeLength = distanceBetweenGeoPoints(
             point1Latitude = geoPositionShiftLongitude.latitude,
@@ -60,7 +60,7 @@ internal object GeoLocationUtil {
         point2Latitude: Double?,
         point2Longitude: Double?
     ): Double {
-        if (point1Latitude == null || point1Longitude == null || point2Latitude == null || point2Longitude == null) return -1.0
+        if (point1Latitude == null || point1Longitude == null || point2Latitude == null || point2Longitude == null) return Double.MAX_VALUE
 
         val results = FloatArray(1)
         Location.distanceBetween(
@@ -79,8 +79,8 @@ internal object GeoLocationUtil {
 
     private fun initWithBBOXCoordinates(boxXMin: Double, boxYMin: Double, boxXMax: Double, boxYMax: Double): RectangleDto {
         return RectangleDto(
-            upperLeft = PointDto(boxXMin.toString(), boxYMax.toString()),
-            lowerRight = PointDto(boxXMax.toString(), boxYMin.toString())
+            upperLeft = PointDto(boxXMin, boxYMax),
+            lowerRight = PointDto(boxXMax, boxYMin)
         )
     }
 }

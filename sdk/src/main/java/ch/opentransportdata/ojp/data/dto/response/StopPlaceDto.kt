@@ -12,7 +12,9 @@ data class StopPlaceDto(
     @PropertyElement(name = "StopPlaceRef")
     val stopPlaceRef: String,
     @Element(name = "StopPlaceName")
-    val name: NameDto?,
+    val name: NameDto,
     @PropertyElement(name = "TopographicPlaceRef")
     val topographicPlaceRef: String?,
+    @Element(name = "PrivateCode")
+    val privateCodes: List<PrivateCodeDto> = emptyList()
 )

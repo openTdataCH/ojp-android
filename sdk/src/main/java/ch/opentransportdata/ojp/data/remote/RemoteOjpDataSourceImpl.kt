@@ -1,12 +1,11 @@
 package ch.opentransportdata.ojp.data.remote
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
+import ch.opentransportdata.ojp.data.dto.converter.PlaceTypeRestrictionConverter
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
-import ch.opentransportdata.ojp.data.dto.request.lir.GeoRestrictionDto
-import ch.opentransportdata.ojp.data.dto.request.lir.InitialInputDto
-import ch.opentransportdata.ojp.data.dto.request.lir.LocationInformationRequestDto
-import ch.opentransportdata.ojp.data.dto.request.lir.RestrictionsDto
+import ch.opentransportdata.ojp.data.dto.request.lir.*
+import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.utils.GeoLocationUtil.initWithGeoLocationAndBoxSize
 import ch.opentransportdata.ojp.utils.toInstantString
@@ -28,36 +27,39 @@ internal class RemoteOjpDataSourceImpl(
     private val url: String
         get() = initializer.baseUrl + initializer.endpoint
 
-    override suspend fun searchLocationBySearchTerm(term: String, onlyStation: Boolean): OjpDto = withContext(Dispatchers.IO) {
-        val requestTime = LocalDateTime.now()
-        val restrictionType = if (onlyStation) "stop" else "-"
+    override suspend fun searchLocationBySearchTerm(term: String, restrictions: List<PlaceTypeRestriction>): OjpDto =
+        withContext(Dispatchers.IO) {
+            val requestTime = LocalDateTime.now()
 
-        val request = OjpDto(
-            ojpRequest = OjpRequestDto(
-                serviceRequest = ServiceRequestDto(
-                    requestTimestamp = requestTime.toInstantString(),
-                    requestorRef = initializer.requesterReference,
-                    locationInformationRequest = LocationInformationRequestDto(
+            val request = OjpDto(
+                ojpRequest = OjpRequestDto(
+                    serviceRequest = ServiceRequestDto(
                         requestTimestamp = requestTime.toInstantString(),
-                        initialInput = InitialInputDto(name = term),
-                        restrictions = RestrictionsDto(
-                            type = restrictionType,
-                            numberOfResults = numberOfResults,
-                            ptModeIncluded = true
+                        requestorRef = initializer.requesterReference,
+                        locationInformationRequest = LocationInformationRequestDto(
+                            requestTimestamp = requestTime.toInstantString(),
+                            initialInput = InitialInputDto(name = term),
+                            restrictions = RestrictionsDto(
+                                types = restrictions.map { RestrictionType(PlaceTypeRestrictionConverter().write(it)) },
+                                numberOfResults = numberOfResults,
+                                ptModeIncluded = true
+                            )
                         )
                     )
                 )
             )
-        )
 
-        Timber.d("Request object: $request")
-        return@withContext ojpService.locationInformationRequest(url, request)
-    }
+            Timber.d("Request object: $request")
+            return@withContext ojpService.locationInformationRequest(url, request)
+        }
 
-    override suspend fun searchLocationByCoordinates(longitude: Double, latitude: Double, onlyStation: Boolean): OjpDto =
+    override suspend fun searchLocationByCoordinates(
+        longitude: Double,
+        latitude: Double,
+        restrictions: List<PlaceTypeRestriction>
+    ): OjpDto =
         withContext(Dispatchers.IO) {
             val requestTime = LocalDateTime.now()
-            val restrictionType = if (onlyStation) "stop" else "-"
 
             val request = OjpDto(
                 ojpRequest = OjpRequestDto(
@@ -72,7 +74,7 @@ internal class RemoteOjpDataSourceImpl(
                                 )
                             ),
                             restrictions = RestrictionsDto(
-                                type = restrictionType,
+                                types = restrictions.map { RestrictionType(PlaceTypeRestrictionConverter().write(it)) },
                                 numberOfResults = numberOfResults,
                                 ptModeIncluded = true
                             )

@@ -11,10 +11,9 @@ data class PlaceDto(
     @Element(name = "StopPlace")
     val stopPlace: StopPlaceDto?,
     @Element(name = "Name")
-    val name: NameDto,
+    val name: NameDto?,
     @Element(name = "GeoPosition")
-    val position: GeoPositionDto,
+    val position: GeoPositionDto?,
     @Element(name = "Mode")
-    val mode: ModeDto,
+    val mode: List<ModeDto>? = emptyList(),
 )
-
