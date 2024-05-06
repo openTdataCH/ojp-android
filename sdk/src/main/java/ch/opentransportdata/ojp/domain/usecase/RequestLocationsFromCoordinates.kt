@@ -2,7 +2,8 @@ package ch.opentransportdata.ojp.domain.usecase
 
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
-import ch.opentransportdata.ojp.domain.model.Response
+import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import ch.opentransportdata.ojp.utils.GeoLocationUtil
 
@@ -18,15 +19,15 @@ internal class RequestLocationsFromCoordinates(
         longitude: Double,
         latitude: Double,
         restrictions: List<PlaceTypeRestriction>
-    ): Response<List<PlaceResultDto>> {
+    ): Result<List<PlaceResultDto>, OjpError> {
         return when (val response =
             ojpRepository.placeResultsFromCoordinates(longitude = longitude, latitude = latitude, restrictions = restrictions)) {
-            is Response.Success -> {
+            is Result.Success -> {
                 val sortedList = sortByDistance(longitude, latitude, response.data)
-                Response.Success(sortedList)
+                Result.Success(sortedList)
             }
 
-            is Response.Error -> response //if needed, map the error to a predefined List of Errors
+            is Result.Error -> response //if needed, map the error to a predefined List of Errors
         }
     }
 

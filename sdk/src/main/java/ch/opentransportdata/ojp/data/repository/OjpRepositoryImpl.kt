@@ -3,7 +3,8 @@ package ch.opentransportdata.ojp.data.repository
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.remote.RemoteOjpDataSource
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
-import ch.opentransportdata.ojp.domain.model.Response
+import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import timber.log.Timber
 
@@ -15,33 +16,28 @@ internal class OjpRepositoryImpl(
 ) : OjpRepository {
 
     override suspend fun placeResultsFromSearchTerm(
-        term: String,
-        restrictions: List<PlaceTypeRestriction>
-    ): Response<List<PlaceResultDto>> {
+        term: String, restrictions: List<PlaceTypeRestriction>
+    ): Result<List<PlaceResultDto>, OjpError> {
         return try {
             val response = remoteDataSource.searchLocationBySearchTerm(term, restrictions).ojpResponse
             val result = response?.serviceDelivery?.locationInformation?.placeResults ?: emptyList()
-            Response.Success(result)
+            Result.Success(result)
         } catch (e: Exception) {
-            //TODO: Implement errors
             Timber.e(e, "Error creating request or receiving response")
-            Response.Error(IllegalStateException("Request did not work", e))
+            return Result.Error(OjpError.UNKNOWN)
         }
     }
 
     override suspend fun placeResultsFromCoordinates(
-        longitude: Double,
-        latitude: Double,
-        restrictions: List<PlaceTypeRestriction>
-    ): Response<List<PlaceResultDto>> {
+        longitude: Double, latitude: Double, restrictions: List<PlaceTypeRestriction>
+    ): Result<List<PlaceResultDto>, OjpError> {
         return try {
             val response = remoteDataSource.searchLocationByCoordinates(longitude, latitude, restrictions).ojpResponse
             val result = response?.serviceDelivery?.locationInformation?.placeResults ?: emptyList()
-            Response.Success(result)
+            Result.Success(result)
         } catch (e: Exception) {
-            //TODO: Implement errors
             Timber.e(e, "Error creating request or receiving response")
-            Response.Error(IllegalStateException("Request did not work", e))
+            return Result.Error(OjpError.UNKNOWN)
         }
     }
 }

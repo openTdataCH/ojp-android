@@ -3,7 +3,8 @@ package ch.opentransportdata.ojp
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.di.context.OjpKoinContext
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
-import ch.opentransportdata.ojp.domain.model.Response
+import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
@@ -33,14 +34,14 @@ class OjpSdk(
         longitude: Double,
         latitude: Double,
         restrictions: List<PlaceTypeRestriction> = emptyList()
-    ): Response<List<PlaceResultDto>> {
+    ): Result<List<PlaceResultDto>, OjpError> {
         return OjpKoinContext.koinApp.koin.get<RequestLocationsFromCoordinates>().invoke(longitude, latitude, restrictions)
     }
 
     suspend fun requestLocationsFromSearchTerm(
         term: String,
         restrictions: List<PlaceTypeRestriction>
-    ): Response<List<PlaceResultDto>> {
+    ): Result<List<PlaceResultDto>, OjpError> {
         return OjpKoinContext.koinApp.koin.get<RequestLocationsFromSearchTerm>().invoke(term, restrictions)
     }
 
