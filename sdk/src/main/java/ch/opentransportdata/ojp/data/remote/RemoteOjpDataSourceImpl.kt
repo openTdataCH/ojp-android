@@ -103,6 +103,9 @@ internal class RemoteOjpDataSourceImpl(
         } catch (e: XmlDataException) {
             Timber.e(e, "Error in XML Data")
             Result.Error(OjpError.DECODING_FAILED)
+        } catch (e: NullPointerException) {
+            Timber.e(e, "A required element is missing")
+            Result.Error(OjpError.MISSING_ELEMENT)
         } catch (e: Exception) {
             Timber.e(e, "Error creating request or receiving response")
             Result.Error(OjpError.UNKNOWN)
