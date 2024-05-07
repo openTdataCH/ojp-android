@@ -1,3 +1,6 @@
 package ch.opentransportdata.ojp.domain.model.error
 
-interface Error
+/**
+ * Created by Deniz Kalem on 06.05.2024
+ */
+sealed interface Error

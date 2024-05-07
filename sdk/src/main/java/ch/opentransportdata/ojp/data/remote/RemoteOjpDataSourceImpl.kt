@@ -6,12 +6,15 @@ import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
 import ch.opentransportdata.ojp.data.dto.request.lir.*
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
+import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.utils.GeoLocationUtil.initWithGeoLocationAndBoxSize
 import ch.opentransportdata.ojp.utils.toInstantString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDateTime
+import retrofit2.HttpException
 import timber.log.Timber
 
 /**
@@ -27,63 +30,71 @@ internal class RemoteOjpDataSourceImpl(
     private val url: String
         get() = initializer.baseUrl + initializer.endpoint
 
-    override suspend fun searchLocationBySearchTerm(term: String, restrictions: List<PlaceTypeRestriction>): OjpDto =
-        withContext(Dispatchers.IO) {
-            val requestTime = LocalDateTime.now()
+    override suspend fun searchLocationBySearchTerm(
+        term: String, restrictions: List<PlaceTypeRestriction>
+    ): Result<OjpDto, OjpError> = withContext(Dispatchers.IO) {
+        val requestTime = LocalDateTime.now()
 
-            val request = OjpDto(
-                ojpRequest = OjpRequestDto(
-                    serviceRequest = ServiceRequestDto(
+        val request = OjpDto(
+            ojpRequest = OjpRequestDto(
+                serviceRequest = ServiceRequestDto(
+                    requestTimestamp = requestTime.toInstantString(),
+                    requestorRef = initializer.requesterReference,
+                    locationInformationRequest = LocationInformationRequestDto(
                         requestTimestamp = requestTime.toInstantString(),
-                        requestorRef = initializer.requesterReference,
-                        locationInformationRequest = LocationInformationRequestDto(
-                            requestTimestamp = requestTime.toInstantString(),
-                            initialInput = InitialInputDto(name = term),
-                            restrictions = RestrictionsDto(
-                                types = restrictions.map { RestrictionType(PlaceTypeRestrictionConverter().write(it)) },
-                                numberOfResults = numberOfResults,
-                                ptModeIncluded = true
-                            )
+                        initialInput = InitialInputDto(name = term),
+                        restrictions = RestrictionsDto(
+                            types = restrictions.map { RestrictionType(PlaceTypeRestrictionConverter().write(it)) },
+                            numberOfResults = numberOfResults,
+                            ptModeIncluded = true
                         )
                     )
                 )
             )
+        )
 
-            Timber.d("Request object: $request")
-            return@withContext ojpService.locationInformationRequest(url, request)
-        }
+        return@withContext handleLocationInformationRequest(request)
+    }
 
     override suspend fun searchLocationByCoordinates(
-        longitude: Double,
-        latitude: Double,
-        restrictions: List<PlaceTypeRestriction>
-    ): OjpDto =
-        withContext(Dispatchers.IO) {
-            val requestTime = LocalDateTime.now()
+        longitude: Double, latitude: Double, restrictions: List<PlaceTypeRestriction>
+    ): Result<OjpDto, OjpError> = withContext(Dispatchers.IO) {
+        val requestTime = LocalDateTime.now()
 
-            val request = OjpDto(
-                ojpRequest = OjpRequestDto(
-                    serviceRequest = ServiceRequestDto(
-                        requestTimestamp = requestTime.toInstantString(),
-                        requestorRef = initializer.requesterReference,
-                        locationInformationRequest = LocationInformationRequestDto(
-                            requestTimestamp = requestTime.toInstantString(),
-                            initialInput = InitialInputDto(
-                                geoRestriction = GeoRestrictionDto(
-                                    rectangle = initWithGeoLocationAndBoxSize(longitude, latitude)
-                                )
-                            ),
-                            restrictions = RestrictionsDto(
-                                types = restrictions.map { RestrictionType(PlaceTypeRestrictionConverter().write(it)) },
-                                numberOfResults = numberOfResults,
-                                ptModeIncluded = true
+        val request = OjpDto(
+            ojpRequest = OjpRequestDto(
+                serviceRequest = ServiceRequestDto(
+                    requestTimestamp = requestTime.toInstantString(),
+                    requestorRef = initializer.requesterReference,
+                    locationInformationRequest = LocationInformationRequestDto(
+                        requestTimestamp = requestTime.toInstantString(), initialInput = InitialInputDto(
+                            geoRestriction = GeoRestrictionDto(
+                                rectangle = initWithGeoLocationAndBoxSize(longitude, latitude)
                             )
+                        ), restrictions = RestrictionsDto(
+                            types = restrictions.map { RestrictionType(PlaceTypeRestrictionConverter().write(it)) },
+                            numberOfResults = numberOfResults,
+                            ptModeIncluded = true
                         )
                     )
                 )
             )
+        )
 
+        return@withContext handleLocationInformationRequest(request)
+    }
+
+    private suspend fun handleLocationInformationRequest(request: OjpDto): Result<OjpDto, OjpError> {
+        return try {
             Timber.d("Request object: $request")
-            return@withContext ojpService.locationInformationRequest(url, request)
+            val response = ojpService.locationInformationRequest(url, request)
+            Result.Success(response)
+        } catch (e: HttpException) {
+            Timber.e("Http Exception with error code: ${e.code()}")
+            Result.Error(OjpError.UNEXPECTED_HTTP_STATUS)
+        } catch (e: Exception) {
+            Timber.e(e, "Error creating request or receiving response")
+            Result.Error(OjpError.UNKNOWN)
         }
+    }
 }
