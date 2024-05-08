@@ -28,7 +28,7 @@ internal class RemoteOjpDataSourceImpl(
 ) : RemoteOjpDataSource {
 
     private val numberOfResults = 10
-
+    private val placeTypeRestrictionConverter = PlaceTypeRestrictionConverter()
     private val url: String
         get() = initializer.baseUrl + initializer.endpoint
 
@@ -37,21 +37,11 @@ internal class RemoteOjpDataSourceImpl(
     ): Result<OjpDto, OjpError> = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
 
-        val request = OjpDto(
-            ojpRequest = OjpRequestDto(
-                serviceRequest = ServiceRequestDto(
-                    requestTimestamp = requestTime.toInstantString(),
-                    requestorRef = initializer.requesterReference,
-                    locationInformationRequest = LocationInformationRequestDto(
-                        requestTimestamp = requestTime.toInstantString(),
-                        initialInput = InitialInputDto(name = term),
-                        restrictions = RestrictionsDto(
-                            types = restrictions.map { RestrictionType(PlaceTypeRestrictionConverter().write(it)) },
-                            numberOfResults = numberOfResults,
-                            ptModeIncluded = true
-                        )
-                    )
-                )
+        val request = createRequest(
+            requestTime = requestTime, locationInformationRequest = LocationInformationRequestDto(
+                requestTimestamp = requestTime.toInstantString(),
+                initialInput = InitialInputDto(name = term),
+                restrictions = createRestrictions(restrictions)
             )
         )
 
@@ -63,27 +53,37 @@ internal class RemoteOjpDataSourceImpl(
     ): Result<OjpDto, OjpError> = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
 
-        val request = OjpDto(
-            ojpRequest = OjpRequestDto(
-                serviceRequest = ServiceRequestDto(
-                    requestTimestamp = requestTime.toInstantString(),
-                    requestorRef = initializer.requesterReference,
-                    locationInformationRequest = LocationInformationRequestDto(
-                        requestTimestamp = requestTime.toInstantString(), initialInput = InitialInputDto(
-                            geoRestriction = GeoRestrictionDto(
-                                rectangle = initWithGeoLocationAndBoxSize(longitude, latitude)
-                            )
-                        ), restrictions = RestrictionsDto(
-                            types = restrictions.map { RestrictionType(PlaceTypeRestrictionConverter().write(it)) },
-                            numberOfResults = numberOfResults,
-                            ptModeIncluded = true
-                        )
+        val request = createRequest(
+            requestTime = requestTime, locationInformationRequest = LocationInformationRequestDto(
+                requestTimestamp = requestTime.toInstantString(), initialInput = InitialInputDto(
+                    geoRestriction = GeoRestrictionDto(
+                        rectangle = initWithGeoLocationAndBoxSize(longitude, latitude)
                     )
-                )
+                ), restrictions = createRestrictions(restrictions)
             )
         )
 
         return@withContext handleLocationInformationRequest(request)
+    }
+
+    private fun createRequest(requestTime: LocalDateTime, locationInformationRequest: LocationInformationRequestDto): OjpDto {
+        return OjpDto(
+            ojpRequest = OjpRequestDto(
+                serviceRequest = ServiceRequestDto(
+                    requestTimestamp = requestTime.toInstantString(),
+                    requestorRef = initializer.requesterReference,
+                    locationInformationRequest = locationInformationRequest
+                )
+            )
+        )
+    }
+
+    private fun createRestrictions(restrictions: List<PlaceTypeRestriction>): RestrictionsDto {
+        return RestrictionsDto(
+            types = restrictions.map { RestrictionType(placeTypeRestrictionConverter.write(it)) },
+            numberOfResults = numberOfResults,
+            ptModeIncluded = true
+        )
     }
 
     private suspend fun handleLocationInformationRequest(request: OjpDto): Result<OjpDto, OjpError> {
