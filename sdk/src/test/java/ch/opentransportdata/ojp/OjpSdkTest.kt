@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp
 
+import assertk.assertFailure
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
@@ -22,21 +23,23 @@ import java.io.InputStream
  */
 internal class OjpSdkTest {
 
-    private val invalidXmlFile = """
+    @Test
+    fun `Invalid XML data should throw an exception`() {
+        // GIVEN
+        val invalidXmlFile = """
             <xml>
                 <field1>Value1</field1>
                 <field2>Value2</field2>
             </xml>
         """.trimIndent()
 
-//    @Test
-//    fun `Invalid XML should throw an exception`() {
-//        val inputStream: InputStream = ByteArrayInputStream(invalidXmlFile.toByteArray())
-//        val bufferedSource = inputStream.source().buffer()
-//        val tikXml = TikXml.Builder().exceptionOnUnreadXml(false).build()
-//
-//        tikXml.read<OjpDto>(bufferedSource, OjpDto::class.java)
-//    }
+        val inputStream: InputStream = ByteArrayInputStream(invalidXmlFile.toByteArray())
+        val bufferedSource = inputStream.source().buffer()
+        val tikXml = TikXml.Builder().exceptionOnUnreadXml(false).build()
+
+        // ASSERTION
+        assertFailure { tikXml.read<OjpDto>(bufferedSource, OjpDto::class.java) }
+    }
 
     @Test
     fun `requestLocationsFromSearchTerm with valid data should return a list of places`() {
