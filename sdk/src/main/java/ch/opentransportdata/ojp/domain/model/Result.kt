@@ -1,13 +1,11 @@
 package ch.opentransportdata.ojp.domain.model
 
-import ch.opentransportdata.ojp.domain.model.error.Error
-
 /**
  * Created by Deniz Kalem on 06.05.2024
  */
-sealed interface Result<out D, out E : Error> {
-    data class Success<out D>(val data: D) : Result<D, Nothing>
-    data class Error<out E : ch.opentransportdata.ojp.domain.model.error.Error>(val error: E) : Result<Nothing, E>
+sealed class Result<out T> {
+    data class Success<out T>(val data: T) : Result<T>()
+    data class Error(val error: ch.opentransportdata.ojp.domain.model.error.Error) : Result<Nothing>()
 }
 
-typealias EmptyResult<E> = Result<Unit, E>
+typealias EmptyResult<E> = Result<E>

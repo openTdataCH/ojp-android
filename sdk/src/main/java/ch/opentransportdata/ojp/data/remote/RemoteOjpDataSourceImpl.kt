@@ -28,7 +28,7 @@ internal class RemoteOjpDataSourceImpl(
 
     override suspend fun searchLocationBySearchTerm(
         term: String, restrictions: List<PlaceTypeRestriction>
-    ): Result<OjpDto, OjpError> = withContext(Dispatchers.IO) {
+    ): OjpDto = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
 
         val request = createRequest(
@@ -45,7 +45,7 @@ internal class RemoteOjpDataSourceImpl(
 
     override suspend fun searchLocationByCoordinates(
         longitude: Double, latitude: Double, restrictions: List<PlaceTypeRestriction>
-    ): Result<OjpDto, OjpError> = withContext(Dispatchers.IO) {
+    ): OjpDto = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
 
         val request = createRequest(

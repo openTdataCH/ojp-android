@@ -3,7 +3,6 @@ package ch.opentransportdata.ojp.domain.usecase
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
-import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import ch.opentransportdata.ojp.utils.GeoLocationUtil
 
@@ -19,7 +18,7 @@ internal class RequestLocationsFromCoordinates(
         longitude: Double,
         latitude: Double,
         restrictions: List<PlaceTypeRestriction>
-    ): Result<List<PlaceResultDto>, OjpError> {
+    ): Result<List<PlaceResultDto>> {
         return when (val response =
             ojpRepository.placeResultsFromCoordinates(longitude = longitude, latitude = latitude, restrictions = restrictions)) {
             is Result.Success -> {
