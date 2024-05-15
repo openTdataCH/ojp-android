@@ -6,10 +6,13 @@ import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.data.dto.OjpDto
+import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
+import ch.opentransportdata.ojp.domain.model.PtMode
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import com.tickaroo.tikxml.TikXml
+import com.tickaroo.tikxml.TypeConverterNotFoundException
 import kotlinx.coroutines.test.runTest
 import okio.Buffer
 import org.junit.Assert.assertThrows
@@ -23,15 +26,42 @@ import java.io.File
 internal class OjpSdkTest {
 
     @Test
-    fun `Missing element in XML data should throw a NullPointerException`() {
+    fun `XML data that contains the custom data type PtMode which is not registered should throw a TypeConverterNotFoundException`() {
         // GIVEN
-        val validXmlFile = "src/test/resources/response_missing_element.xml"
-        val xmlData = File(validXmlFile).readText()
+        val xmlFile = "src/test/resources/response_custom_data_type_ptmode.xml"
+        val bufferedSource = readXmlFile(xmlFile)
         val tikXml = TikXml.Builder().build()
-        val buffer = Buffer().writeUtf8(xmlData)
 
         // ACTION
-        val parsingAction: () -> Unit = { tikXml.read<OjpDto>(buffer, OjpDto::class.java) }
+        val parsingAction: () -> Unit = { tikXml.read<OjpDto>(bufferedSource, OjpDto::class.java) }
+
+        // ASSERTION
+        assertThrows(TypeConverterNotFoundException::class.java, parsingAction)
+    }
+
+    @Test
+    fun `XML data that contains the custom data type PtMode which is registered should allow successful parsing to an OjpDto`() {
+        // GIVEN
+        val xmlFile = "src/test/resources/response_custom_data_type_ptmode.xml"
+        val bufferedSource = readXmlFile(xmlFile)
+        val tikXml = TikXml.Builder().addTypeConverter(PtMode::class.java, PtModeTypeConverter()).build()
+
+        // ACTION
+        val result = tikXml.read<OjpDto>(bufferedSource, OjpDto::class.java)
+
+        // ASSERTION
+        assertThat(result).isNotNull()
+    }
+
+    @Test
+    fun `Missing element in XML data should throw a NullPointerException`() {
+        // GIVEN
+        val xmlFile = "src/test/resources/response_missing_element.xml"
+        val bufferedSource = readXmlFile(xmlFile)
+        val tikXml = TikXml.Builder().build()
+
+        // ACTION
+        val parsingAction: () -> Unit = { tikXml.read<OjpDto>(bufferedSource, OjpDto::class.java) }
 
         // ASSERTION
         assertThrows(NullPointerException::class.java, parsingAction)
@@ -40,13 +70,12 @@ internal class OjpSdkTest {
     @Test
     fun `Valid XML data should allow successful parsing to an OjpDto`() {
         // GIVEN
-        val validXmlFile = "src/test/resources/response_valid.xml"
-        val xmlData = File(validXmlFile).readText()
+        val xmlFile = "src/test/resources/response_valid.xml"
+        val bufferedSource = readXmlFile(xmlFile)
         val tikXml = TikXml.Builder().build()
-        val buffer = Buffer().writeUtf8(xmlData)
 
         // ACTION
-        val result = tikXml.read<OjpDto>(buffer, OjpDto::class.java)
+        val result = tikXml.read<OjpDto>(bufferedSource, OjpDto::class.java)
 
         // ASSERTION
         assertThat(result).isNotNull()
@@ -96,5 +125,10 @@ internal class OjpSdkTest {
             assertThat(result).isInstanceOf(Result.Error::class.java)
             assertThat((result as Result.Error).error).isEqualTo(OjpError.UNEXPECTED_HTTP_STATUS)
         }
+    }
+
+    private fun readXmlFile(xmlFile: String): Buffer {
+        val xmlData = File(xmlFile).readText()
+        return Buffer().writeUtf8(xmlData)
     }
 }
