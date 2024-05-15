@@ -3,7 +3,7 @@ package ch.opentransportdata.ojp
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.di.context.OjpKoinContext
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
-import ch.opentransportdata.ojp.domain.model.Response
+import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
@@ -29,18 +29,34 @@ class OjpSdk(
         OjpKoinContext.koinApp.koin.get<Initializer>().init(baseUrl, endpoint, requesterReference, httpHeaders)
     }
 
+    /**
+     * Request a list of Place Results based on the given geographical point
+     *
+     *
+     * @param longitude The longitude of the geographical point
+     * @param latitude The latitude of the geographical point
+     * @param restrictions List of restrictions that should be used
+     * @return List of Place Results sorted by the nearest point
+     */
     suspend fun requestLocationsFromCoordinates(
         longitude: Double,
         latitude: Double,
         restrictions: List<PlaceTypeRestriction> = emptyList()
-    ): Response<List<PlaceResultDto>> {
+    ): Result<List<PlaceResultDto>> {
         return OjpKoinContext.koinApp.koin.get<RequestLocationsFromCoordinates>().invoke(longitude, latitude, restrictions)
     }
 
+    /**
+     * Request a list of Place Results based on the given search term
+     *
+     * @param term The given search term
+     * @param restrictions List of restrictions that should be used
+     * @return List of Place Results that contains the search term
+     */
     suspend fun requestLocationsFromSearchTerm(
         term: String,
         restrictions: List<PlaceTypeRestriction>
-    ): Response<List<PlaceResultDto>> {
+    ): Result<List<PlaceResultDto>> {
         return OjpKoinContext.koinApp.koin.get<RequestLocationsFromSearchTerm>().invoke(term, restrictions)
     }
 
