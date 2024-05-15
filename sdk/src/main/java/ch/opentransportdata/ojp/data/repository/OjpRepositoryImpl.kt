@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp.data.repository
 
+import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.remote.RemoteOjpDataSource
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
@@ -20,8 +21,9 @@ internal class OjpRepositoryImpl(
     ): Response<List<PlaceResultDto>> {
         return try {
             val response = remoteDataSource.searchLocationBySearchTerm(term, restrictions).ojpResponse
-            val result = response?.serviceDelivery?.locationInformation?.placeResults ?: emptyList()
-            Response.Success(result)
+            val result = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
+            val lirList = result?.placeResults ?: emptyList()
+            Response.Success(lirList)
         } catch (e: Exception) {
             //TODO: Implement errors
             Timber.e(e, "Error creating request or receiving response")
@@ -36,8 +38,9 @@ internal class OjpRepositoryImpl(
     ): Response<List<PlaceResultDto>> {
         return try {
             val response = remoteDataSource.searchLocationByCoordinates(longitude, latitude, restrictions).ojpResponse
-            val result = response?.serviceDelivery?.locationInformation?.placeResults ?: emptyList()
-            Response.Success(result)
+            val result = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
+            val lirList = result?.placeResults ?: emptyList()
+            Response.Success(lirList)
         } catch (e: Exception) {
             //TODO: Implement errors
             Timber.e(e, "Error creating request or receiving response")
