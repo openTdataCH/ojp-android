@@ -29,6 +29,15 @@ class OjpSdk(
         OjpKoinContext.koinApp.koin.get<Initializer>().init(baseUrl, endpoint, requesterReference, httpHeaders)
     }
 
+    /**
+     * Request a list of Place Results based on the given geographical point
+     *
+     *
+     * @param longitude The longitude of the geographical point
+     * @param latitude The latitude of the geographical point
+     * @param restrictions List of restrictions that should be used
+     * @return List of Place Results sorted by the nearest point
+     */
     suspend fun requestLocationsFromCoordinates(
         longitude: Double,
         latitude: Double,
@@ -37,6 +46,13 @@ class OjpSdk(
         return OjpKoinContext.koinApp.koin.get<RequestLocationsFromCoordinates>().invoke(longitude, latitude, restrictions)
     }
 
+    /**
+     * Request a list of Place Results based on the given search term
+     *
+     * @param term The given search term
+     * @param restrictions List of restrictions that should be used
+     * @return List of Place Results that contains the search term
+     */
     suspend fun requestLocationsFromSearchTerm(
         term: String,
         restrictions: List<PlaceTypeRestriction>
