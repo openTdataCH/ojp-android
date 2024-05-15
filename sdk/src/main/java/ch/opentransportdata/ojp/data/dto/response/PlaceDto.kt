@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp.data.dto.response
 
+import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.Xml
 
