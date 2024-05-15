@@ -56,7 +56,7 @@ internal class OjpSdkTest {
     @Test
     fun `Missing element in XML data should throw a NullPointerException`() {
         // GIVEN
-        val xmlFile = "src/test/resources/response_missing_element.xml"
+        val xmlFile = "src/test/resources/response_missing_element_requestorref.xml"
         val bufferedSource = readXmlFile(xmlFile)
         val tikXml = TikXml.Builder().build()
 
