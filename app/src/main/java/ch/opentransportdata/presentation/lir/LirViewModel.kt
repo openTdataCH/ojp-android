@@ -10,7 +10,7 @@ import ch.opentransportdata.data.DefaultLocationTracker
 import ch.opentransportdata.ojp.OjpSdk
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
-import ch.opentransportdata.ojp.domain.model.Response
+import ch.opentransportdata.ojp.domain.model.Result
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -70,9 +70,9 @@ class LirViewModel : ViewModel() {
                         latitude = currentLocation.latitude,
                         restrictions = listOf(PlaceTypeRestriction.STOP)
                     )) {
-                        is Response.Success -> state.value = state.value.copy(results = result.data.map { it })
+                        is Result.Success -> state.value = state.value.copy(results = result.data.map { it })
 
-                        is Response.Error -> {
+                        is Result.Error -> {
                             state.value = state.value.copy(results = emptyList())
                             postEvent(Event.ShowSnackBar(message = "An error has occurred"))
                             Log.e(TAG, "Error fetching data: ${result.error}")
@@ -89,9 +89,9 @@ class LirViewModel : ViewModel() {
         state.value = state.value.copy(inputValue = input)
         viewModelScope.launch {
             when (val result =
-                ojpSdk.requestLocationsFromSearchTerm(term = input, restrictions = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.TOPOGRAPHIC_PLACE))) {
-                is Response.Success -> state.value = state.value.copy(results = result.data)
-                is Response.Error -> Log.e(TAG, "Error fetching data: ${result.error}")
+                ojpSdk.requestLocationsFromSearchTerm(term = input, restrictions = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS))) {
+                is Result.Success -> state.value = state.value.copy(results = result.data)
+                is Result.Error -> Log.e(TAG, "Error fetching data: ${result.error}")
             }
         }
     }

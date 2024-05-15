@@ -47,6 +47,7 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
     tasks.dokkaHtml {
         outputDirectory.set(file("$rootDir/docs/html"))
         moduleName.set("OJP Android SDK")
@@ -69,6 +70,8 @@ dependencies {
     implementation(libs.dokka)
 
     testImplementation(libs.junit)
+    testImplementation(libs.assertk)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 publishing {
