@@ -7,5 +7,3 @@ sealed class Result<out T> {
     data class Success<out T>(val data: T) : Result<T>()
     data class Error(val error: ch.opentransportdata.ojp.domain.model.error.Error) : Result<Nothing>()
 }
-
-typealias EmptyResult<E> = Result<E>

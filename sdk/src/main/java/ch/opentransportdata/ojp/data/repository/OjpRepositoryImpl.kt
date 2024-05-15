@@ -42,7 +42,7 @@ internal class OjpRepositoryImpl(
             Result.Success(result)
         } catch (exception: Exception) {
             val error = handleError(exception)
-            return Result.Error(error)
+            Result.Error(error)
         }
     }
 
