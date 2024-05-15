@@ -1,21 +1,20 @@
 package ch.opentransportdata.ojp
 
-import assertk.assertFailure
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotEmpty
+import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import com.tickaroo.tikxml.TikXml
 import kotlinx.coroutines.test.runTest
-import okio.buffer
-import okio.source
+import okio.Buffer
+import org.junit.Assert.assertThrows
 import org.junit.Test
-import java.io.ByteArrayInputStream
-import java.io.InputStream
+import java.io.File
 
 
 /**
@@ -24,21 +23,33 @@ import java.io.InputStream
 internal class OjpSdkTest {
 
     @Test
-    fun `Invalid XML data should throw an exception`() {
+    fun `Missing element in XML data should throw a NullPointerException`() {
         // GIVEN
-        val invalidXmlFile = """
-            <xml>
-                <field1>Value1</field1>
-                <field2>Value2</field2>
-            </xml>
-        """.trimIndent()
+        val validXmlFile = "src/test/resources/response_missing_element.xml"
+        val xmlData = File(validXmlFile).readText()
+        val tikXml = TikXml.Builder().build()
+        val buffer = Buffer().writeUtf8(xmlData)
 
-        val inputStream: InputStream = ByteArrayInputStream(invalidXmlFile.toByteArray())
-        val bufferedSource = inputStream.source().buffer()
-        val tikXml = TikXml.Builder().exceptionOnUnreadXml(false).build()
+        // ACTION
+        val parsingAction: () -> Unit = { tikXml.read<OjpDto>(buffer, OjpDto::class.java) }
 
         // ASSERTION
-        assertFailure { tikXml.read<OjpDto>(bufferedSource, OjpDto::class.java) }
+        assertThrows(NullPointerException::class.java, parsingAction)
+    }
+
+    @Test
+    fun `Valid XML data should allow successful parsing to an OjpDto`() {
+        // GIVEN
+        val validXmlFile = "src/test/resources/response_valid.xml"
+        val xmlData = File(validXmlFile).readText()
+        val tikXml = TikXml.Builder().build()
+        val buffer = Buffer().writeUtf8(xmlData)
+
+        // ACTION
+        val result = tikXml.read<OjpDto>(buffer, OjpDto::class.java)
+
+        // ASSERTION
+        assertThat(result).isNotNull()
     }
 
     @Test
