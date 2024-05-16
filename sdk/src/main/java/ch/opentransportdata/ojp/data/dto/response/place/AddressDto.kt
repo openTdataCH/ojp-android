@@ -13,7 +13,7 @@ import com.tickaroo.tikxml.annotation.Xml
 data class AddressDto(
     @PropertyElement(name = "PublicCode")
     val publicCode: String,
-    @Element(name = "StopPlaceName")
+    @Element(name = "Name")
     val name: NameDto,
     @PropertyElement(name = "CountryName")
     val countryName: String?,
@@ -30,5 +30,5 @@ data class AddressDto(
     @PropertyElement(name = "CrossRoad")
     val crossRoad: String?,
     @Element(name = "PrivateCode")
-    override val privateCodes: List<PrivateCodeDto> = emptyList()
+    override val privateCodes: List<PrivateCodeDto>? = emptyList()
 ) : AbstractPlaceDto()

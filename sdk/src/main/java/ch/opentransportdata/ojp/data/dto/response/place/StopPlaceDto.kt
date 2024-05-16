@@ -18,5 +18,5 @@ data class StopPlaceDto(
     @PropertyElement(name = "TopographicPlaceRef")
     val topographicPlaceRef: String?,
     @Element(name = "PrivateCode")
-    override val privateCodes: List<PrivateCodeDto> = emptyList()
+    override val privateCodes: List<PrivateCodeDto>? = emptyList()
 ) : AbstractPlaceDto()

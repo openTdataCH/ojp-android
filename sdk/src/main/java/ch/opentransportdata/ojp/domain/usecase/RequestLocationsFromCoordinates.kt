@@ -40,8 +40,8 @@ internal class RequestLocationsFromCoordinates(
             it.distance = GeoLocationUtil.distanceBetweenGeoPoints(
                 originLatitude,
                 originLongitude,
-                it.place.position?.latitude,
-                it.place.position?.longitude
+                it.place.position.latitude,
+                it.place.position.longitude
             )
         }
 
