@@ -20,8 +20,6 @@ import java.io.IOException
  *
  * Adapter to map all possible place objects correctly
  */
-
-//todo: implement tests
 internal class PlaceAdapter : TypeAdapter<PlaceDto> {
 
     private val childElementBinders: HashMap<String, ChildElementBinder<ValueHolder>> = hashMapOf()
@@ -57,7 +55,7 @@ internal class PlaceAdapter : TypeAdapter<PlaceDto> {
         val valueHolder = ValueHolder()
         while (reader?.hasAttribute() == true) {
             val attributeName = reader.nextAttributeName()
-            if (config!!.exceptionOnUnreadXml() && !attributeName.startsWith("xmlns")) {
+            if (config?.exceptionOnUnreadXml() == true && !attributeName.startsWith("xmlns")) {
                 throw IOException("Could not map the xml attribute with the name '" + attributeName + "' at path " + reader.path + " to java class. Have you annotated such a field in your java class to map this xml attribute? Otherwise you can turn this error message off with TikXml.Builder().exceptionOnUnreadXml(false).build().")
             }
             reader.skipAttributeValue()
@@ -71,13 +69,13 @@ internal class PlaceAdapter : TypeAdapter<PlaceDto> {
                 if (childElementBinder != null) {
                     childElementBinder.fromXml(reader, config, valueHolder)
                     reader.endElement()
-                } else if (config!!.exceptionOnUnreadXml()) {
+                } else if (config?.exceptionOnUnreadXml() == true) {
                     throw IOException("Could not map the xml element with the tag name <" + elementName + "> at path '" + reader.path + "' to java class. Have you annotated such a field in your java class to map this xml attribute? Otherwise you can turn this error message off with TikXml.Builder().exceptionOnUnreadXml(false).build().")
                 } else {
                     reader.skipRemainingElement()
                 }
             } else if (reader?.hasTextContent() == true) {
-                if (config!!.exceptionOnUnreadXml()) {
+                if (config?.exceptionOnUnreadXml() == true) {
                     throw IOException("Could not map the xml element's text content at path '" + reader.path + " to java class. Have you annotated such a field in your java class to map the xml element's text content? Otherwise you can turn this error message off with TikXml.Builder().exceptionOnUnreadXml(false).build().")
                 }
                 reader.skipTextContent()
