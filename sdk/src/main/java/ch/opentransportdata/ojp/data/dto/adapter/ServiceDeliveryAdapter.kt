@@ -18,7 +18,6 @@ import java.io.IOException
  * Adapter to map all possible delivery objects correctly
  */
 
-//todo: implement tests
 internal class ServiceDeliveryAdapter : TypeAdapter<ServiceDeliveryDto> {
 
     private val childElementBinders: HashMap<String, ChildElementBinder<ValueHolder>> = hashMapOf()
