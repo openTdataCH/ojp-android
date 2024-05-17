@@ -6,7 +6,11 @@ import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.data.dto.OjpDto
+import ch.opentransportdata.ojp.data.dto.adapter.PlaceAdapter
+import ch.opentransportdata.ojp.data.dto.adapter.ServiceDeliveryAdapter
 import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
+import ch.opentransportdata.ojp.data.dto.response.PlaceDto
+import ch.opentransportdata.ojp.data.dto.response.ServiceDeliveryDto
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.PtMode
 import ch.opentransportdata.ojp.domain.model.Result
@@ -28,7 +32,10 @@ internal class OjpSdkTest {
         // GIVEN
         val xmlFile = "src/test/resources/response_custom_data_type_ptmode.xml"
         val bufferedSource = TestUtils().readXmlFile(xmlFile)
-        val tikXml = TikXml.Builder().build()
+        val tikXml = TikXml.Builder()
+            .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
+            .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
+            .build()
 
         // ACTION
         val parsingAction: () -> Unit = { tikXml.read<OjpDto>(bufferedSource, OjpDto::class.java) }
@@ -42,7 +49,11 @@ internal class OjpSdkTest {
         // GIVEN
         val xmlFile = "src/test/resources/response_custom_data_type_ptmode.xml"
         val bufferedSource = TestUtils().readXmlFile(xmlFile)
-        val tikXml = TikXml.Builder().addTypeConverter(PtMode::class.java, PtModeTypeConverter()).build()
+        val tikXml = TikXml.Builder()
+            .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
+            .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
+            .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
+            .build()
 
         // ACTION
         val result = tikXml.read<OjpDto>(bufferedSource, OjpDto::class.java)
@@ -93,7 +104,7 @@ internal class OjpSdkTest {
 
             // ACTION
             val result = ojpSdk.requestLocationsFromSearchTerm(
-                term = term, restrictions = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.TOPOGRAPHIC_PLACE)
+                term = term, restrictions = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS)
             )
 
             // ASSERTION
