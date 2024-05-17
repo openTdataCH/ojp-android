@@ -88,8 +88,8 @@ internal class PlaceAdapter : TypeAdapter<PlaceDto> {
 
         return PlaceDto(
             placeType = valueHolder.placeType,
-            name = valueHolder.name,
-            position = valueHolder.positionDto,
+            name = valueHolder.name!!,
+            position = valueHolder.positionDto!!,
             mode = valueHolder.modes
         )
     }
@@ -131,8 +131,8 @@ internal class PlaceAdapter : TypeAdapter<PlaceDto> {
 
     class ValueHolder {
         var placeType: AbstractPlaceDto? = null
-        lateinit var name: NameDto
-        lateinit var positionDto: GeoPositionDto
+        var name: NameDto? = null
+        var positionDto: GeoPositionDto? = null
         var modes: MutableList<ModeDto>? = null
     }
 }
