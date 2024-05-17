@@ -1,0 +1,12 @@
+<Place>
+    <Name>
+        <Text xml:lang="de">Lausanne (Lausanne)</Text>
+    </Name>
+    <GeoPosition>
+        <siri:Longitude>6.62909</siri:Longitude>
+        <siri:Latitude>46.51679</siri:Latitude>
+    </GeoPosition>
+    <Mode>
+        <PtMode>rail</PtMode>
+    </Mode>
+</Place>

@@ -1,0 +1,21 @@
+<Place>
+    <Address>
+        <PublicCode>streetID:1500000701::23006351:-1:Eichholzstrasse:Bern:Eichholzstrasse::Eichholzstrasse:
+            3032 3027:ANY:DIVA_STREET:822217:6065996:MRCV
+        </PublicCode>
+        <Name>
+            <Text xml:lang="de">Bern, Eichholzstrasse</Text>
+        </Name>
+        <PostCode>3032 3027</PostCode>
+        <TopographicPlaceName>Bern</TopographicPlaceName>
+        <TopographicPlaceRef>23006351:-1</TopographicPlaceRef>
+        <Street>Eichholzstrasse</Street>
+    </Address>
+    <Name>
+        <Text xml:lang="de">Eichholzstrasse (Bern)</Text>
+    </Name>
+    <GeoPosition>
+        <siri:Longitude>7.3861</siri:Longitude>
+        <siri:Latitude>46.95054</siri:Latitude>
+    </GeoPosition>
+</Place>
