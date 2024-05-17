@@ -14,10 +14,8 @@ import ch.opentransportdata.ojp.domain.model.error.OjpError
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.TypeConverterNotFoundException
 import kotlinx.coroutines.test.runTest
-import okio.Buffer
 import org.junit.Assert.assertThrows
 import org.junit.Test
-import java.io.File
 
 
 /**
@@ -29,7 +27,7 @@ internal class OjpSdkTest {
     fun `XML data that contains the custom data type PtMode which is not registered should throw a TypeConverterNotFoundException`() {
         // GIVEN
         val xmlFile = "src/test/resources/response_custom_data_type_ptmode.xml"
-        val bufferedSource = readXmlFile(xmlFile)
+        val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder().build()
 
         // ACTION
@@ -43,7 +41,7 @@ internal class OjpSdkTest {
     fun `XML data that contains the custom data type PtMode which is registered should allow successful parsing to an OjpDto`() {
         // GIVEN
         val xmlFile = "src/test/resources/response_custom_data_type_ptmode.xml"
-        val bufferedSource = readXmlFile(xmlFile)
+        val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder().addTypeConverter(PtMode::class.java, PtModeTypeConverter()).build()
 
         // ACTION
@@ -57,7 +55,7 @@ internal class OjpSdkTest {
     fun `Missing element in XML data should throw a NullPointerException`() {
         // GIVEN
         val xmlFile = "src/test/resources/response_missing_element_requestorref.xml"
-        val bufferedSource = readXmlFile(xmlFile)
+        val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder().build()
 
         // ACTION
@@ -71,7 +69,7 @@ internal class OjpSdkTest {
     fun `Valid XML data should allow successful parsing to an OjpDto`() {
         // GIVEN
         val xmlFile = "src/test/resources/response_valid.xml"
-        val bufferedSource = readXmlFile(xmlFile)
+        val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder().build()
 
         // ACTION
@@ -127,8 +125,4 @@ internal class OjpSdkTest {
         }
     }
 
-    private fun readXmlFile(xmlFile: String): Buffer {
-        val xmlData = File(xmlFile).readText()
-        return Buffer().writeUtf8(xmlData)
-    }
 }
