@@ -1,8 +1,12 @@
 package ch.opentransportdata.ojp.di
 
 import ch.opentransportdata.ojp.BuildConfig
+import ch.opentransportdata.ojp.data.dto.adapter.PlaceAdapter
+import ch.opentransportdata.ojp.data.dto.adapter.ServiceDeliveryAdapter
 import ch.opentransportdata.ojp.data.dto.converter.PlaceTypeRestrictionConverter
 import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
+import ch.opentransportdata.ojp.data.dto.response.PlaceDto
+import ch.opentransportdata.ojp.data.dto.response.ServiceDeliveryDto
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.di.interceptor.TokenInterceptor
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
@@ -59,6 +63,8 @@ internal fun provideRetrofit(ojpHttpClient: OkHttpClient, tikXml: TikXml, initia
 
 internal fun provideTikXml(): TikXml {
     return TikXml.Builder()
+        .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
+        .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
         .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
         .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
         .addTypeConverter(PlaceTypeRestriction::class.java, PlaceTypeRestrictionConverter())

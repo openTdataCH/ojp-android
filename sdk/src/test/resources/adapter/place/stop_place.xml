@@ -1,0 +1,23 @@
+<Place>
+    <StopPlace>
+        <StopPlaceRef>8501120</StopPlaceRef>
+        <StopPlaceName>
+            <Text xml:lang="de">Lausanne</Text>
+        </StopPlaceName>
+        <PrivateCode>
+            <System>EFA</System>
+            <Value>107099</Value>
+        </PrivateCode>
+        <TopographicPlaceRef>23023586:3</TopographicPlaceRef>
+    </StopPlace>
+    <Name>
+        <Text xml:lang="de">Lausanne (Lausanne)</Text>
+    </Name>
+    <GeoPosition>
+        <siri:Longitude>6.62909</siri:Longitude>
+        <siri:Latitude>46.51679</siri:Latitude>
+    </GeoPosition>
+    <Mode>
+        <PtMode>rail</PtMode>
+    </Mode>
+</Place>

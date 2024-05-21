@@ -1,5 +1,7 @@
-package ch.opentransportdata.ojp.data.dto.response
+package ch.opentransportdata.ojp.data.dto.response.place
 
+import ch.opentransportdata.ojp.data.dto.response.NameDto
+import ch.opentransportdata.ojp.data.dto.response.PrivateCodeDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
@@ -16,5 +18,5 @@ data class StopPlaceDto(
     @PropertyElement(name = "TopographicPlaceRef")
     val topographicPlaceRef: String?,
     @Element(name = "PrivateCode")
-    val privateCodes: List<PrivateCodeDto> = emptyList()
-)
+    override val privateCodes: List<PrivateCodeDto>? = emptyList()
+) : AbstractPlaceDto()

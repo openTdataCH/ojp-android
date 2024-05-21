@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.data.repository
 
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
 import ch.opentransportdata.ojp.data.remote.RemoteOjpDataSource
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
@@ -24,8 +25,9 @@ internal class OjpRepositoryImpl(
         term: String, restrictions: List<PlaceTypeRestriction>
     ): Result<List<PlaceResultDto>> {
         return try {
-            val response = remoteDataSource.searchLocationBySearchTerm(term, restrictions)
-            val result = response.ojpResponse?.serviceDelivery?.locationInformation?.placeResults ?: emptyList()
+            val response = remoteDataSource.searchLocationBySearchTerm(term, restrictions).ojpResponse
+            val delivery = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
+            val result = delivery?.placeResults ?: emptyList()
             Result.Success(result)
         } catch (exception: Exception) {
             val error = handleError(exception)
@@ -34,11 +36,14 @@ internal class OjpRepositoryImpl(
     }
 
     override suspend fun placeResultsFromCoordinates(
-        longitude: Double, latitude: Double, restrictions: List<PlaceTypeRestriction>
+        longitude: Double,
+        latitude: Double,
+        restrictions: List<PlaceTypeRestriction>
     ): Result<List<PlaceResultDto>> {
         return try {
-            val response = remoteDataSource.searchLocationByCoordinates(longitude, latitude, restrictions)
-            val result = response.ojpResponse?.serviceDelivery?.locationInformation?.placeResults ?: emptyList()
+            val response = remoteDataSource.searchLocationByCoordinates(longitude, latitude, restrictions).ojpResponse
+            val delivery = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
+            val result = delivery?.placeResults ?: emptyList()
             Result.Success(result)
         } catch (exception: Exception) {
             val error = handleError(exception)

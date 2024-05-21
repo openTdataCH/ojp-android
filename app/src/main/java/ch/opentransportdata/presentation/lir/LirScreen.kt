@@ -16,6 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import ch.opentransportdata.ojp.data.dto.response.place.AbstractPlaceDto
+import ch.opentransportdata.ojp.data.dto.response.place.AddressDto
+import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
 import ch.opentransportdata.presentation.components.LocationButton
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import kotlinx.coroutines.launch
@@ -69,12 +72,12 @@ fun LirScreenComposable(
                 LazyColumn {
                     items(
                         items = state.value.results,
-                        key = { item -> item.place.name?.stationName + item.place.position?.longitude + item.place.position?.latitude + item.distance }
+                        key = { item -> item.place.name.stationName + item.place.position.longitude + item.place.position.latitude + item.distance }
                     ) { item ->
                         ListItem(
                             headlineContent = {
                                 Text(
-                                    text = item.place.stopPlace?.name?.stationName ?: "undef",
+                                    text = item.place.placeType?.name() ?: "undef",
                                     style = MaterialTheme.typography.titleSmall
                                 )
                             }
@@ -99,6 +102,14 @@ fun LirScreenComposable(
         viewModel.eventHandled(event.id)
     }
 
+}
+
+fun AbstractPlaceDto.name(): String {
+    return when (this) {
+        is StopPlaceDto -> this.name.stationName
+        is AddressDto -> this.name.stationName
+        else -> "undef"
+    }
 }
 
 @PreviewLightDark

@@ -1,0 +1,15 @@
+<Place>
+    <TopographicPlace>
+        <TopographicPlaceCode>8136088:7</TopographicPlaceCode>
+        <TopographicPlaceName>
+            <Text xml:lang="de">Bernlohe (Aalen)</Text>
+        </TopographicPlaceName>
+    </TopographicPlace>
+    <Name>
+        <Text xml:lang="de">Bernlohe (Aalen)</Text>
+    </Name>
+    <GeoPosition>
+        <siri:Longitude>48.85</siri:Longitude>
+        <siri:Latitude>10.16666</siri:Latitude>
+    </GeoPosition>
+</Place>
