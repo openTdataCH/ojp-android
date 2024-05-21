@@ -26,9 +26,9 @@ internal class OjpRepositoryImpl(
     ): Result<List<PlaceResultDto>> {
         return try {
             val response = remoteDataSource.searchLocationBySearchTerm(term, restrictions).ojpResponse
-            val result = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
-            val lirList = result?.placeResults ?: emptyList()
-            Result.Success(lirList)
+            val delivery = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
+            val result = delivery?.placeResults ?: emptyList()
+            Result.Success(result)
         } catch (exception: Exception) {
             val error = handleError(exception)
             Result.Error(error)
@@ -42,9 +42,9 @@ internal class OjpRepositoryImpl(
     ): Result<List<PlaceResultDto>> {
         return try {
             val response = remoteDataSource.searchLocationByCoordinates(longitude, latitude, restrictions).ojpResponse
-            val result = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
-            val lirList = result?.placeResults ?: emptyList()
-            Result.Success(lirList)
+            val delivery = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
+            val result = delivery?.placeResults ?: emptyList()
+            Result.Success(result)
         } catch (exception: Exception) {
             val error = handleError(exception)
             Result.Error(error)
