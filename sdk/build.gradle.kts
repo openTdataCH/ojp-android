@@ -7,7 +7,7 @@ plugins {
     `maven-publish`
 }
 
-private val versionName = "0.0.3"
+private val versionName = "0.0.4"
 
 android {
     namespace = "ch.opentransportdata.ojp"
@@ -29,6 +29,7 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            consumerProguardFile("proguard-rules.pro")
         }
     }
 

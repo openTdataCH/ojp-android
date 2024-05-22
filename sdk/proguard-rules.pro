@@ -27,6 +27,8 @@
 
 -keep class ch.opentransportdata.ojp.domain.model.** { *; }
 -keep class ch.opentransportdata.ojp.OjpSdk{ *; }
+-keep class ch.opentransportdata.ojp.data.dto.adapter.** { *; }
+-keep class ch.opentransportdata.ojp.data.dto.converter.** { *; }
 -keep class ch.opentransportdata.ojp.data.dto.response.** { *; }
 
 # TikXML
