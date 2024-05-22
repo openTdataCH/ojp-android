@@ -7,7 +7,7 @@ plugins {
     `maven-publish`
 }
 
-val versionName = "0.0.2"
+private val versionName = "0.0.3"
 
 android {
     namespace = "ch.opentransportdata.ojp"
