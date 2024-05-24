@@ -11,6 +11,7 @@ import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import com.tickaroo.tikxml.TypeAdapterNotFoundException
 import com.tickaroo.tikxml.TypeConverterNotFoundException
 import com.tickaroo.tikxml.XmlDataException
+import kotlinx.coroutines.CancellationException
 import retrofit2.HttpException
 import timber.log.Timber
 
@@ -76,6 +77,11 @@ internal class OjpRepositoryImpl(
             is NullPointerException -> {
                 Timber.e(exception, "A required element is missing")
                 OjpError.MISSING_ELEMENT
+            }
+
+            is CancellationException -> {
+                Timber.e(exception, "Coroutine is cancelled")
+                OjpError.REQUEST_CANCELLED
             }
 
             else -> {

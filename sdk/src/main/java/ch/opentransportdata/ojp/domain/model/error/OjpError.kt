@@ -19,6 +19,9 @@ enum class OjpError : Error {
     // Can't correctly decode a XML response
     DECODING_FAILED,
 
+    // Can't correctly decode a XML response
+    REQUEST_CANCELLED,
+
     // Unknown error
     UNKNOWN
 }
