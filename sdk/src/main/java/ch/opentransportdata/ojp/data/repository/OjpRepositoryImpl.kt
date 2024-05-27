@@ -56,37 +56,37 @@ internal class OjpRepositoryImpl(
         return when (exception) {
             is HttpException -> {
                 Timber.e("Http Exception with error code: ${exception.code()}")
-                OjpError.UNEXPECTED_HTTP_STATUS
+                OjpError.UnexpectedHttpStatus(exception)
             }
 
             is TypeConverterNotFoundException -> {
                 Timber.e(exception, "Missing TypeConverter")
-                OjpError.ENCODING_FAILED
+                OjpError.EncodingFailed(exception)
             }
 
             is TypeAdapterNotFoundException -> {
                 Timber.e(exception, "Missing TypeAdapter")
-                OjpError.ENCODING_FAILED
+                OjpError.EncodingFailed(exception)
             }
 
             is XmlDataException -> {
                 Timber.e(exception, "Error in XML Data")
-                OjpError.DECODING_FAILED
+                OjpError.DecodingFailed(exception)
             }
 
             is NullPointerException -> {
                 Timber.e(exception, "A required element is missing")
-                OjpError.MISSING_ELEMENT
+                OjpError.MissingElement(exception)
             }
 
             is CancellationException -> {
                 Timber.e(exception, "Coroutine is cancelled")
-                OjpError.REQUEST_CANCELLED
+                OjpError.RequestCancelled(exception)
             }
 
             else -> {
                 Timber.e(exception, "Error creating request or receiving response")
-                OjpError.UNKNOWN
+                OjpError.Unknown(exception)
             }
         }
     }

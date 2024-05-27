@@ -132,7 +132,7 @@ internal class OjpSdkTest {
 
             // ASSERTION
             assertThat(result).isInstanceOf(Result.Error::class.java)
-            assertThat((result as Result.Error).error).isEqualTo(OjpError.UNEXPECTED_HTTP_STATUS)
+            assertThat((result as Result.Error).error).isInstanceOf(OjpError.UnexpectedHttpStatus::class)
         }
     }
 
