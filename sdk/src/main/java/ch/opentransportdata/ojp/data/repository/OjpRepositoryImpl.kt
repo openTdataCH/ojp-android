@@ -5,12 +5,12 @@ import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDe
 import ch.opentransportdata.ojp.data.remote.RemoteOjpDataSource
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
-import ch.opentransportdata.ojp.domain.model.error.Error
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import com.tickaroo.tikxml.TypeAdapterNotFoundException
 import com.tickaroo.tikxml.TypeConverterNotFoundException
 import com.tickaroo.tikxml.XmlDataException
+import kotlinx.coroutines.CancellationException
 import retrofit2.HttpException
 import timber.log.Timber
 
@@ -51,36 +51,41 @@ internal class OjpRepositoryImpl(
         }
     }
 
-    private fun handleError(exception: Exception): Error {
+    private fun handleError(exception: Exception): OjpError {
         return when (exception) {
             is HttpException -> {
                 Timber.e("Http Exception with error code: ${exception.code()}")
-                OjpError.UNEXPECTED_HTTP_STATUS
+                OjpError.UnexpectedHttpStatus(exception)
             }
 
             is TypeConverterNotFoundException -> {
                 Timber.e(exception, "Missing TypeConverter")
-                OjpError.ENCODING_FAILED
+                OjpError.EncodingFailed(exception)
             }
 
             is TypeAdapterNotFoundException -> {
                 Timber.e(exception, "Missing TypeAdapter")
-                OjpError.ENCODING_FAILED
+                OjpError.EncodingFailed(exception)
             }
 
             is XmlDataException -> {
                 Timber.e(exception, "Error in XML Data")
-                OjpError.DECODING_FAILED
+                OjpError.DecodingFailed(exception)
             }
 
             is NullPointerException -> {
                 Timber.e(exception, "A required element is missing")
-                OjpError.MISSING_ELEMENT
+                OjpError.MissingElement(exception)
+            }
+
+            is CancellationException -> {
+                Timber.e(exception, "Coroutine is cancelled")
+                OjpError.RequestCancelled(exception)
             }
 
             else -> {
                 Timber.e(exception, "Error creating request or receiving response")
-                OjpError.UNKNOWN
+                OjpError.Unknown(exception)
             }
         }
     }

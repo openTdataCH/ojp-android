@@ -11,11 +11,10 @@ import ch.opentransportdata.ojp.OjpSdk
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.error.OjpError
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import java.util.UUID
 
 /**
@@ -39,6 +38,9 @@ class LirViewModel : ViewModel() {
         requesterReference = "OJP_Demo",
     )
 
+    private val job = SupervisorJob()
+    private val searchScope = CoroutineScope(job + Dispatchers.IO)
+
     fun initLocationTracker(context: Context) {
         locationTracker = DefaultLocationTracker(
             LocationServices.getFusedLocationProviderClient(context),
@@ -61,7 +63,7 @@ class LirViewModel : ViewModel() {
             when (currentLocation == null) {
                 true -> {
                     state.value = state.value.copy(results = emptyList())
-                    postEvent(Event.ShowSnackBar(message = "An error has occurred"))
+                    postEvent(Event.ShowSnackBar(message = "No location received"))
                 }
 
                 else -> {
@@ -73,9 +75,9 @@ class LirViewModel : ViewModel() {
                         is Result.Success -> state.value = state.value.copy(results = result.data.map { it })
 
                         is Result.Error -> {
+                            Log.e(TAG, "Error fetching data", result.error.exception)
                             state.value = state.value.copy(results = emptyList())
                             postEvent(Event.ShowSnackBar(message = "An error has occurred"))
-                            Log.e(TAG, "Error fetching data: ${result.error}")
                         }
                     }
                 }
@@ -87,11 +89,18 @@ class LirViewModel : ViewModel() {
 
     fun fetchLocations(input: String) {
         state.value = state.value.copy(inputValue = input)
-        viewModelScope.launch {
-            when (val result =
-                ojpSdk.requestLocationsFromSearchTerm(term = input, restrictions = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS))) {
+        searchScope.coroutineContext.cancelChildren()
+        searchScope.launch {
+            when (val result = ojpSdk.requestLocationsFromSearchTerm(
+                term = input,
+                restrictions = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS)
+            )
+            ) {
                 is Result.Success -> state.value = state.value.copy(results = result.data)
-                is Result.Error -> Log.e(TAG, "Error fetching data: ${result.error}")
+                is Result.Error -> {
+                    Log.e(TAG, "Error fetching data", result.error.exception)
+                    if (result.error !is OjpError.RequestCancelled) postEvent(Event.ShowSnackBar("Something went wrong"))
+                }
             }
         }
     }

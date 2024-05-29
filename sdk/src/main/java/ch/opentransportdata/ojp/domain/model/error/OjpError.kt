@@ -1,24 +1,30 @@
 package ch.opentransportdata.ojp.domain.model.error
 
+import com.tickaroo.tikxml.XmlDataException
+import kotlinx.coroutines.CancellationException
+import retrofit2.HttpException
+import java.io.IOException
+
 /**
  * Created by Deniz Kalem on 06.05.2024
  */
-enum class OjpError : Error {
-    // Used as a placeholder for features, that are not finished implementing
-    NOT_IMPLEMENTED,
+sealed class OjpError(open val exception: Exception) {
 
     // When a response status code is != `200` this error is thrown
-    UNEXPECTED_HTTP_STATUS,
+    data class UnexpectedHttpStatus(override val exception: HttpException) : OjpError(exception)
 
     // A response is missing a required element. Eg. no `serviceDelivery` is present
-    MISSING_ELEMENT,
+    data class MissingElement(override val exception: NullPointerException) : OjpError(exception)
 
     // Issue when trying to generate a request xml
-    ENCODING_FAILED,
+    data class EncodingFailed(override val exception: IOException) : OjpError(exception)
 
     // Can't correctly decode a XML response
-    DECODING_FAILED,
+    data class DecodingFailed(override val exception: XmlDataException) : OjpError(exception)
+
+    // Job of the coroutine is cancelled while it is suspending
+    data class RequestCancelled(override val exception: CancellationException) : OjpError(exception)
 
     // Unknown error
-    UNKNOWN
+    data class Unknown(override val exception: Exception) : OjpError(exception)
 }
