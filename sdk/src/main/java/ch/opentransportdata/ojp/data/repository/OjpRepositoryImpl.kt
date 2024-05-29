@@ -5,7 +5,6 @@ import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDe
 import ch.opentransportdata.ojp.data.remote.RemoteOjpDataSource
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
-import ch.opentransportdata.ojp.domain.model.error.Error
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import com.tickaroo.tikxml.TypeAdapterNotFoundException
@@ -52,7 +51,7 @@ internal class OjpRepositoryImpl(
         }
     }
 
-    private fun handleError(exception: Exception): Error {
+    private fun handleError(exception: Exception): OjpError {
         return when (exception) {
             is HttpException -> {
                 Timber.e("Http Exception with error code: ${exception.code()}")

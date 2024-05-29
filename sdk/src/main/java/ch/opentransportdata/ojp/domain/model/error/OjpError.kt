@@ -8,25 +8,23 @@ import java.io.IOException
 /**
  * Created by Deniz Kalem on 06.05.2024
  */
-sealed class OjpError : Error {
-    // Used as a placeholder for features, that are not finished implementing
-    data class NotImplemented(val exception: Exception) : OjpError()
+sealed class OjpError(open val exception: Exception) {
 
     // When a response status code is != `200` this error is thrown
-    data class UnexpectedHttpStatus(val exception: HttpException) : OjpError()
+    data class UnexpectedHttpStatus(override val exception: HttpException) : OjpError(exception)
 
     // A response is missing a required element. Eg. no `serviceDelivery` is present
-    data class MissingElement(val exception: NullPointerException) : OjpError()
+    data class MissingElement(override val exception: NullPointerException) : OjpError(exception)
 
     // Issue when trying to generate a request xml
-    data class EncodingFailed(val exception: IOException) : OjpError()
+    data class EncodingFailed(override val exception: IOException) : OjpError(exception)
 
     // Can't correctly decode a XML response
-    data class DecodingFailed(val exception: XmlDataException) : OjpError()
+    data class DecodingFailed(override val exception: XmlDataException) : OjpError(exception)
 
     // Job of the coroutine is cancelled while it is suspending
-    data class RequestCancelled(val exception: CancellationException) : OjpError()
+    data class RequestCancelled(override val exception: CancellationException) : OjpError(exception)
 
     // Unknown error
-    data class Unknown(val exception: Exception) : OjpError()
+    data class Unknown(override val exception: Exception) : OjpError(exception)
 }
