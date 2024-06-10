@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.data.dto.request
 
 import ch.opentransportdata.ojp.data.dto.request.lir.LocationInformationRequestDto
+import ch.opentransportdata.ojp.data.dto.request.tir.TripRequestDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
@@ -17,5 +18,8 @@ internal data class ServiceRequestDto(
     val requestorRef: String,
 
     @Element(name = "OJPLocationInformationRequest")
-    val locationInformationRequest: LocationInformationRequestDto
+    val locationInformationRequest: LocationInformationRequestDto? = null,
+
+    @Element(name= "OJPTripRequest")
+    val tripRequest: TripRequestDto? = null,
 )
