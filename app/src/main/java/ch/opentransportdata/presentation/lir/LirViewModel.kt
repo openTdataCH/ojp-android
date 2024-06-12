@@ -7,11 +7,11 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.opentransportdata.data.DefaultLocationTracker
-import ch.opentransportdata.ojp.OjpSdk
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
+import ch.opentransportdata.presentation.MainActivity
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,18 +25,6 @@ class LirViewModel : ViewModel() {
     private lateinit var locationTracker: DefaultLocationTracker
 
     val state = MutableStateFlow(UiState())
-
-    private val ojpSdk = OjpSdk(
-        baseUrl = "https://odpch-api.clients.liip.ch/",
-        endpoint = "ojp20-beta",
-        httpHeaders = hashMapOf(
-            Pair(
-                "Authorization",
-                "Bearer eyJvcmciOiI2M2Q4ODhiMDNmZmRmODAwMDEzMDIwODkiLCJpZCI6IjUzYzAyNWI2ZTRhNjQyOTM4NzMxMDRjNTg2ODEzNTYyIiwiaCI6Im11cm11cjEyOCJ9"
-            )
-        ),
-        requesterReference = "OJP_Demo",
-    )
 
     private val job = SupervisorJob()
     private val searchScope = CoroutineScope(job + Dispatchers.IO)
@@ -67,7 +55,7 @@ class LirViewModel : ViewModel() {
                 }
 
                 else -> {
-                    when (val result = ojpSdk.requestLocationsFromCoordinates(
+                    when (val result = MainActivity.ojpSdk.requestLocationsFromCoordinates(
                         longitude = currentLocation.longitude,
                         latitude = currentLocation.latitude,
                         restrictions = listOf(PlaceTypeRestriction.STOP)
@@ -91,7 +79,7 @@ class LirViewModel : ViewModel() {
         state.value = state.value.copy(inputValue = input)
         searchScope.coroutineContext.cancelChildren()
         searchScope.launch {
-            when (val result = ojpSdk.requestLocationsFromSearchTerm(
+            when (val result = MainActivity.ojpSdk.requestLocationsFromSearchTerm(
                 term = input,
                 restrictions = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS)
             )
