@@ -51,7 +51,10 @@ fun LirScreenComposable(
                 modifier = Modifier.padding(16.dp),
                 requestLocation = { viewModel.getCurrentLocation() },
                 textInputValue = state.value.inputValue,
-                onTextValueChange = { viewModel.fetchLocations(it) }
+                onTextValueChange = { viewModel.fetchLocations(it) },
+                hasFocus = true,
+                onFocusChange = {},
+                onClearInputClicked = { viewModel.fetchLocations("") }
             )
             if (state.value.isLoading) {
                 CircularProgressIndicator(
