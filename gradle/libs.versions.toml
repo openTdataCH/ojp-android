@@ -1,25 +1,24 @@
 [versions]
-agp = "8.2.1"
+agp = "8.4.2"
 assertk = "0.28.1"
-kotlin = "1.9.23"
-coreKtx = "1.12.0"
+kotlin = "2.0.0"
+coreKtx = "1.13.1"
 junit = "4.13.2"
 extJunit = "1.1.5"
 kotlinxCoroutinesTest = "1.8.0"
 timber = "5.0.1"
 koin = "3.5.3"
-retrofit2 = "2.9.0"
+retrofit2 = "2.11.0"
 okHttp = "4.12.0"
 tikXml = "0.9.0_13-SNAPSHOT"
 jodaTime = "2.12.6"
 dokka = "1.9.20"
-lifecycleRuntimeKtx = "2.7.0"
+lifecycleRuntimeKtx = "2.8.2"
 activityCompose = "1.9.0"
-compose-bom = "2024.04.01"
-composeCompiler = "1.5.12"
+compose-bom = "2024.06.00"
 navigation = "2.7.7"
 accompanistPermission = "0.32.0"
-playServices = "21.1.0"
+playServices = "21.3.0"
 
 [libraries]
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
@@ -58,3 +57,4 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
