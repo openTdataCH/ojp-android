@@ -16,4 +16,4 @@ import kotlinx.serialization.Serializable
 data class ModeDto(
     @PropertyElement(name = "PtMode")
     val ptMode: PtMode
-):Parcelable
+) : Parcelable

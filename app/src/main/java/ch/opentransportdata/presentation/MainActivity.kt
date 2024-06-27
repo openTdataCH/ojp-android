@@ -15,11 +15,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import ch.opentransportdata.ojp.OjpSdk
+import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.presentation.lir.LirScreenComposable
 import ch.opentransportdata.presentation.navigation.*
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.TirScreenComposable
+import kotlin.reflect.typeOf
 
 class MainActivity : ComponentActivity() {
 
@@ -91,8 +94,21 @@ class MainActivity : ComponentActivity() {
 
         NavHost(navController = navController, startDestination = TripSearchMask) {
             composable<TripSearchMask> { TirScreenComposable(navHostController = navController) }
-            composable<TripResults> {  } // todo: implement
-            composable<TripDetails> {  } // todo: implement
+            composable<TripResults>(
+                typeMap = mapOf(
+                    typeOf<PlaceResultDto?>() to CustomNavType(
+                        PlaceResultDto::class.java,
+                        PlaceResultDto.serializer()
+                    ),
+                    typeOf<PlaceResultDto>() to CustomNavType(
+                        PlaceResultDto::class.java,
+                        PlaceResultDto.serializer()
+                    )
+                )
+            ) { navBackstackEntry ->
+                val parameters = navBackstackEntry.toRoute<TripResults>()
+            }
+            composable<TripDetails> { } // todo: implement
         }
     }
 

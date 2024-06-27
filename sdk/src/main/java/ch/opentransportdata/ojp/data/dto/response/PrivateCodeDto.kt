@@ -17,4 +17,4 @@ data class PrivateCodeDto(
     val system: String,
     @PropertyElement(name = "Value")
     val value: String,
-):Parcelable
+) : Parcelable
