@@ -2,6 +2,8 @@ package ch.opentransportdata.ojp.di
 
 import ch.opentransportdata.ojp.data.remote.RemoteOjpDataSource
 import ch.opentransportdata.ojp.data.remote.RemoteOjpDataSourceImpl
+import ch.opentransportdata.ojp.data.remote.tir.RemoteTirDataSource
+import ch.opentransportdata.ojp.data.remote.tir.RemoteTirDataSourceImpl
 import org.koin.dsl.module
 
 /**
@@ -9,4 +11,5 @@ import org.koin.dsl.module
  */
 internal val dataSourceModule = module {
     single<RemoteOjpDataSource> { RemoteOjpDataSourceImpl(get(), get()) }
+    single<RemoteTirDataSource> { RemoteTirDataSourceImpl(get(), get()) }
 }

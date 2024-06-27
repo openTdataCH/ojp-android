@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp
 
+import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.di.context.OjpKoinContext
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
@@ -7,7 +8,9 @@ import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
+import ch.opentransportdata.ojp.domain.usecase.RequestTrips
 import timber.log.Timber
+import java.time.Instant
 
 /**
  * Created by Michael Ruppen on 08.04.2024
@@ -58,6 +61,27 @@ class OjpSdk(
         restrictions: List<PlaceTypeRestriction>
     ): Result<List<PlaceResultDto>> {
         return OjpKoinContext.koinApp.koin.get<RequestLocationsFromSearchTerm>().invoke(term, restrictions)
+    }
+
+    /**
+     * Request a list of trips
+     *
+     * @param origin The origin where the trip starts
+     * @param destination The destination where the trip ends
+     * @param via The via station which the trip should cover
+     * @param time The time the trip should start/end
+     * @param params The params to get further information on each trip
+     *
+     * todo: add return value
+     */
+    suspend fun requestTrips(
+        origin: PlaceResultDto,
+        destination: PlaceResultDto,
+        via: PlaceResultDto? = null,
+        time: Instant,
+        params: TripParamsDto?
+    ) {
+        OjpKoinContext.koinApp.koin.get<RequestTrips>().invoke(origin, destination, via, time, params)
     }
 
 }
