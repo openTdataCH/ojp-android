@@ -40,7 +40,7 @@ internal class RemoteOjpDataSourceImpl(
             )
         )
 
-        return@withContext ojpService.locationInformationRequest(url, request)
+        return@withContext ojpService.serviceRequest(url, request)
     }
 
     override suspend fun searchLocationByCoordinates(
@@ -60,7 +60,7 @@ internal class RemoteOjpDataSourceImpl(
             )
         )
 
-        return@withContext ojpService.locationInformationRequest(url, request)
+        return@withContext ojpService.serviceRequest(url, request)
     }
 
     private fun createRequest(requestTime: LocalDateTime, locationInformationRequest: LocationInformationRequestDto): OjpDto {
