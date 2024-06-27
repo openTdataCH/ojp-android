@@ -1,4 +1,4 @@
-package ch.opentransportdata.ojp.data.remote.tir
+package ch.opentransportdata.ojp.data.remote.trip
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
@@ -17,10 +17,10 @@ import org.joda.time.LocalDateTime
 /**
  * Created by Michael Ruppen on 27.06.2024
  */
-internal class RemoteTirDataSourceImpl(
+internal class RemoteTripDataSourceImpl(
     private val ojpService: OjpService,
     private val initializer: Initializer
-) : RemoteTirDataSource {
+) : RemoteTripDataSource {
 
     private val url: String
         get() = initializer.baseUrl + initializer.endpoint

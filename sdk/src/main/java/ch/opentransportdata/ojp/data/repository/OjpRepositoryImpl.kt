@@ -3,8 +3,8 @@ package ch.opentransportdata.ojp.data.repository
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
-import ch.opentransportdata.ojp.data.remote.RemoteOjpDataSource
-import ch.opentransportdata.ojp.data.remote.tir.RemoteTirDataSource
+import ch.opentransportdata.ojp.data.remote.location.RemoteLocationInformationDataSource
+import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
@@ -22,8 +22,8 @@ import java.time.Instant
  * Created by Michael Ruppen on 08.04.2024
  */
 internal class OjpRepositoryImpl(
-    private val remoteDataSource: RemoteOjpDataSource,
-    private val tripDataSource: RemoteTirDataSource
+    private val remoteDataSource: RemoteLocationInformationDataSource,
+    private val tripDataSource: RemoteTripDataSource
 ) : OjpRepository {
 
     override suspend fun placeResultsFromSearchTerm(

@@ -1,10 +1,11 @@
-package ch.opentransportdata.ojp.data.remote
+package ch.opentransportdata.ojp.data.remote.location
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.converter.PlaceTypeRestrictionConverter
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
 import ch.opentransportdata.ojp.data.dto.request.lir.*
+import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.utils.GeoLocationUtil.initWithGeoLocationAndBoxSize
@@ -16,10 +17,10 @@ import org.joda.time.LocalDateTime
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-internal class RemoteOjpDataSourceImpl(
+internal class RemoteLocationInformationDataSourceImpl(
     private val ojpService: OjpService,
     private val initializer: Initializer
-) : RemoteOjpDataSource {
+) : RemoteLocationInformationDataSource {
 
     private val numberOfResults = 10
     private val placeTypeRestrictionConverter = PlaceTypeRestrictionConverter()
