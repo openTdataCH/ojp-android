@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import ch.opentransportdata.ojp.data.dto.response.place.AbstractPlaceDto
 import ch.opentransportdata.ojp.data.dto.response.place.AddressDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
-import ch.opentransportdata.presentation.components.LocationButton
+import ch.opentransportdata.presentation.components.LocationInputRow
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import kotlinx.coroutines.launch
 
@@ -47,20 +47,15 @@ fun LirScreenComposable(
                 .padding(innerPaddings)
                 .fillMaxSize()
         ) {
-            Row(
+            LocationInputRow(
                 modifier = Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                LocationButton(requestLocation = { viewModel.getCurrentLocation() })
-                OutlinedTextField(
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .fillMaxWidth(),
-                    value = state.value.inputValue,
-                    singleLine = true,
-                    onValueChange = { viewModel.fetchLocations(it) },
-                    placeholder = { Text(text = "Type to search") })
-            }
+                requestLocation = { viewModel.getCurrentLocation() },
+                textInputValue = state.value.inputValue,
+                onTextValueChange = { viewModel.fetchLocations(it) },
+                hasFocus = true,
+                onFocusChange = {},
+                onClearInputClicked = { viewModel.fetchLocations("") }
+            )
             if (state.value.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier
