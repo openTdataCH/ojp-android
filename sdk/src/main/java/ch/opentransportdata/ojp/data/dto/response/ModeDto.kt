@@ -9,6 +9,8 @@ import kotlinx.serialization.Serializable
 
 /**
  * Created by Michael Ruppen on 08.04.2024
+ *
+ * Serializable and Parcelize annotation is both needed for compose navigation with custom types
  */
 @Serializable
 @Parcelize
