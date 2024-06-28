@@ -7,6 +7,9 @@ import androidx.navigation.NavType
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
+/**
+ * Created by Deniz Kalem on 27.06.2024
+ */
 class CustomNavType<T : Parcelable>(
     private val clazz: Class<T>,
     private val serializer: KSerializer<T>,
