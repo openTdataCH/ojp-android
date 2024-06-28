@@ -5,10 +5,16 @@ import ch.opentransportdata.ojp.data.dto.response.PrivateCodeDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 /**
  * Created by Michael Ruppen on 08.04.2024
+ *
+ * Serializable and Parcelize annotation is both needed for compose navigation with custom types
  */
+@Serializable
+@Parcelize
 @Xml(name = "StopPlace")
 data class StopPlaceDto(
     @PropertyElement(name = "StopPlaceRef")
