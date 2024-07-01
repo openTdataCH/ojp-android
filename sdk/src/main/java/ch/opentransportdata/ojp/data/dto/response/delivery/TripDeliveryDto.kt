@@ -1,5 +1,8 @@
 package ch.opentransportdata.ojp.data.dto.response.delivery
 
+import ch.opentransportdata.ojp.data.dto.response.tir.TripResponseContextDto
+import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
+import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
 
@@ -15,4 +18,10 @@ internal data class TripDeliveryDto(
     override val requestMessageRef: String?,
     @PropertyElement(name = "siri:DefaultLanguage")
     override val defaultLanguage: String?,
+    @PropertyElement(name = "CalcTime")
+    val calcTime: String,
+    @Element(name = "TripResult")
+    val tripResults: List<TripResultDto>,
+    @Element(name = "TripResponseContext")
+    val responseContext: TripResponseContextDto?
 ) : AbstractDeliveryDto()

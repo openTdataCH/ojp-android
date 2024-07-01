@@ -70,7 +70,7 @@ fun TirScreenComposable(
                 LazyColumn {
                     items(
                         items = state.value.results,
-                        key = { item -> item.place.name.stationName + item.place.position.longitude + item.place.position.latitude + item.distance }
+                        key = { item -> item.place.name.text + item.place.position.longitude + item.place.position.latitude + item.distance }
                     ) { item ->
                         ListItem(
                             modifier = Modifier.clickable { viewModel.onLocationSelected(item) },

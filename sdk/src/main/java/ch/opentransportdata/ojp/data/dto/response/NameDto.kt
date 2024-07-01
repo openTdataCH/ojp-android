@@ -9,5 +9,5 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "Name")
 data class NameDto(
     @PropertyElement(name = "Text")
-    val stationName: String
+    val text: String
 )
