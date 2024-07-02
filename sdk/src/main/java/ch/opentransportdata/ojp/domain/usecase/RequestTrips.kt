@@ -2,6 +2,8 @@ package ch.opentransportdata.ojp.domain.usecase
 
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
+import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import java.time.Instant
 
@@ -18,7 +20,10 @@ internal class RequestTrips(
         via: PlaceResultDto? = null,
         time: Instant,
         params: TripParamsDto?
-    ) {
-        ojpRepository.requestTrips(origin, destination, via, time, params)
+    ): Result<TripDeliveryDto> {
+        return when (val response = ojpRepository.requestTrips(origin, destination, via, time, params)) {
+            is Result.Success -> Result.Success(response.data)
+            is Result.Error -> Result.Error(response.error)
+        }
     }
 }

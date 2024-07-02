@@ -3,6 +3,7 @@ package ch.opentransportdata.ojp.data.repository
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.remote.location.RemoteLocationInformationDataSource
 import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
@@ -62,11 +63,11 @@ internal class OjpRepositoryImpl(
         via: PlaceResultDto?,
         time: Instant,
         params: TripParamsDto?
-    ) {
-        //todo: add return value
-        try {
+    ): Result<TripDeliveryDto> {
+        return try {
             val response = tripDataSource.requestTrips(origin, destination, via, LocalDateTime(time.toEpochMilli()), params)
-            Result.Success(response)
+            val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripDeliveryDto
+            if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null"))) //todo: challenge handling
         } catch (exception: Exception) {
             val error = handleError(exception)
             Result.Error(error)

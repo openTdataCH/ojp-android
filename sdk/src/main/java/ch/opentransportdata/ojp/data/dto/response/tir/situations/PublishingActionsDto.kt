@@ -10,19 +10,19 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "siri:PublishingActions")
 data class PublishingActionsDto(
     @Element(name = "siri:PublishingAction")
-    val publishingActions: List<PublishingActionDto>
+    val publishingActions: List<PublishingActionDto>?
 )
 
 @Xml(name = "siri:PublishingAction")
 data class PublishingActionDto(
     @Element(name = "siri:PassengerInformationAction")
-    val passengerInformationAction: PassengerInformationActionDto
+    val passengerInformationAction: PassengerInformationActionDto?
 )
 
 @Xml(name = "siri:PassengerInformationAction")
 data class PassengerInformationActionDto(
     @PropertyElement(name = "siri:RecordedAtTime")
-    val recordedAtTime: String,
+    val recordedAtTime: String?,
     @Element(name = "siri:TextualContent")
-    val textualContent: TextualContentDto
+    val textualContent: TextualContentDto?
 )

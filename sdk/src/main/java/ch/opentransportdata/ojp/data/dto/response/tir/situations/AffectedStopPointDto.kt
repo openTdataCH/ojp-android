@@ -9,5 +9,5 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "siri:AffectedStopPoint")
 data class AffectedStopPointDto(
     @PropertyElement(name = "siri:StopPointRef")
-    val stopPointRef: String
+    val stopPointRef: String?
 )

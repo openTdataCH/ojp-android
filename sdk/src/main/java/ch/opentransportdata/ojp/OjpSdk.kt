@@ -2,6 +2,7 @@ package ch.opentransportdata.ojp
 
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.di.context.OjpKoinContext
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
@@ -72,7 +73,7 @@ class OjpSdk(
      * @param time The time the trip should start/end
      * @param params The params to get further information on each trip
      *
-     * todo: add return value
+     * @return [TripDeliveryDto] object with related trip information
      */
     suspend fun requestTrips(
         origin: PlaceResultDto,
@@ -80,8 +81,8 @@ class OjpSdk(
         via: PlaceResultDto? = null,
         time: Instant,
         params: TripParamsDto?
-    ) {
-        OjpKoinContext.koinApp.koin.get<RequestTrips>().invoke(origin, destination, via, time, params)
+    ): Result<TripDeliveryDto> {
+        return OjpKoinContext.koinApp.koin.get<RequestTrips>().invoke(origin, destination, via, time, params)
     }
 
 }

@@ -2,6 +2,7 @@ package ch.opentransportdata.ojp.domain.repository
 
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
 import java.time.Instant
@@ -24,5 +25,5 @@ internal interface OjpRepository {
         via: PlaceResultDto? = null,
         time: Instant,
         params: TripParamsDto?
-    )
+    ): Result<TripDeliveryDto>
 }

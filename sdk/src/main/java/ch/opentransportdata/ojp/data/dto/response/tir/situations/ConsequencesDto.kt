@@ -9,5 +9,5 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "siri:Consequences")
 data class ConsequencesDto(
     @Element(name = "siri:Consequence")
-    val consequence: ConsequenceDto
+    val consequence: ConsequenceDto?
 )

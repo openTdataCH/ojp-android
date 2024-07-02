@@ -10,43 +10,43 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "siri:TextualContent")
 data class TextualContentDto(
     @Element(name = "siri:SummaryContent")
-    val summaryContent: SummaryContentDto,
+    val summaryContent: SummaryContentDto?,
     @Element(name = "siri:ReasonContent")
-    val reasonContent: ReasonContentDto,
+    val reasonContent: ReasonContentDto?,
     @Element(name = "siri:ConsequenceContent")
-    val consequenceContent: ConsequenceContentDto,
+    val consequenceContent: ConsequenceContentDto?,
     @Element(name = "siri:RecommendationContent")
-    val recommendationContent: RecommendationContentDto,
+    val recommendationContent: RecommendationContentDto?,
     @Element(name = "siri:DurationContent")
-    val durationContent: DurationContentDto,
+    val durationContent: DurationContentDto?,
 )
 
 @Xml(name = "siri:SummaryContent")
 data class SummaryContentDto(
     @PropertyElement(name = "siri:SummaryText")
-    val summaryText: String
+    val summaryText: String?
 )
 
 @Xml(name = "siri:ReasonContent")
 data class ReasonContentDto(
     @PropertyElement(name = "siri:ReasonText")
-    val reasonText: String
+    val reasonText: String?
 )
 
 @Xml(name = "siri:ConsequenceContent")
 data class ConsequenceContentDto(
     @PropertyElement(name = "siri:ConsequenceText")
-    val consequenceText: String
+    val consequenceText: String?
 )
 
 @Xml(name = "siri:RecommendationContent")
 data class RecommendationContentDto(
     @PropertyElement(name = "siri:RecommendationText")
-    val recommendationText: String
+    val recommendationText: String?
 )
 
 @Xml(name = "siri:DurationContent")
 data class DurationContentDto(
     @PropertyElement(name = "siri:DurationText")
-    val durationText: String
+    val durationText: String?
 )

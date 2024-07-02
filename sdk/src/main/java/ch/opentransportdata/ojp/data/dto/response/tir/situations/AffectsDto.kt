@@ -9,5 +9,5 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "siri:Affects")
 data class AffectsDto(
     @Element(name = "siri:StopPoints")
-    val stopPoints: StopPointsDto
+    val stopPoints: StopPointsDto?
 )

@@ -11,7 +11,7 @@ import com.tickaroo.tikxml.annotation.Xml
  */
 
 @Xml(name = "OJPTripDelivery")
-internal data class TripDeliveryDto(
+data class TripDeliveryDto(
     @PropertyElement(name = "siri:ResponseTimestamp")
     override val responseTimestamp: String,
     @PropertyElement(name = "siri:RequestMessageRef")

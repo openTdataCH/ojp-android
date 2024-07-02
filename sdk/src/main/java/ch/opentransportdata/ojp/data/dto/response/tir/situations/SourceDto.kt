@@ -9,5 +9,5 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "siri:Source")
 data class SourceDto(
     @PropertyElement(name = "siri:SourceType")
-    val sourceType: String //todo: check siri doc for info: https://laidig.github.io/siri-20-java/doc/
+    val sourceType: String? //todo: check siri doc for info: https://laidig.github.io/siri-20-java/doc/
 )

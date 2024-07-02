@@ -17,5 +17,5 @@ data class TimedLegDto(
     @Element(name = "Service")
     val service: ServiceDto,
     @Element(name = "LegTrack")
-    val legTrack: LegTrackDto
+    val legTrack: LegTrackDto?
 ) : AbstractLegType()
