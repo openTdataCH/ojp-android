@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.tir
+package ch.opentransportdata.presentation.tir.result
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -8,17 +8,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import ch.opentransportdata.ojp.data.dto.response.tir.TripResponseContextDto
+import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.presentation.components.Label
 import ch.opentransportdata.presentation.components.LabelType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
+import ch.opentransportdata.presentation.tir.PreviewData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import kotlin.time.Duration
 
 /**
  * Created by Michael Ruppen on 28.06.2024
@@ -26,9 +34,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun TripItem(
     modifier: Modifier = Modifier,
-    startWithWalkLeg: Boolean,
+    responseContextDto: TripResponseContextDto? = null,
+    trip: TripDto,
     hasDisruptions: Boolean,
-    numberOfTransferLegs: Int
 ) {
     var isPriceVisible by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
@@ -38,6 +46,12 @@ fun TripItem(
             isPriceVisible = true
         }
     }
+
+    val duration = Duration.parseOrNull(trip.duration)
+    val startTime = LocalDateTime
+        .ofInstant(trip.firstTimedLeg.legBoard.serviceDeparture.timetabledTimeInstant, ZoneOffset.UTC)
+        .format(DateTimeFormatter.ofPattern("HH:mm"))
+    val platform = trip.firstTimedLeg.legBoard.estimatedQuay?.text ?: trip.firstTimedLeg.legBoard.plannedQuay.text
 
     Column(
         modifier = modifier
@@ -50,12 +64,12 @@ fun TripItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "07:30",
+                text = LocalDateTime.parse(trip.startTime).format(DateTimeFormatter.ofPattern("HH:mm")),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "08:54",
+                text = LocalDateTime.parse(trip.endTime).format(DateTimeFormatter.ofPattern("HH:mm")),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -67,23 +81,22 @@ fun TripItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
-            if (startWithWalkLeg) {
+            if (trip.startWithTransferLeg) {
                 Text(
-                    text = "07:48 ",
+                    text = startTime,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-
-                    )
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(
-                    text = "IC8 ab Brig",
+                    modifier = Modifier.padding(start = 4.dp),
+                    text = "${trip.firstTimedLeg.service.publishedServiceName.text} direction ${trip.firstTimedLeg.service.destinationText.text}",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-
-                    )
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Spacer(modifier = Modifier.weight(1f))
             }
             Text(
-                text = "1h 24m",
+                text = "${duration?.inWholeHours}h ${duration?.inWholeMinutes?.rem(60)}m",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -102,7 +115,7 @@ fun TripItem(
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                repeat(numberOfTransferLegs) {
+                repeat(trip.transfers) {
                     Surface(
                         modifier = Modifier.size(4.dp),
                         color = MaterialTheme.colorScheme.primary,
@@ -122,9 +135,9 @@ fun TripItem(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "GL. 3",
+                    text = "Pl. $platform",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = if (trip.firstTimedLeg.legBoard.isPlatformChanged) MaterialTheme.colorScheme.onError else MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
@@ -133,11 +146,7 @@ fun TripItem(
                     color = MaterialTheme.colorScheme.onSurface
 
                 )
-                Icon(
-                    modifier = Modifier.size(18.dp),
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "first class occupancy"
-                )
+                ClassOccupancy(occupancyCount = 1)
 
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
@@ -145,11 +154,7 @@ fun TripItem(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Icon(
-                    modifier = Modifier.size(18.dp),
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "second class occupancy"
-                )
+                ClassOccupancy(occupancyCount = 2)
             }
             Row(
                 modifier = Modifier.weight(1f),
@@ -167,7 +172,7 @@ fun TripItem(
                         modifier = Modifier.padding(start = 8.dp),
                         type = LabelType.GREEN,
                         icon = Icons.Default.FavoriteBorder,
-                        text = "ab CHF 25.20"
+                        text = "from CHF 25.20"
                     )
                 }
             }
@@ -176,14 +181,55 @@ fun TripItem(
     }
 }
 
+@Composable
+private fun ClassOccupancy(
+    modifier: Modifier = Modifier,
+    occupancyCount: Int
+) {
+
+    Box(modifier = modifier) {
+        Icon(
+            modifier = Modifier.size(18.dp),
+            imageVector = Icons.Default.Person,
+            contentDescription = "second class occupancy",
+            tint = MaterialTheme.colorScheme.onSurface
+        )
+        Icon(
+            modifier = Modifier
+                .padding(start = 4.dp)
+                .size(18.dp),
+            imageVector = if (occupancyCount == 2) Icons.Default.Person else Icons.Outlined.Person,
+            contentDescription = "second class occupancy",
+            tint = MaterialTheme.colorScheme.onSurface
+        )
+        Icon(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .size(18.dp),
+            imageVector = if (occupancyCount == 3) Icons.Default.Person else Icons.Outlined.Person,
+            contentDescription = "second class occupancy",
+            tint = MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
 @PreviewLightDark
 @Composable
 private fun TripItemPreview() {
     OJPAndroidSDKTheme {
         TripItem(
-            startWithWalkLeg = true,
             hasDisruptions = true,
-            numberOfTransferLegs = 3
+            trip = TripDto(
+                id = "1234",
+                duration = "PT1H",
+                startTime = LocalDateTime.now().toString(),
+                endTime = LocalDateTime.now().plusHours(1).toString(),
+                transfers = 0,
+                legs = listOf(
+                    PreviewData.transferLeg,
+                    PreviewData.timedLeg
+                )
+            )
         )
     }
 }
@@ -193,9 +239,18 @@ private fun TripItemPreview() {
 private fun TripItemSecondPreview() {
     OJPAndroidSDKTheme {
         TripItem(
-            startWithWalkLeg = false,
             hasDisruptions = false,
-            numberOfTransferLegs = 0
+            trip = TripDto(
+                id = "1234",
+                duration = "PT1H18M",
+                startTime = LocalDateTime.now().toString(),
+                endTime = LocalDateTime.now().plusHours(1).plusMinutes(18).toString(),
+                transfers = 2,
+                legs = listOf(
+                    PreviewData.transferLeg,
+                    PreviewData.timedLeg
+                )
+            )
         )
     }
 }

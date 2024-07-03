@@ -30,7 +30,7 @@ data class ServiceDto(
     @Element(name = "PublishedServiceName")
     val publishedServiceName: NameDto,
     @Element(name = "ProductCategory")
-    val productCategory: ProductCategoryDto,
+    val productCategory: ProductCategoryDto?,
     @PropertyElement(name = "siri:DirectionRef")
     val directionRef: String,
     @PropertyElement(name = "OperatingDayRef")

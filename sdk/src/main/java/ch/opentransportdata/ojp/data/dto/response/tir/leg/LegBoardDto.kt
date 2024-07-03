@@ -17,7 +17,7 @@ data class LegBoardDto(
     @Element(name = "PlannedQuay")
     val plannedQuay: NameDto,
     @Element(name = "EstimatedQuay")
-    val estimatedQuay: NameDto,
+    val estimatedQuay: NameDto?,
     @Element(name = "NameSuffix")
     val nameSuffix: NameDto?,
     @Element(name = "ServiceArrival")
@@ -27,4 +27,8 @@ data class LegBoardDto(
     @PropertyElement(name = "Order")
     val order: Int?
     //todo: check for other needed elements...
-)
+) {
+    val isPlatformChanged: Boolean
+        get() = plannedQuay.text != estimatedQuay?.text
+
+}
