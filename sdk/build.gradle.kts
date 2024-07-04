@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.kotlin.serialization)
     `maven-publish`
 }
 
@@ -75,6 +76,8 @@ dependencies {
     kapt(libs.tikProcessor) //needed for TypeAdapter creation
     implementation(libs.joda)
     implementation(libs.dokka)
+    implementation(libs.kotlinx.serialization.json)
+
 
     testImplementation(libs.junit)
     testImplementation(libs.assertk)
