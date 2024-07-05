@@ -3,6 +3,7 @@ package ch.opentransportdata.ojp.data.dto.request.tir
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
+import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 07.06.2024
@@ -10,7 +11,7 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "OJPTripRequest")
 internal data class TripRequestDto(
     @PropertyElement(name = "siri:RequestTimestamp")
-    val requestTimestamp: String,
+    val requestTimestamp: LocalDateTime,
 
     @Element(name = "Origin")
     val origin: PlaceContextDto,

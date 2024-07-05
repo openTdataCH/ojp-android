@@ -9,10 +9,9 @@ import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.utils.GeoLocationUtil.initWithGeoLocationAndBoxSize
-import ch.opentransportdata.ojp.utils.toInstantString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 08.04.2024
@@ -35,7 +34,7 @@ internal class RemoteLocationInformationDataSourceImpl(
         val request = createRequest(
             requestTime = requestTime,
             locationInformationRequest = LocationInformationRequestDto(
-                requestTimestamp = requestTime.toInstantString(),
+                requestTimestamp = requestTime,
                 initialInput = InitialInputDto(name = term),
                 restrictions = createRestrictions(restrictions)
             )
@@ -52,7 +51,7 @@ internal class RemoteLocationInformationDataSourceImpl(
         val request = createRequest(
             requestTime = requestTime,
             locationInformationRequest = LocationInformationRequestDto(
-                requestTimestamp = requestTime.toInstantString(),
+                requestTimestamp = requestTime,
                 initialInput = InitialInputDto(
                     geoRestriction = GeoRestrictionDto(
                         rectangle = initWithGeoLocationAndBoxSize(longitude, latitude)
@@ -68,7 +67,7 @@ internal class RemoteLocationInformationDataSourceImpl(
         return OjpDto(
             ojpRequest = OjpRequestDto(
                 serviceRequest = ServiceRequestDto(
-                    requestTimestamp = requestTime.toInstantString(),
+                    requestTimestamp = requestTime,
                     requestorRef = initializer.requesterReference,
                     locationInformationRequest = locationInformationRequest
                 )

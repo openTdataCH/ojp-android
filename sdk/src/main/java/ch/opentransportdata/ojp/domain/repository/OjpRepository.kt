@@ -5,7 +5,7 @@ import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
-import java.time.Instant
+import java.time.LocalDateTime
 
 internal interface OjpRepository {
     suspend fun placeResultsFromSearchTerm(
@@ -23,7 +23,7 @@ internal interface OjpRepository {
         origin: PlaceResultDto,
         destination: PlaceResultDto,
         via: PlaceResultDto? = null,
-        time: Instant,
+        time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
     ): Result<TripDeliveryDto>

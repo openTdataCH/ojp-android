@@ -14,10 +14,9 @@ import com.tickaroo.tikxml.TypeAdapterNotFoundException
 import com.tickaroo.tikxml.TypeConverterNotFoundException
 import com.tickaroo.tikxml.XmlDataException
 import kotlinx.coroutines.CancellationException
-import org.joda.time.LocalDateTime
 import retrofit2.HttpException
 import timber.log.Timber
-import java.time.Instant
+import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 08.04.2024
@@ -61,12 +60,12 @@ internal class OjpRepositoryImpl(
         origin: PlaceResultDto,
         destination: PlaceResultDto,
         via: PlaceResultDto?,
-        time: Instant,
+        time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
     ): Result<TripDeliveryDto> {
         return try {
-            val response = tripDataSource.requestTrips(origin, destination, via, LocalDateTime(time.toEpochMilli()), isSearchForDepartureTime, params)
+            val response = tripDataSource.requestTrips(origin, destination, via, time, isSearchForDepartureTime, params)
             val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripDeliveryDto
             if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null"))) //todo: challenge handling
         } catch (exception: Exception) {

@@ -24,7 +24,6 @@ import ch.opentransportdata.presentation.tir.PreviewData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import kotlin.time.Duration
 
@@ -48,10 +47,8 @@ fun TripItem(
     }
 
     val duration = Duration.parseOrNull(trip.duration)
-    val startTime = LocalDateTime
-        .ofInstant(trip.firstTimedLeg.legBoard.serviceDeparture.timetabledTimeInstant, ZoneOffset.UTC)
-        .format(DateTimeFormatter.ofPattern("HH:mm"))
-    val platform = trip.firstTimedLeg.legBoard.estimatedQuay?.text ?: trip.firstTimedLeg.legBoard.plannedQuay.text
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    val platform = trip.firstTimedLeg.legBoard.estimatedQuay?.text ?: trip.firstTimedLeg.legBoard.plannedQuay?.text
 
     Column(
         modifier = modifier
@@ -64,12 +61,12 @@ fun TripItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = LocalDateTime.parse(trip.startTime).format(DateTimeFormatter.ofPattern("HH:mm")),
+                text = trip.startTime.format(formatter),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = LocalDateTime.parse(trip.endTime).format(DateTimeFormatter.ofPattern("HH:mm")),
+                text = trip.endTime.format(formatter),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -83,7 +80,7 @@ fun TripItem(
         ) {
             if (trip.startWithTransferLeg) {
                 Text(
-                    text = startTime,
+                    text = trip.firstTimedLeg.legBoard.serviceDeparture.timetabledTime.format(formatter),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -222,8 +219,8 @@ private fun TripItemPreview() {
             trip = TripDto(
                 id = "1234",
                 duration = "PT1H",
-                startTime = LocalDateTime.now().toString(),
-                endTime = LocalDateTime.now().plusHours(1).toString(),
+                startTime = LocalDateTime.now(),
+                endTime = LocalDateTime.now().plusHours(1),
                 transfers = 0,
                 legs = listOf(
                     PreviewData.transferLeg,
@@ -243,8 +240,8 @@ private fun TripItemSecondPreview() {
             trip = TripDto(
                 id = "1234",
                 duration = "PT1H18M",
-                startTime = LocalDateTime.now().toString(),
-                endTime = LocalDateTime.now().plusHours(1).plusMinutes(18).toString(),
+                startTime = LocalDateTime.now(),
+                endTime = LocalDateTime.now().plusHours(1).plusMinutes(18),
                 transfers = 2,
                 legs = listOf(
                     PreviewData.transferLeg,

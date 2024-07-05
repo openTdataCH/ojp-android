@@ -9,10 +9,9 @@ import ch.opentransportdata.ojp.data.dto.response.place.AddressDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.domain.usecase.Initializer
-import ch.opentransportdata.ojp.utils.toInstantString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 27.06.2024
@@ -48,7 +47,7 @@ internal class RemoteTripDataSourceImpl(
                 stationName = originName,
                 position = origin.place.position
             ),
-            departureArrivalTime = if (isSearchForDepartureTime) time.toInstantString() else null
+            departureArrivalTime = if (isSearchForDepartureTime) time else null
         )
 
         val destinationName = when (destination.place.placeType) {
@@ -63,7 +62,7 @@ internal class RemoteTripDataSourceImpl(
                 stationName = destinationName,
                 position = destination.place.position
             ),
-            departureArrivalTime = if (isSearchForDepartureTime) null else time.toInstantString()
+            departureArrivalTime = if (isSearchForDepartureTime) null else time
         )
 
         val vias = via?.let {
@@ -87,7 +86,7 @@ internal class RemoteTripDataSourceImpl(
         val request = createRequest(
             requestTime = requestTime,
             tripRequest = TripRequestDto(
-                requestTimestamp = requestTime.toInstantString(),
+                requestTimestamp = requestTime,
                 origin = originPlace,
                 destination = destinationPlace,
                 via = vias ?: emptyList(),
@@ -102,7 +101,7 @@ internal class RemoteTripDataSourceImpl(
         return OjpDto(
             ojpRequest = OjpRequestDto(
                 serviceRequest = ServiceRequestDto(
-                    requestTimestamp = requestTime.toInstantString(),
+                    requestTimestamp = requestTime,
                     requestorRef = initializer.requesterReference,
                     tripRequest = tripRequest
                 )

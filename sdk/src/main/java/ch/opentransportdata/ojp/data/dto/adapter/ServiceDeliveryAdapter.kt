@@ -10,6 +10,7 @@ import com.tickaroo.tikxml.XmlWriter
 import com.tickaroo.tikxml.typeadapter.ChildElementBinder
 import com.tickaroo.tikxml.typeadapter.TypeAdapter
 import java.io.IOException
+import java.time.LocalDateTime
 
 
 /**
@@ -31,7 +32,7 @@ internal class ServiceDeliveryAdapter : TypeAdapter<ServiceDeliveryDto> {
                 }
                 reader.skipAttributeValue()
             }
-            value.responseTimestamp = reader.nextTextContent()
+            value.responseTimestamp = config.getTypeConverter(LocalDateTime::class.java).read(reader.nextTextContent())
         }
 
         childElementBinders["siri:ProducerRef"] = ChildElementBinder<ValueHolder> { reader, config, value ->
@@ -108,7 +109,7 @@ internal class ServiceDeliveryAdapter : TypeAdapter<ServiceDeliveryDto> {
             }
 
             writer?.beginElement("siri:ResponseTimestamp")
-            writer?.textContent(it.responseTimestamp)
+            writer?.textContent(config?.getTypeConverter(LocalDateTime::class.java)?.write(it.responseTimestamp))
             writer?.endElement()
 
             if (it.producerRef != null) {
@@ -135,7 +136,7 @@ internal class ServiceDeliveryAdapter : TypeAdapter<ServiceDeliveryDto> {
     }
 
     class ValueHolder {
-        var responseTimestamp: String? = null
+        var responseTimestamp: LocalDateTime? = null
         var producerRef: String? = null
         var ojpDelivery: AbstractDeliveryDto? = null
     }

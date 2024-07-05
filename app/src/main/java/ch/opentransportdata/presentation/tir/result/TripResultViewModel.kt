@@ -50,8 +50,8 @@ class TripResultViewModel(
                 origin = origin!!,
                 destination = destination!!,
                 via = via,
-                time = Instant.now(),
-                params = null
+                time = LocalDateTime.now(),
+                params = TripParamsDto(numberOfResultsAfter = 5)
             )
             when (response) {
                 is Result.Success -> {
@@ -87,8 +87,8 @@ class TripResultViewModel(
                 origin = origin,
                 destination = destination,
                 via = via,
-                time = Instant.now(),
-                params = null
+                time = LocalDateTime.now(),
+                params = TripParamsDto(numberOfResults = 10)
             )
             when (response) {
                 is Result.Success -> {

@@ -6,6 +6,7 @@ import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
+import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 28.06.2024
@@ -18,9 +19,9 @@ data class TripDto(
     @PropertyElement(name = "Duration")
     val duration: String,
     @PropertyElement(name = "StartTime")
-    val startTime: String,
+    val startTime: LocalDateTime,
     @PropertyElement(name = "EndTime")
-    val endTime: String,
+    val endTime: LocalDateTime,
     @PropertyElement(name = "Transfers")
     val transfers: Int,
     @Element(name = "Leg")

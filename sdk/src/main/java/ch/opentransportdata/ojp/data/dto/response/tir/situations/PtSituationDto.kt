@@ -3,6 +3,7 @@ package ch.opentransportdata.ojp.data.dto.response.tir.situations
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
+import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 28.06.2024
@@ -11,7 +12,7 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "PtSituation")
 data class PtSituationDto(
     @PropertyElement(name = "siri:CreationTime")
-    val creationTime: String?,
+    val creationTime: LocalDateTime?,
     @PropertyElement(name = "siri:ParticipantRef")
     val participantRef: String?,
     @PropertyElement(name = "siri:SituationNumber")

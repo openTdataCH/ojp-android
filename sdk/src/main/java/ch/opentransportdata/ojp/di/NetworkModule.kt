@@ -4,10 +4,7 @@ import ch.opentransportdata.ojp.BuildConfig
 import ch.opentransportdata.ojp.data.dto.adapter.PlaceAdapter
 import ch.opentransportdata.ojp.data.dto.adapter.ServiceDeliveryAdapter
 import ch.opentransportdata.ojp.data.dto.adapter.TripResultAdapter
-import ch.opentransportdata.ojp.data.dto.converter.ConventionalModesOfOperationConverter
-import ch.opentransportdata.ojp.data.dto.converter.PlaceTypeRestrictionConverter
-import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
-import ch.opentransportdata.ojp.data.dto.converter.TransferTypeConverter
+import ch.opentransportdata.ojp.data.dto.converter.*
 import ch.opentransportdata.ojp.data.dto.response.PlaceDto
 import ch.opentransportdata.ojp.data.dto.response.ServiceDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
@@ -72,6 +69,7 @@ internal fun provideTikXml(): TikXml {
         .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
         .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
         .addTypeAdapter(TripResultDto::class.java, TripResultAdapter())
+        .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
         .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
         .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
         .addTypeConverter(PlaceTypeRestriction::class.java, PlaceTypeRestrictionConverter())

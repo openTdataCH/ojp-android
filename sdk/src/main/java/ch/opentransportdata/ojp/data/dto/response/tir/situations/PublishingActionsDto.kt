@@ -22,7 +22,7 @@ data class PublishingActionDto(
 @Xml(name = "siri:PassengerInformationAction")
 data class PassengerInformationActionDto(
     @PropertyElement(name = "siri:RecordedAtTime")
-    val recordedAtTime: String?,
+    val recordedAtTime: String?, //values like 00001-01-01T00:00:00 are returned and can not be parsed to LocalDateTime thus it's a String
     @Element(name = "siri:TextualContent")
     val textualContent: TextualContentDto?
 )

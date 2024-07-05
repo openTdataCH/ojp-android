@@ -5,6 +5,7 @@ import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
+import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 14.05.2024
@@ -13,7 +14,7 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "OJPTripDelivery")
 data class TripDeliveryDto(
     @PropertyElement(name = "siri:ResponseTimestamp")
-    override val responseTimestamp: String,
+    override val responseTimestamp: LocalDateTime,
     @PropertyElement(name = "siri:RequestMessageRef")
     override val requestMessageRef: String?,
     @PropertyElement(name = "siri:DefaultLanguage")

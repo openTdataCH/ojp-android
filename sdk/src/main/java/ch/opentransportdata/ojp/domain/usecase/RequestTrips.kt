@@ -5,7 +5,7 @@ import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
-import java.time.Instant
+import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 27.06.2024
@@ -18,11 +18,12 @@ internal class RequestTrips(
         origin: PlaceResultDto,
         destination: PlaceResultDto,
         via: PlaceResultDto? = null,
-        time: Instant,
+        time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
     ): Result<TripDeliveryDto> {
-        return when (val response = ojpRepository.requestTrips(origin, destination, via, time, isSearchForDepartureTime, params)) {
+        return when (val response =
+            ojpRepository.requestTrips(origin, destination, via, time, isSearchForDepartureTime, params)) {
             is Result.Success -> Result.Success(response.data)
             is Result.Error -> Result.Error(response.error)
         }

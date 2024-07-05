@@ -11,7 +11,7 @@ import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
 import ch.opentransportdata.ojp.domain.usecase.RequestTrips
 import timber.log.Timber
-import java.time.Instant
+import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 08.04.2024
@@ -80,7 +80,7 @@ class OjpSdk(
         origin: PlaceResultDto,
         destination: PlaceResultDto,
         via: PlaceResultDto? = null,
-        time: Instant,
+        time: LocalDateTime,
         isSearchForDepartureTime: Boolean = true,
         params: TripParamsDto?
     ): Result<TripDeliveryDto> {

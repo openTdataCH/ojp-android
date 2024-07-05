@@ -5,6 +5,7 @@ import ch.opentransportdata.ojp.data.dto.response.NameDto
 import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.*
 import ch.opentransportdata.ojp.domain.model.PtMode
+import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 03.07.2024
@@ -37,7 +38,7 @@ object PreviewData {
                 estimatedQuay = NameDto(text = "6"),
                 nameSuffix = null,
                 serviceDeparture = ServiceDepartureDto(
-                    timetabledTime = "2024-07-01T16:03:00Z",
+                    timetabledTime = LocalDateTime.now(),//"2024-07-01T16:03:00Z",
                     estimatedTime = null
                 ),
                 serviceArrival = null,
@@ -51,7 +52,7 @@ object PreviewData {
                 estimatedQuay = null,
                 nameSuffix = null,
                 serviceArrival = ServiceDepartureDto(
-                    timetabledTime = "2024-07-01T16:28:00Z",
+                    timetabledTime = LocalDateTime.now(),//"2024-07-01T16:28:00Z",
                     estimatedTime = null
                 ),
                 serviceDeparture = null,
