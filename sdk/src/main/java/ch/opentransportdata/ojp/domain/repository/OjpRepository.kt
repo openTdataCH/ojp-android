@@ -24,6 +24,7 @@ internal interface OjpRepository {
         destination: PlaceResultDto,
         via: PlaceResultDto? = null,
         time: Instant,
+        isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
     ): Result<TripDeliveryDto>
 }

@@ -19,9 +19,10 @@ internal class RequestTrips(
         destination: PlaceResultDto,
         via: PlaceResultDto? = null,
         time: Instant,
+        isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
     ): Result<TripDeliveryDto> {
-        return when (val response = ojpRepository.requestTrips(origin, destination, via, time, params)) {
+        return when (val response = ojpRepository.requestTrips(origin, destination, via, time, isSearchForDepartureTime, params)) {
             is Result.Success -> Result.Success(response.data)
             is Result.Error -> Result.Error(response.error)
         }

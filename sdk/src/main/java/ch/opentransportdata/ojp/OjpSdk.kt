@@ -40,7 +40,7 @@ class OjpSdk(
      * @param longitude The longitude of the geographical point
      * @param latitude The latitude of the geographical point
      * @param restrictions List of restrictions that should be used
-     * @return List of Place Results sorted by the nearest point
+     * @return List of [PlaceResultDto] sorted by the nearest point
      */
     suspend fun requestLocationsFromCoordinates(
         longitude: Double,
@@ -55,7 +55,7 @@ class OjpSdk(
      *
      * @param term The given search term
      * @param restrictions List of restrictions that should be used
-     * @return List of Place Results that contains the search term
+     * @return List of [PlaceResultDto] that contains the search term
      */
     suspend fun requestLocationsFromSearchTerm(
         term: String,
@@ -71,6 +71,7 @@ class OjpSdk(
      * @param destination The destination where the trip ends
      * @param via The via station which the trip should cover
      * @param time The time the trip should start/end
+     * @param isSearchForDepartureTime weather to search for trips that arrive at [time] or leave at [time]. Set to true if searching for trips that leave at [time].
      * @param params The params to get further information on each trip
      *
      * @return [TripDeliveryDto] object with related trip information
@@ -80,9 +81,11 @@ class OjpSdk(
         destination: PlaceResultDto,
         via: PlaceResultDto? = null,
         time: Instant,
+        isSearchForDepartureTime: Boolean = true,
         params: TripParamsDto?
     ): Result<TripDeliveryDto> {
-        return OjpKoinContext.koinApp.koin.get<RequestTrips>().invoke(origin, destination, via, time, params)
+        return OjpKoinContext.koinApp.koin.get<RequestTrips>()
+            .invoke(origin, destination, via, time, isSearchForDepartureTime, params)
     }
 
 }

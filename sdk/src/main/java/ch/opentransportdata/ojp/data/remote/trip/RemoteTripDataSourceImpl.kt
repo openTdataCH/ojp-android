@@ -31,6 +31,7 @@ internal class RemoteTripDataSourceImpl(
         destination: PlaceResultDto,
         via: PlaceResultDto?,
         time: LocalDateTime,
+        isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
     ): OjpDto = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
@@ -47,7 +48,7 @@ internal class RemoteTripDataSourceImpl(
                 stationName = originName,
                 position = origin.place.position
             ),
-            departureArrivalTime = time.toInstantString()
+            departureArrivalTime = if (isSearchForDepartureTime) time.toInstantString() else null
         )
 
         val destinationName = when (destination.place.placeType) {
@@ -62,7 +63,7 @@ internal class RemoteTripDataSourceImpl(
                 stationName = destinationName,
                 position = destination.place.position
             ),
-            departureArrivalTime = time.toInstantString()
+            departureArrivalTime = if (isSearchForDepartureTime) null else time.toInstantString()
         )
 
         val vias = via?.let {

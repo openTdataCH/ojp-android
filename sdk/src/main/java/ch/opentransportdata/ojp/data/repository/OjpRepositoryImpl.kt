@@ -62,10 +62,11 @@ internal class OjpRepositoryImpl(
         destination: PlaceResultDto,
         via: PlaceResultDto?,
         time: Instant,
+        isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
     ): Result<TripDeliveryDto> {
         return try {
-            val response = tripDataSource.requestTrips(origin, destination, via, LocalDateTime(time.toEpochMilli()), params)
+            val response = tripDataSource.requestTrips(origin, destination, via, LocalDateTime(time.toEpochMilli()), isSearchForDepartureTime, params)
             val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripDeliveryDto
             if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null"))) //todo: challenge handling
         } catch (exception: Exception) {

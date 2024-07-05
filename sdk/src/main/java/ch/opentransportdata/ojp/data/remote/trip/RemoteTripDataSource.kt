@@ -14,6 +14,7 @@ internal interface RemoteTripDataSource {
         destination: PlaceResultDto,
         via: PlaceResultDto? = null,
         time: LocalDateTime,
+        isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
     ): OjpDto
 }
