@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ch.opentransportdata.presentation.components.LocationInputRow
 import ch.opentransportdata.presentation.lir.name
+import ch.opentransportdata.presentation.navigation.TripResults
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import kotlinx.coroutines.launch
 
@@ -98,7 +99,13 @@ fun TirScreenComposable(
                 }
             }
 
-            is TirViewModel.Event.RequestTrip -> navHostController.navigate("/tir/results")
+            is TirViewModel.Event.RequestTrip -> navHostController.navigate(
+                TripResults(
+                    origin = event.origin,
+                    via = event.via,
+                    destination = event.destination
+                )
+            )
         }
         viewModel.eventHandled(event.id)
     }
@@ -128,7 +135,7 @@ private fun Header(
             hasFocus = origin.hasFocus,
             onFocusChange = { updateFocus(true, false, false) },
             isLocationSelected = origin.selectedLocation != null,
-            onClearInputClicked = {} //todo: implement clear to reset textInput
+            onClearInputClicked = { originTextValueChanged("") }
         )
 
         LocationInputRow(
@@ -141,7 +148,7 @@ private fun Header(
             hasFocus = via.hasFocus,
             onFocusChange = { updateFocus(false, true, false) },
             isLocationSelected = via.selectedLocation != null,
-            onClearInputClicked = {} //todo: implement clear to reset textInput
+            onClearInputClicked = { viaTextValueChanged("") }
         )
 
         LocationInputRow(
@@ -152,7 +159,7 @@ private fun Header(
             hasFocus = destination.hasFocus,
             onFocusChange = { updateFocus(false, false, true) },
             isLocationSelected = destination.selectedLocation != null,
-            onClearInputClicked = {} //todo: implement clear to reset textInput
+            onClearInputClicked = { destinationTextValueChanged("") }
         )
     }
 

@@ -5,21 +5,22 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.presentation.MainActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.time.Instant
+import java.time.LocalDateTime
 import java.util.UUID
 
 /**
  * Created by Michael Ruppen on 02.07.2024
  */
 class TripResultViewModel(
-    savedStateHandle: SavedStateHandle
-) : ViewModel() {
+    private val savedStateHandle: SavedStateHandle
+): ViewModel() {
 
     val state = MutableStateFlow(UiState())
 

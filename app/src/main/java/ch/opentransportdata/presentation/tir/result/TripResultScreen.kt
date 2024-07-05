@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
+import ch.opentransportdata.presentation.lir.name
 import ch.opentransportdata.presentation.reachedBottom
 import ch.opentransportdata.presentation.reachedTop
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
@@ -23,9 +25,14 @@ import kotlinx.coroutines.launch
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripResultScreen(
+    navHostController: NavHostController,
     viewModel: TripResultViewModel = viewModel(),
+//    originName: String,
+//    viaName: String? = null,
+//    destinationName: String
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -82,8 +89,9 @@ fun TripResultScreen(
         ) {
 
             TripResultHeader(
-                originName = viewModel.origin?.place?.name?.text ?: "-",
-                destinationName = viewModel.destination?.place?.name?.text ?: "-"
+                modifier = Modifier.padding(horizontal = 8.dp),
+                originName = viewModel.origin?.place?.placeType?.name() ?: "-",
+                destinationName = viewModel.destination?.place?.placeType?.name() ?: "-"
             )
 
             LazyColumn(

@@ -13,15 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import ch.opentransportdata.ojp.OjpSdk
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.presentation.lir.LirScreenComposable
 import ch.opentransportdata.presentation.navigation.*
+import ch.opentransportdata.presentation.navigation.navtypes.PlaceResultType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.TirScreenComposable
+import ch.opentransportdata.presentation.tir.result.TripResultScreen
 import kotlin.reflect.typeOf
 
 class MainActivity : ComponentActivity() {
@@ -36,14 +37,12 @@ class MainActivity : ComponentActivity() {
         val bottomNavigationItems = listOf(BottomNavItem.Lir, BottomNavItem.Tir)
         OJPAndroidSDKTheme {
             val navController = rememberNavController()
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-
+//            val navBackStackEntry by navController.currentBackStackEntryAsState()
 //            val currentDestination = navBackStackEntry?.destination
             var selectedBottomNavItem by remember { mutableIntStateOf(0) }
 
             Scaffold(
                 bottomBar = {
-//                    BottomAppBarWithNavigation(navController = navController)
                     NavigationBar {
                         bottomNavigationItems.forEachIndexed { index, item ->
                             NavigationBarItem(
@@ -96,17 +95,17 @@ class MainActivity : ComponentActivity() {
             composable<TripSearchMask> { TirScreenComposable(navHostController = navController) }
             composable<TripResults>(
                 typeMap = mapOf(
-                    typeOf<PlaceResultDto?>() to CustomNavType(
-                        PlaceResultDto::class.java,
-                        PlaceResultDto.serializer()
-                    ),
-                    typeOf<PlaceResultDto>() to CustomNavType(
-                        PlaceResultDto::class.java,
-                        PlaceResultDto.serializer()
-                    )
+                    typeOf<PlaceResultDto?>() to PlaceResultType,
+                    typeOf<PlaceResultDto>() to PlaceResultType,
                 )
             ) { navBackstackEntry ->
                 val parameters = navBackstackEntry.toRoute<TripResults>()
+                TripResultScreen(
+                    navHostController = navController,
+//                    originName = parameters.origin.place.placeType?.name() ?: "-",
+//                    viaName = parameters.via?.place?.placeType?.name(),
+//                    destinationName = parameters.destination.place.placeType?.name() ?: "-"
+                )
             }
             composable<TripDetails> { } // todo: implement
         }
