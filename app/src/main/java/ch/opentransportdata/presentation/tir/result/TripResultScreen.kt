@@ -7,6 +7,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -62,7 +64,7 @@ fun TripResultScreen(
                         initialItemsLoaded = true
                     }
 
-                    if (lastVisibleItemIndex >= layoutInfo.totalItemsCount - 2) {
+                    if (lastVisibleItemIndex >= layoutInfo.totalItemsCount - 2 && initialItemsLoaded) {
                         viewModel.loadNextTrips()
                     }
                 }
@@ -77,6 +79,16 @@ fun TripResultScreen(
     }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Trip results") },
+                navigationIcon = {
+                    IconButton(onClick = { navHostController.navigateUp() }) {
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "navigate back")
+                    }
+                }
+            )
+        },
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState)
 
@@ -87,12 +99,12 @@ fun TripResultScreen(
                 .padding(it)
                 .fillMaxSize()
         ) {
-
             TripResultHeader(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 originName = viewModel.origin?.place?.placeType?.name() ?: "-",
                 destinationName = viewModel.destination?.place?.placeType?.name() ?: "-"
             )
+            HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -101,7 +113,9 @@ fun TripResultScreen(
             ) {
                 // Loading indicator for previous items
                 item {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
                 }
 
                 items(state.value.tripDelivery?.tripResults ?: emptyList(), key = { item -> item.id }) { item ->
@@ -115,7 +129,9 @@ fun TripResultScreen(
 
                 // Loading indicator for next items
                 item {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
                 }
             }
         }
@@ -140,9 +156,10 @@ private fun TripResultHeader(
 
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        tonalElevation = 1.dp
     ) {
-        Column {
+        Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)) {
             Text(
                 modifier = Modifier.padding(all = 8.dp),
                 text = originName,
@@ -158,14 +175,6 @@ private fun TripResultHeader(
 
     }
 
-}
-
-@PreviewLightDark
-@Composable
-private fun TripResultScreenPreview() {
-    OJPAndroidSDKTheme {
-        TripResultScreen()
-    }
 }
 
 @PreviewLightDark

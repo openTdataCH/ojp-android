@@ -80,18 +80,18 @@ fun TripItem(
         ) {
             if (trip.startWithTransferLeg) {
                 Text(
+                    modifier = Modifier.padding(end = 4.dp),
                     text = trip.firstTimedLeg.legBoard.serviceDeparture.timetabledTime.format(formatter),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Text(
-                    modifier = Modifier.padding(start = 4.dp),
-                    text = "${trip.firstTimedLeg.service.publishedServiceName.text} direction ${trip.firstTimedLeg.service.destinationText.text}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.weight(1f))
             }
+            Text(
+                text = "${trip.firstTimedLeg.service.publishedServiceName.text} direction ${trip.firstTimedLeg.service.destinationText.text}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "${duration?.inWholeHours}h ${duration?.inWholeMinutes?.rem(60)}m",
                 style = MaterialTheme.typography.bodyMedium,
@@ -102,9 +102,25 @@ fun TripItem(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp)
+                .padding(top = 8.dp, start = 16.dp, end = 16.dp)
         ) {
             HorizontalDivider(modifier = Modifier.align(Alignment.Center))
+            Surface(
+                modifier = Modifier
+                    .size(4.dp)
+                    .align(Alignment.CenterStart),
+                color = MaterialTheme.colorScheme.primary,
+                shape = CircleShape,
+                content = {}
+            )
+            Surface(
+                modifier = Modifier
+                    .size(4.dp)
+                    .align(Alignment.CenterEnd),
+                color = MaterialTheme.colorScheme.primary,
+                shape = CircleShape,
+                content = {}
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -134,7 +150,7 @@ fun TripItem(
                 Text(
                     text = "Pl. $platform",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = if (trip.firstTimedLeg.legBoard.isPlatformChanged) MaterialTheme.colorScheme.onError else MaterialTheme.colorScheme.onSurface,
+                    color = if (trip.firstTimedLeg.legBoard.isPlatformChanged) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
@@ -153,6 +169,7 @@ fun TripItem(
                 )
                 ClassOccupancy(occupancyCount = 2)
             }
+            Spacer(modifier = Modifier.height(28.dp))
             Row(
                 modifier = Modifier.weight(1f),
                 verticalAlignment = Alignment.CenterVertically,
