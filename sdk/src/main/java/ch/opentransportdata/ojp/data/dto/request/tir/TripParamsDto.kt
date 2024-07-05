@@ -6,7 +6,7 @@ import com.tickaroo.tikxml.annotation.Xml
 /**
  * Created by Michael Ruppen on 07.06.2024
  */
-@Xml(name = "TripParams")
+@Xml(name = "Params")
 data class TripParamsDto(
     @PropertyElement(name = "NumberOfResults")
     val numberOfResults: Int? = null,

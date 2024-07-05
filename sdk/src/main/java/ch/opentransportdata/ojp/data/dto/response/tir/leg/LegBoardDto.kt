@@ -15,7 +15,7 @@ data class LegBoardDto(
     @Element(name = "StopPointName")
     val stopPointName: NameDto,
     @Element(name = "PlannedQuay")
-    val plannedQuay: NameDto,
+    val plannedQuay: NameDto?,
     @Element(name = "EstimatedQuay")
     val estimatedQuay: NameDto?,
     @Element(name = "NameSuffix")
@@ -29,6 +29,6 @@ data class LegBoardDto(
     //todo: check for other needed elements...
 ) {
     val isPlatformChanged: Boolean
-        get() = plannedQuay.text != estimatedQuay?.text
+        get() = plannedQuay?.text != estimatedQuay?.text
 
 }

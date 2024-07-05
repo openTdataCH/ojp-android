@@ -21,7 +21,7 @@ internal data class TripRequestDto(
     @Element(name = "Via")
     val via: List<TripVia> = emptyList(),
 
-    @Element(name = "TripParams")
+    @Element(name = "Params")
     val params: TripParamsDto?
 
 )
