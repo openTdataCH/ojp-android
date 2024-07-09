@@ -37,8 +37,7 @@ class TirViewModel : ViewModel() {
         )
     }
 
-    fun getCurrentLocation() {
-        //todo: Implement current location click for origin & destination and update textInputValue
+    fun getCurrentLocation(isOrigin: Boolean, isDestination: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             state.value = state.value.copy(isLoading = true)
             var currentLocation: Location? = null
@@ -62,7 +61,23 @@ class TirViewModel : ViewModel() {
                         latitude = currentLocation.latitude,
                         restrictions = listOf(PlaceTypeRestriction.STOP)
                     )) {
-                        is Result.Success -> state.value = state.value.copy(results = result.data.map { it })
+                        is Result.Success -> {
+                            if (result.data.isEmpty()) {
+                                postEvent(Event.ShowSnackBar(message = "An error has occurred"))
+                            } else {
+                                val location = result.data.first()
+                                val input = TextInput(
+                                    hasFocus = false,
+                                    textInputValue = "Current Location",
+                                    selectedLocation = location
+                                )
+                                state.value = state.value.copy(
+                                    results = emptyList(),
+                                    origin = if (isOrigin) input else state.value.origin,
+                                    destination = if (isDestination) input else state.value.destination
+                                )
+                            }
+                        }
 
                         is Result.Error -> {
                             Log.e(TAG, "Error fetching data", result.error.exception)
@@ -74,6 +89,7 @@ class TirViewModel : ViewModel() {
             }
 
             state.value = state.value.copy(isLoading = false)
+            checkFormValidity()
         }
     }
 
@@ -124,7 +140,10 @@ class TirViewModel : ViewModel() {
     fun onLocationSelected(location: PlaceResultDto) {
         state.value = when {
             state.value.origin.hasFocus -> state.value.copy(
-                origin = state.value.origin.copy(selectedLocation = location, textInputValue = location.place.placeType?.name() ?: "undef"),
+                origin = state.value.origin.copy(
+                    selectedLocation = location,
+                    textInputValue = location.place.placeType?.name() ?: "undef"
+                ),
                 results = emptyList()
             )
 
@@ -141,7 +160,15 @@ class TirViewModel : ViewModel() {
             else -> state.value
         }
 
+        checkFormValidity()
+    }
 
+    fun eventHandled(id: Long) {
+        val events = state.value.events.filterNot { it.id == id }
+        state.value = state.value.copy(events = events)
+    }
+
+    private fun checkFormValidity() {
         if (state.value.origin.selectedLocation != null && state.value.destination.selectedLocation != null) {
             postEvent(
                 Event.RequestTrip(
@@ -151,11 +178,6 @@ class TirViewModel : ViewModel() {
                 )
             )
         }
-    }
-
-    fun eventHandled(id: Long) {
-        val events = state.value.events.filterNot { it.id == id }
-        state.value = state.value.copy(events = events)
     }
 
     private fun postEvent(event: Event) {

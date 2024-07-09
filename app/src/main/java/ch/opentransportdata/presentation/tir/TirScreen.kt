@@ -38,7 +38,6 @@ fun TirScreenComposable(
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.collectAsState()
 
-
     Scaffold(
         snackbarHost = {
             SnackbarHost(modifier = Modifier.imePadding(), hostState = snackBarHostState)
@@ -51,7 +50,7 @@ fun TirScreenComposable(
         ) {
             Header(
                 modifier = Modifier.padding(16.dp),
-                requestLocation = { viewModel.getCurrentLocation() },
+                requestLocation = { isOrigin, isDestination -> viewModel.getCurrentLocation(isOrigin, isDestination) },
                 origin = state.value.origin,
                 originTextValueChanged = { viewModel.fetchLocations(it, isOrigin = true) },
                 destination = state.value.destination,
@@ -114,7 +113,7 @@ fun TirScreenComposable(
 @Composable
 private fun Header(
     modifier: Modifier = Modifier,
-    requestLocation: () -> Unit,
+    requestLocation: (Boolean, Boolean) -> Unit,
     origin: TirViewModel.TextInput,
     originTextValueChanged: (String) -> Unit,
     destination: TirViewModel.TextInput,
@@ -128,7 +127,7 @@ private fun Header(
 //        horizontalAlignment = Alignment.End
     ) {
         LocationInputRow(
-            requestLocation = requestLocation,
+            requestLocation = { requestLocation(true, false) },
             textInputValue = origin.textInputValue,
             onTextValueChange = originTextValueChanged,
             supportingText = "From",
@@ -141,7 +140,7 @@ private fun Header(
         LocationInputRow(
             modifier = Modifier.padding(start = 72.dp, top = 16.dp, bottom = 16.dp),
             isLocationButtonEnabled = false,
-            requestLocation = requestLocation,
+            requestLocation = {},
             textInputValue = via.textInputValue,
             onTextValueChange = viaTextValueChanged,
             supportingText = "Via",
@@ -152,7 +151,7 @@ private fun Header(
         )
 
         LocationInputRow(
-            requestLocation = requestLocation,
+            requestLocation = { requestLocation(false, true) },
             textInputValue = destination.textInputValue,
             onTextValueChange = destinationTextValueChanged,
             supportingText = "To",
