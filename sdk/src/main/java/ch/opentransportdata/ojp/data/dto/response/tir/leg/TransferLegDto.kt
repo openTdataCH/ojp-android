@@ -1,7 +1,5 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
-import ch.opentransportdata.ojp.data.dto.converter.TransferTypeConverter
-import ch.opentransportdata.ojp.domain.model.TransferType
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
@@ -19,4 +17,6 @@ data class TransferLegDto(
     val legStart: LegStartEndDto,
     @Element(name = "LegEnd")
     val legEnd: LegStartEndDto,
+    @PropertyElement(name = "Duration")
+    val duration: String
 ) : AbstractLegType()

@@ -29,6 +29,6 @@ data class LegBoardDto(
     //todo: check for other needed elements...
 ) {
     val isPlatformChanged: Boolean
-        get() = plannedQuay?.text != estimatedQuay?.text
+        get() = estimatedQuay != null && plannedQuay?.text != estimatedQuay.text
 
 }

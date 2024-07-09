@@ -23,7 +23,8 @@ object PreviewData {
             legEnd = LegStartEndDto(
                 stopPointRef = "8500218",
                 name = NameDto(text = "Olten")
-            )
+            ),
+            duration = "PT5M"
         )
     )
 

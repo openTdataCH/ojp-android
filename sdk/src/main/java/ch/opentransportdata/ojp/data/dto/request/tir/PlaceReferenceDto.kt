@@ -9,6 +9,7 @@ import com.tickaroo.tikxml.annotation.Xml
 /**
  * Created by Michael Ruppen on 07.06.2024
  */
+//todo: normally should create all the reference objects
 @Xml(name = "PlaceRef")
 internal data class PlaceReferenceDto(
     //If more types needed, create custom typeAdapter and parse only necessary
@@ -16,6 +17,6 @@ internal data class PlaceReferenceDto(
     val ref: String? = null,
     @Element(name = "StopPlaceName")
     val stationName: NameDto?, 
-    @Element(name = "siri:LocationStructure") //todo: check if schema is correct (when working on backend), think of solution where only send this if is Address
+    @Element(name = "GeoPosition") //todo: check if schema is correct (when working on backend), think of solution where only send this if is Address
     val position: GeoPositionDto? = null
 )

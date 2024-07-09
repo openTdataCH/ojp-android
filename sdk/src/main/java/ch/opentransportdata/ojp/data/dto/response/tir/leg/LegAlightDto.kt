@@ -27,4 +27,8 @@ data class LegAlightDto(
     @PropertyElement(name = "Order")
     val order: Int?
     //todo: check for other needed elements...
-)
+) {
+    val isPlatformChanged: Boolean
+        get() = estimatedQuay != null && plannedQuay?.text != estimatedQuay.text
+
+}

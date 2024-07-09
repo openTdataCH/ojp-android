@@ -44,7 +44,7 @@ data class ServiceDto(
     @Element(name = "DestinationText")
     val destinationText: NameDto,
     @PropertyElement(name = "JourneyRef")
-    val journeyRef: String,
+    val journeyRef: String?,
     @Element(name = "Attribute")
-    val attributes: List<AttributeDto>
+    val attributes: List<AttributeDto>?
 )
