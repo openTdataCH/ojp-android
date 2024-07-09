@@ -66,18 +66,18 @@ internal class RemoteTripDataSourceImpl(
         )
 
         val vias = via?.let {
-            val viaName = when (destination.place.placeType) {
-                is StopPlaceDto -> destination.place.placeType.name
-                is AddressDto -> destination.place.placeType.name
+            val viaName = when (it.place.placeType) {
+                is StopPlaceDto -> it.place.placeType.name
+                is AddressDto -> it.place.placeType.name
                 else -> null
             }
 
             listOf(
                 TripVia(
                     viaPoint = PlaceReferenceDto(
-                        ref = (destination.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+                        ref = (it.place.placeType as? StopPlaceDto)?.stopPlaceRef,
                         stationName = viaName,
-                        position = destination.place.position
+                        position = it.place.position
                     )
                 )
             )

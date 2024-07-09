@@ -85,7 +85,14 @@ class OjpSdk(
         params: TripParamsDto?
     ): Result<TripDeliveryDto> {
         return OjpKoinContext.koinApp.koin.get<RequestTrips>()
-            .invoke(origin, destination, via, time, isSearchForDepartureTime, params)
+            .invoke(
+                origin = origin,
+                destination = destination,
+                via = via,
+                time = time,
+                isSearchForDepartureTime = isSearchForDepartureTime,
+                params = params
+            )
     }
 
 }

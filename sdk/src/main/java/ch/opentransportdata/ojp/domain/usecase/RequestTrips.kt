@@ -23,7 +23,15 @@ internal class RequestTrips(
         params: TripParamsDto?
     ): Result<TripDeliveryDto> {
         return when (val response =
-            ojpRepository.requestTrips(origin, destination, via, time, isSearchForDepartureTime, params)) {
+            ojpRepository.requestTrips(
+                origin = origin,
+                destination = destination,
+                via = via,
+                time = time,
+                isSearchForDepartureTime = isSearchForDepartureTime,
+                params = params
+            )
+        ) {
             is Result.Success -> Result.Success(response.data)
             is Result.Error -> Result.Error(response.error)
         }

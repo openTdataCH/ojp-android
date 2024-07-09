@@ -9,6 +9,6 @@ import com.tickaroo.tikxml.annotation.Xml
 
 @Xml(name = "ViaPoint")
 internal data class TripVia(
-    @Element(name = "PlaceRef")
+    @Element(name = "ViaPoint")
     val viaPoint: PlaceReferenceDto
 )
