@@ -163,6 +163,10 @@ class TirViewModel : ViewModel() {
         checkFormValidity()
     }
 
+    fun resetData() {
+        state.value = UiState()
+    }
+
     fun eventHandled(id: Long) {
         val events = state.value.events.filterNot { it.id == id }
         state.value = state.value.copy(events = events)

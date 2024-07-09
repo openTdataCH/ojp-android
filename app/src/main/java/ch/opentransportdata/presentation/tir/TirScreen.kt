@@ -98,13 +98,16 @@ fun TirScreenComposable(
                 }
             }
 
-            is TirViewModel.Event.RequestTrip -> navHostController.navigate(
-                TripResults(
-                    origin = event.origin,
-                    via = event.via,
-                    destination = event.destination
+            is TirViewModel.Event.RequestTrip -> {
+                navHostController.navigate(
+                    TripResults(
+                        origin = event.origin,
+                        via = event.via,
+                        destination = event.destination
+                    )
                 )
-            )
+                viewModel.resetData()
+            }
         }
         viewModel.eventHandled(event.id)
     }
