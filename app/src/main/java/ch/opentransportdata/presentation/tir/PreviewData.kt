@@ -5,6 +5,7 @@ import ch.opentransportdata.ojp.data.dto.response.NameDto
 import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.*
 import ch.opentransportdata.ojp.domain.model.PtMode
+import ch.opentransportdata.ojp.domain.model.TransferType
 import java.time.LocalDateTime
 
 /**
@@ -16,6 +17,7 @@ object PreviewData {
         id = "111",
         duration = "PT5M",
         legType = TransferLegDto(
+            transferType = TransferType.WALK,
             legStart = LegStartEndDto(
                 stopPointRef = "8500218",
                 name = NameDto(text = "Olten")

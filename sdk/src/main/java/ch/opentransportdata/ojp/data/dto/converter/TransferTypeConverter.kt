@@ -7,7 +7,7 @@ import com.tickaroo.tikxml.TypeConverter
  * Created by Michael Ruppen on 01.07.2024
  */
 internal class TransferTypeConverter : TypeConverter<TransferType> {
-    override fun read(value: String?): TransferType {
+    override fun read(value: String): TransferType {
         return when (value) {
             "walk" -> TransferType.WALK
             "shuttle" -> TransferType.SHUTTLE
@@ -27,7 +27,7 @@ internal class TransferTypeConverter : TypeConverter<TransferType> {
         }
     }
 
-    override fun write(value: TransferType?): String {
+    override fun write(value: TransferType): String {
         return when (value) {
             TransferType.WALK -> "walk"
             TransferType.SHUTTLE -> "shuttle"

@@ -87,7 +87,7 @@ fun TripItem(
                 )
             }
             Text(
-                text = "${trip.firstTimedLeg.service.publishedServiceName.text} direction ${trip.firstTimedLeg.service.destinationText.text}",
+                text = "${trip.firstTimedLeg.service.publishedServiceName?.text} direction ${trip.firstTimedLeg.service.destinationText?.text}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -147,13 +147,15 @@ fun TripItem(
                 modifier = Modifier.weight(1f),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                platform?.let {
+                    Text(
+                        modifier = Modifier.padding(end = 8.dp),
+                        text = "Pl. $it",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (trip.firstTimedLeg.legBoard.isPlatformChanged) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                    )
+                }
                 Text(
-                    text = "Pl. $platform",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = if (trip.firstTimedLeg.legBoard.isPlatformChanged) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
-                )
-                Text(
-                    modifier = Modifier.padding(start = 8.dp),
                     text = "1.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface

@@ -28,4 +28,7 @@ data class TripParamsDto(
 
     @PropertyElement(name = "IncludeIntermediateStops")
     val includeIntermediateStops: Boolean? = null,//todo: check if makes difference setting them to false as default or if they have to be nullable
+
+    @PropertyElement(name = "IncludeAllRestrictedLines")
+    val includeAllRestrictedLines: Boolean? = null,//todo: check if makes difference setting them to false as default or if they have to be nullable
 )

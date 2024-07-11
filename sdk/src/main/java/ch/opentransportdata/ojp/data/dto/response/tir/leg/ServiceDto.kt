@@ -22,27 +22,27 @@ data class ServiceDto(
     @PropertyElement(name = "TrainNumber")
     val trainNumber: String?,
     @PropertyElement(name = "siri:LineRef")
-    val lineRef: String,
+    val lineRef: String?,
     @PropertyElement(name = "siri:OperatorRef")
     val operatorRef: String?,
     @PropertyElement(name = "PublicCode")
     val publicCode: String?,
     @Element(name = "PublishedServiceName")
-    val publishedServiceName: NameDto,
+    val publishedServiceName: NameDto?,
     @Element(name = "ProductCategory")
     val productCategory: ProductCategoryDto?,
     @PropertyElement(name = "siri:DirectionRef")
-    val directionRef: String,
+    val directionRef: String?,
     @PropertyElement(name = "OperatingDayRef")
-    val operatingDayRef: String,
+    val operatingDayRef: String?,
     @PropertyElement(name = "OriginStopPointRef")
-    val originStopPointRef: String,
+    val originStopPointRef: String?,
     @PropertyElement(name = "DestinationStopPointRef")
-    val destinationStopPointRef: String,
+    val destinationStopPointRef: String?,
     @Element(name = "OriginText")
-    val originText: NameDto,
+    val originText: NameDto?,
     @Element(name = "DestinationText")
-    val destinationText: NameDto,
+    val destinationText: NameDto?,
     @PropertyElement(name = "JourneyRef")
     val journeyRef: String?,
     @Element(name = "Attribute")
