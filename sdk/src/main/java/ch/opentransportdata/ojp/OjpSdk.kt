@@ -95,4 +95,28 @@ class OjpSdk(
             )
     }
 
+    /**
+     * Load previous trips according to your first trip item of the tripResult list.
+     * Need to do a [requestTrips] call first!
+     */
+    suspend fun requestPreviousTrips() {
+        OjpKoinContext.koinApp.koin.get<RequestTrips>().loadPrevious()
+    }
+
+    /**
+     * Load further trips according to your last trip item of the tripResult list.
+     * Need to do a [requestTrips] call first!
+     */
+    suspend fun requestNextTrips() {
+        OjpKoinContext.koinApp.koin.get<RequestTrips>().loadNext()
+    }
+
+    /**
+     * Reset the current tripRequest state so no loadNext/Previous works anymore and a clean trip search can be done.
+     * Do not have to be called for initial [requestTrips] call
+     */
+    fun resetTripState() {
+        OjpKoinContext.koinApp.koin.get<RequestTrips>().reset()
+    }
+
 }
