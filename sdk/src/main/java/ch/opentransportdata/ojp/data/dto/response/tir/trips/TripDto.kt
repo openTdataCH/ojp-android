@@ -39,4 +39,36 @@ data class TripDto(
 
     val lastTimedLeg: TimedLegDto
         get() = legs.last { it.legType is TimedLegDto }.legType as TimedLegDto
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as TripDto
+
+        return this.hashCode() == other.hashCode()
+    }
+
+    override fun hashCode(): Int {
+        var result = transfers
+        legs.forEach { leg ->
+            when (val legType = leg.legType) {
+                is TimedLegDto -> {
+                    result = 31 * result + legType.service.publishedServiceName?.text.hashCode()
+                    result = 31 * result + legType.legBoard.stopPointName.text.hashCode()
+                    result = 31 * result + legType.legBoard.serviceDeparture.timetabledTime.hashCode()
+                    result = 31 * result + legType.legAlight.serviceArrival.timetabledTime.hashCode()
+                    result = 31 * result + legType.legAlight.stopPointName.text.hashCode()
+                }
+
+                is TransferLegDto -> {
+                    result = 31 * result + legType.duration.hashCode()
+                    result = 31 * result + legType.transferType.name.hashCode() //using string representation is mandatory!
+                }
+            }
+        }
+
+        return result
+    }
+
 }
