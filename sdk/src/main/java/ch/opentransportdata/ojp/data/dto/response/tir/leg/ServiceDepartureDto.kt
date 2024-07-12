@@ -2,6 +2,7 @@ package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
+import java.time.Duration
 import java.time.LocalDateTime
 
 /**
@@ -15,8 +16,9 @@ data class ServiceDepartureDto(
     val estimatedTime: LocalDateTime?,
 ) {
 
-//    private val diff: Long
-//        get() = estimatedTimeInstant.toEpochMilli() - timetabledTimeInstant.toEpochMilli()
+    val hasDelay: Boolean
+        get() = estimatedTime != null && delay.toMinutes() > 0
 
-    //todo: delay calculation
+    val delay: Duration
+        get() = Duration.between(timetabledTime, estimatedTime)
 }

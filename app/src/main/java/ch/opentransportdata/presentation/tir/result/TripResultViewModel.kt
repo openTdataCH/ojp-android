@@ -117,7 +117,11 @@ class TripResultViewModel(
                 destination = destination,
                 via = via,
                 time = LocalDateTime.now(),
-                params = TripParamsDto(numberOfResults = 10)
+                params = TripParamsDto(
+                    numberOfResults = 10,
+                    includeIntermediateStops = true,
+                    includeAllRestrictedLines = true
+                )
             )
             when (response) {
                 is Result.Success -> {

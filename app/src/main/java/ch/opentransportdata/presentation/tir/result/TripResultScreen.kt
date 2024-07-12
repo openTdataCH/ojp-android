@@ -1,26 +1,26 @@
 package ch.opentransportdata.presentation.tir.result
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
+import ch.opentransportdata.presentation.components.TripResultHeader
 import ch.opentransportdata.presentation.lir.name
-import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
+import ch.opentransportdata.presentation.tir.detail.TripDetailScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -43,6 +43,22 @@ fun TripResultScreen(
 //    val reachedBottom by remember { derivedStateOf { listState.reachedBottom() } } //todo: check if these can be useful to simplify logic
 //    val reachedTop by remember { derivedStateOf { listState.reachedTop() } }
     var initialItemsLoaded by remember { mutableStateOf(false) }
+    val detailBottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var selectedTrip by remember { mutableStateOf<TripDto?>(null) }
+
+    if (selectedTrip != null) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                coroutineScope.launch {
+                    selectedTrip = null
+                }
+            },
+            sheetState = detailBottomSheet,
+            dragHandle = { BottomSheetDefaults.DragHandle() },
+        ) {
+            TripDetailScreen(trip = selectedTrip!!)
+        }
+    }
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo }
@@ -119,6 +135,9 @@ fun TripResultScreen(
 
                 items(state.value.tripDelivery?.tripResults ?: emptyList(), key = { item -> item.id }) { item ->
                     TripItem(
+                        modifier = Modifier.clickable {
+                            selectedTrip = item.trip as TripDto
+                        },
                         hasDisruptions = false,
                         trip = item.trip as TripDto,
                         responseContextDto = state.value.tripDelivery?.responseContext
@@ -158,46 +177,5 @@ fun TripResultScreen(
             }
             viewModel.eventHandled(event.id)
         }
-    }
-}
-
-@Composable
-private fun TripResultHeader(
-    modifier: Modifier = Modifier,
-    originName: String,
-    destinationName: String
-) {
-
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
-        tonalElevation = 1.dp
-    ) {
-        Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)) {
-            Text(
-                modifier = Modifier.padding(all = 8.dp),
-                text = originName,
-                style = MaterialTheme.typography.titleLarge
-            )
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 8.dp))
-            Text(
-                modifier = Modifier.padding(all = 8.dp),
-                text = destinationName,
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
-
-    }
-
-}
-
-@PreviewLightDark
-@Composable
-private fun TripResultHeaderPreview() {
-    OJPAndroidSDKTheme {
-        TripResultHeader(
-            originName = "Bern, Eigerplatz",
-            destinationName = "Basel SBB"
-        )
     }
 }

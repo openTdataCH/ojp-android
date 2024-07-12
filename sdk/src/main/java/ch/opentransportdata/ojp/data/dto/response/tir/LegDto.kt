@@ -14,7 +14,9 @@ data class LegDto(
     @PropertyElement(name = "Id")
     val id: String,
     @PropertyElement(name = "Duration")
-    val duration: String,
+    val duration: String, //todo: think about all Duration objects to write customTypeConverter to parse as Duration and not String
     @Element
     val legType: AbstractLegType
 )
+
+//Duration.parseOrNull(trip.duration)
