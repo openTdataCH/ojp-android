@@ -1,7 +1,7 @@
 package ch.opentransportdata.ojp.domain.usecase
 
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
-import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
+import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 
@@ -14,7 +14,7 @@ internal class RequestLocationsFromSearchTerm(
 
     suspend operator fun invoke(
         text: String,
-        restrictions: List<PlaceTypeRestriction>
+        restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return when (val response = ojpRepository.placeResultsFromSearchTerm(term = text, restrictions = restrictions)) {
             is Result.Success -> Result.Success(response.data)

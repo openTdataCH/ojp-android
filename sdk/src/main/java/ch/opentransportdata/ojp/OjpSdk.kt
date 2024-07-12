@@ -4,7 +4,7 @@ import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.di.context.OjpKoinContext
-import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
+import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
@@ -39,13 +39,13 @@ class OjpSdk(
      *
      * @param longitude The longitude of the geographical point
      * @param latitude The latitude of the geographical point
-     * @param restrictions List of restrictions that should be used
+     * @param restrictions Restrictions that should be used for results
      * @return List of [PlaceResultDto] sorted by the nearest point
      */
     suspend fun requestLocationsFromCoordinates(
         longitude: Double,
         latitude: Double,
-        restrictions: List<PlaceTypeRestriction> = emptyList()
+        restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return OjpKoinContext.koinApp.koin.get<RequestLocationsFromCoordinates>().invoke(longitude, latitude, restrictions)
     }
@@ -54,12 +54,12 @@ class OjpSdk(
      * Request a list of Place Results based on the given search term
      *
      * @param term The given search term
-     * @param restrictions List of restrictions that should be used
+     * @param restrictions Restrictions that should be used for results
      * @return List of [PlaceResultDto] that contains the search term
      */
     suspend fun requestLocationsFromSearchTerm(
         term: String,
-        restrictions: List<PlaceTypeRestriction>
+        restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return OjpKoinContext.koinApp.koin.get<RequestLocationsFromSearchTerm>().invoke(term, restrictions)
     }

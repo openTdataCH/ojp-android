@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.opentransportdata.data.DefaultLocationTracker
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
@@ -58,7 +59,11 @@ class LirViewModel : ViewModel() {
                     when (val result = MainActivity.ojpSdk.requestLocationsFromCoordinates(
                         longitude = currentLocation.longitude,
                         latitude = currentLocation.latitude,
-                        restrictions = listOf(PlaceTypeRestriction.STOP)
+                        restrictions = LocationInformationParams(
+                            types = listOf(PlaceTypeRestriction.STOP),
+                            numberOfResults = 10,
+                            ptModeIncluded = true
+                        )
                     )) {
                         is Result.Success -> state.value = state.value.copy(results = result.data.map { it })
 
@@ -81,7 +86,11 @@ class LirViewModel : ViewModel() {
         searchScope.launch {
             when (val result = MainActivity.ojpSdk.requestLocationsFromSearchTerm(
                 term = input,
-                restrictions = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS)
+                restrictions = LocationInformationParams(
+                    types = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS),
+                    numberOfResults = 10,
+                    ptModeIncluded = true
+                )
             )
             ) {
                 is Result.Success -> state.value = state.value.copy(results = result.data)

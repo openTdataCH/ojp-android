@@ -6,7 +6,7 @@ import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDe
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.remote.location.RemoteLocationInformationDataSource
 import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource
-import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
+import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
@@ -27,7 +27,8 @@ internal class OjpRepositoryImpl(
 ) : OjpRepository {
 
     override suspend fun placeResultsFromSearchTerm(
-        term: String, restrictions: List<PlaceTypeRestriction>
+        term: String,
+        restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return try {
             val response = remoteDataSource.searchLocationBySearchTerm(term, restrictions).ojpResponse
@@ -43,7 +44,7 @@ internal class OjpRepositoryImpl(
     override suspend fun placeResultsFromCoordinates(
         longitude: Double,
         latitude: Double,
-        restrictions: List<PlaceTypeRestriction>
+        restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return try {
             val response = remoteDataSource.searchLocationByCoordinates(longitude, latitude, restrictions).ojpResponse

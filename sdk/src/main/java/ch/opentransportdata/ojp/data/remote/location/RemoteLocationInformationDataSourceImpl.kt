@@ -6,7 +6,7 @@ import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
 import ch.opentransportdata.ojp.data.dto.request.lir.*
 import ch.opentransportdata.ojp.data.remote.OjpService
-import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
+import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.utils.GeoLocationUtil.initWithGeoLocationAndBoxSize
 import kotlinx.coroutines.Dispatchers
@@ -21,13 +21,13 @@ internal class RemoteLocationInformationDataSourceImpl(
     private val initializer: Initializer
 ) : RemoteLocationInformationDataSource {
 
-    private val numberOfResults = 10
     private val placeTypeRestrictionConverter = PlaceTypeRestrictionConverter()
     private val url: String
         get() = initializer.baseUrl + initializer.endpoint
 
     override suspend fun searchLocationBySearchTerm(
-        term: String, restrictions: List<PlaceTypeRestriction>
+        term: String,
+        restrictions: LocationInformationParams
     ): OjpDto = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
 
@@ -44,7 +44,8 @@ internal class RemoteLocationInformationDataSourceImpl(
     }
 
     override suspend fun searchLocationByCoordinates(
-        longitude: Double, latitude: Double, restrictions: List<PlaceTypeRestriction>
+        longitude: Double, latitude: Double,
+        restrictions: LocationInformationParams
     ): OjpDto = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
 
@@ -56,7 +57,8 @@ internal class RemoteLocationInformationDataSourceImpl(
                     geoRestriction = GeoRestrictionDto(
                         rectangle = initWithGeoLocationAndBoxSize(longitude, latitude)
                     )
-                ), restrictions = createRestrictions(restrictions)
+                ),
+                restrictions = createRestrictions(restrictions)
             )
         )
 
@@ -75,11 +77,11 @@ internal class RemoteLocationInformationDataSourceImpl(
         )
     }
 
-    private fun createRestrictions(restrictions: List<PlaceTypeRestriction>): RestrictionsDto {
+    private fun createRestrictions(restrictions: LocationInformationParams): RestrictionsDto {
         return RestrictionsDto(
-            types = restrictions.map { RestrictionType(placeTypeRestrictionConverter.write(it)) },
-            numberOfResults = numberOfResults,
-            ptModeIncluded = true
+            types = restrictions.types.map { RestrictionType(placeTypeRestrictionConverter.write(it)) },
+            numberOfResults = restrictions.numberOfResults,
+            ptModeIncluded = restrictions.ptModeIncluded
         )
     }
 }
