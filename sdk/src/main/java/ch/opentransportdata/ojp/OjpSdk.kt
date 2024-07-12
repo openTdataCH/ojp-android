@@ -98,17 +98,21 @@ class OjpSdk(
     /**
      * Load previous trips according to your first trip item of the tripResult list.
      * Need to do a [requestTrips] call first!
+     *
+     * @return [TripDeliveryDto] with previous trips that are not already returned
      */
-    suspend fun requestPreviousTrips() {
-        OjpKoinContext.koinApp.koin.get<RequestTrips>().loadPrevious()
+    suspend fun requestPreviousTrips(): Result<TripDeliveryDto> {
+        return OjpKoinContext.koinApp.koin.get<RequestTrips>().loadPrevious()
     }
 
     /**
      * Load further trips according to your last trip item of the tripResult list.
      * Need to do a [requestTrips] call first!
+     *
+     * @return [TripDeliveryDto] with next trips that are not already returned
      */
-    suspend fun requestNextTrips() {
-        OjpKoinContext.koinApp.koin.get<RequestTrips>().loadNext()
+    suspend fun requestNextTrips(): Result<TripDeliveryDto> {
+        return OjpKoinContext.koinApp.koin.get<RequestTrips>().loadNext()
     }
 
     /**

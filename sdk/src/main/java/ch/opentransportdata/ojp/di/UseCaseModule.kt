@@ -15,5 +15,5 @@ internal val useCaseModule = module {
     singleOf(::Initializer)
     factoryOf(::RequestLocationsFromSearchTerm)
     factoryOf(::RequestLocationsFromCoordinates)
-    factoryOf(::RequestTrips)
+    singleOf(::RequestTrips)
 }

@@ -8,7 +8,10 @@ import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
+import kotlinx.coroutines.isActive
 import java.time.LocalDateTime
+import java.util.concurrent.CancellationException
+import kotlin.coroutines.coroutineContext
 
 /**
  * Created by Michael Ruppen on 27.06.2024
@@ -35,6 +38,9 @@ internal class RequestTrips(
             isSearchForDepartureTime = isSearchForDepartureTime,
             params = params,
         )
+
+        //do not return or overwrite state, if user canceled the request (long running task or something)
+        if (!coroutineContext.isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
 
         return when (val response =
             ojpRepository.requestTrips(
@@ -107,7 +113,7 @@ internal class RequestTrips(
                             state = state.copy(maxDateTime = trip.startTime)
                         }
                         if (state.minDateTime == null || trip.startTime < state.minDateTime) {
-                            state = state.copy(maxDateTime = trip.startTime)
+                            state = state.copy(minDateTime = trip.startTime)
                         }
                         tripResult
                     }

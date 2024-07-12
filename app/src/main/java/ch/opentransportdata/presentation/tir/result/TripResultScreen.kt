@@ -1,5 +1,6 @@
 package ch.opentransportdata.presentation.tir.result
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,9 +20,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.presentation.lir.name
-import ch.opentransportdata.presentation.reachedBottom
-import ch.opentransportdata.presentation.reachedTop
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -40,14 +40,9 @@ fun TripResultScreen(
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     val state = viewModel.state.collectAsState()
-    val reachedBottom by remember { derivedStateOf { listState.reachedBottom() } } //todo: check if these can be useful to simplify logic
-    val reachedTop by remember { derivedStateOf { listState.reachedTop() } }
+//    val reachedBottom by remember { derivedStateOf { listState.reachedBottom() } } //todo: check if these can be useful to simplify logic
+//    val reachedTop by remember { derivedStateOf { listState.reachedTop() } }
     var initialItemsLoaded by remember { mutableStateOf(false) }
-
-    LaunchedEffect(state.value.tripDelivery?.tripResults?.isNotEmpty()) {
-        //scrolls to first element position (not the loading indicator)
-        if (state.value.tripDelivery?.tripResults?.isNotEmpty() == true) listState.scrollToItem(1)
-    }
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo }
@@ -56,7 +51,7 @@ fun TripResultScreen(
                     val firstVisibleItemIndex = layoutInfo.visibleItemsInfo.first().index
                     val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.last().index
 
-                    if (initialItemsLoaded && firstVisibleItemIndex <= 1 && !state.value.isLoadingPrevious) {
+                    if (initialItemsLoaded && firstVisibleItemIndex < 1 && !state.value.isLoadingPrevious) {
                         viewModel.loadPreviousTrips()
                     }
 
@@ -64,18 +59,11 @@ fun TripResultScreen(
                         initialItemsLoaded = true
                     }
 
-                    if (lastVisibleItemIndex >= layoutInfo.totalItemsCount - 2 && initialItemsLoaded) {
+                    if (lastVisibleItemIndex >= layoutInfo.totalItemsCount - 2 && initialItemsLoaded && !state.value.isLoadingNext) {
                         viewModel.loadNextTrips()
                     }
                 }
             }
-    }
-
-    //todo: sometimes has issues with scrolling (not resetting correctly and load indefinitely previous items)
-    LaunchedEffect(state.value.previousItemsLoaded) {
-        if (state.value.previousItemsLoaded > 0) {
-            listState.scrollToItem(index = state.value.previousItemsLoaded)
-        }
     }
 
     Scaffold(
@@ -83,7 +71,10 @@ fun TripResultScreen(
             TopAppBar(
                 title = { Text(text = "Trip results") },
                 navigationIcon = {
-                    IconButton(onClick = { navHostController.navigateUp() }) {
+                    IconButton(onClick = {
+                        viewModel.resetTripState()
+                        navHostController.navigateUp()
+                    }) {
                         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "navigate back")
                     }
                 }
@@ -91,7 +82,6 @@ fun TripResultScreen(
         },
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState)
-
         }
     ) {
         Column(
@@ -106,16 +96,25 @@ fun TripResultScreen(
             )
             HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
 
+            if (state.value.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 state = listState,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Loading indicator for previous items
-                item {
-                    CircularProgressIndicator(
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
+                if (initialItemsLoaded) {
+                    item {
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
                 }
 
                 items(state.value.tripDelivery?.tripResults ?: emptyList(), key = { item -> item.id }) { item ->
@@ -128,10 +127,12 @@ fun TripResultScreen(
                 }
 
                 // Loading indicator for next items
-                item {
-                    CircularProgressIndicator(
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
+                if (initialItemsLoaded) {
+                    item {
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
                 }
             }
         }
@@ -140,6 +141,19 @@ fun TripResultScreen(
             when (event) {
                 is TripResultViewModel.Event.ShowSnackBar -> {
                     coroutineScope.launch { snackBarHostState.showSnackbar(message = event.message) }
+                }
+
+                is TripResultViewModel.Event.ScrollToFirstTripItem -> {
+                    coroutineScope.launch {
+                        val scrollItem = if (initialItemsLoaded) state.value.previousItemsLoaded else 1
+                        try {
+                            listState.animateScrollToItem(index = scrollItem)
+                        } catch (e: Exception) {
+                            Log.d("TripResultScreen", "User is still dragging and that as higher priority")
+                            delay(2000) //delay the reset so it wont instantly load new items while still dragging
+                        }
+                        viewModel.resetPreviousItemsCounter()
+                    }
                 }
             }
             viewModel.eventHandled(event.id)
