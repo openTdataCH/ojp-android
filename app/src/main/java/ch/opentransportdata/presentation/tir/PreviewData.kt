@@ -20,11 +20,13 @@ object PreviewData {
             transferType = TransferType.WALK,
             legStart = LegStartEndDto(
                 stopPointRef = "8500218",
-                name = NameDto(text = "Olten")
+                name = NameDto(text = "Olten"),
+                geoPosition = null
             ),
             legEnd = LegStartEndDto(
                 stopPointRef = "8500218",
-                name = NameDto(text = "Olten")
+                name = NameDto(text = "Olten"),
+                geoPosition = null
             ),
             duration = "PT5M"
         )
