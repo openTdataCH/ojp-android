@@ -42,9 +42,9 @@ object PreviewData {
                 plannedQuay = NameDto(text = "6"),
                 estimatedQuay = NameDto(text = "6"),
                 nameSuffix = null,
-                serviceDeparture = ServiceDepartureDto(
+                serviceDeparture = ServiceTimeDto(
                     timetabledTime = LocalDateTime.now(),//"2024-07-01T16:03:00Z",
-                    estimatedTime = null
+                    estimatedTime = LocalDateTime.now().plusMinutes(5)
                 ),
                 serviceArrival = null,
                 order = 1
@@ -56,7 +56,7 @@ object PreviewData {
                 plannedQuay = NameDto(text = "12"),
                 estimatedQuay = null,
                 nameSuffix = null,
-                serviceArrival = ServiceDepartureDto(
+                serviceArrival = ServiceTimeDto(
                     timetabledTime = LocalDateTime.now(),//"2024-07-01T16:28:00Z",
                     estimatedTime = null
                 ),

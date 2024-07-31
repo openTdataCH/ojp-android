@@ -8,8 +8,8 @@ import java.time.LocalDateTime
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
-@Xml(name = "ServiceDeparture")
-data class ServiceDepartureDto(
+@Xml
+data class ServiceTimeDto(
     @PropertyElement(name = "TimetabledTime")
     val timetabledTime: LocalDateTime,
     @PropertyElement(name = "EstimatedTime")
@@ -20,5 +20,5 @@ data class ServiceDepartureDto(
         get() = estimatedTime != null && delay.toMinutes() > 0
 
     val delay: Duration
-        get() = Duration.between(timetabledTime, estimatedTime)
+        get() = if (estimatedTime != null) Duration.between(timetabledTime, estimatedTime) else Duration.ZERO
 }

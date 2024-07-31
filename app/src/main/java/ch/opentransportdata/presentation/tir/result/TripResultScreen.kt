@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -133,7 +133,10 @@ fun TripResultScreen(
                     }
                 }
 
-                items(state.value.tripDelivery?.tripResults ?: emptyList(), key = { item -> item.id }) { item ->
+                itemsIndexed(
+                    items = state.value.tripDelivery?.tripResults ?: emptyList(),
+                    key = { index, item -> item.id + index }
+                ) { _, item ->
                     TripItem(
                         modifier = Modifier.clickable {
                             selectedTrip = item.trip as TripDto
@@ -164,7 +167,7 @@ fun TripResultScreen(
 
                 is TripResultViewModel.Event.ScrollToFirstTripItem -> {
                     coroutineScope.launch {
-                        val scrollItem = if (initialItemsLoaded) state.value.previousItemsLoaded else 1
+                        val scrollItem = if (initialItemsLoaded) event.offset + 1 else 1
                         try {
                             listState.animateScrollToItem(index = scrollItem)
                         } catch (e: Exception) {

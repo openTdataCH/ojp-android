@@ -21,9 +21,9 @@ data class LegBoardDto(
     @Element(name = "NameSuffix")
     val nameSuffix: NameDto?,
     @Element(name = "ServiceArrival")
-    val serviceArrival: ServiceDepartureDto?,
+    val serviceArrival: ServiceTimeDto?,
     @Element(name = "ServiceDeparture")
-    val serviceDeparture: ServiceDepartureDto,
+    val serviceDeparture: ServiceTimeDto,
     @PropertyElement(name = "Order")
     val order: Int?
     //todo: check for other needed elements...

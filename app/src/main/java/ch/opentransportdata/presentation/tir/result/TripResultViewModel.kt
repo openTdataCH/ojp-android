@@ -48,11 +48,8 @@ class TripResultViewModel(
             when (val response = MainActivity.ojpSdk.requestPreviousTrips()) {
                 is Result.Success -> {
                     currentTrips.addAll(0, response.data.tripResults)
-                    state.value = state.value.copy(
-                        tripDelivery = response.data.copy(tripResults = currentTrips),
-                        previousItemsLoaded = response.data.tripResults.size
-                    )
-                    postEvent(Event.ScrollToFirstTripItem)
+                    state.value = state.value.copy(tripDelivery = response.data.copy(tripResults = currentTrips))
+                    postEvent(Event.ScrollToFirstTripItem(response.data.tripResults.size))
                 }
 
                 is Result.Error -> postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
@@ -96,7 +93,7 @@ class TripResultViewModel(
     }
 
     fun resetPreviousItemsCounter() {
-        state.value = state.value.copy(previousItemsLoaded = 0, isLoadingPrevious = false)
+        state.value = state.value.copy(isLoadingPrevious = false)
     }
 
     fun eventHandled(id: Long) {
@@ -127,7 +124,7 @@ class TripResultViewModel(
                 is Result.Success -> {
                     Log.d("TripResultViewModel", "Fetching trip was successful")
                     state.value = state.value.copy(tripDelivery = response.data)
-                    postEvent(Event.ScrollToFirstTripItem)
+                    postEvent(Event.ScrollToFirstTripItem(0))
                 }
 
                 is Result.Error -> {
@@ -148,7 +145,7 @@ class TripResultViewModel(
 
     sealed class Event(val id: Long = UUID.randomUUID().mostSignificantBits) {
         data class ShowSnackBar(val message: String) : Event()
-        data object ScrollToFirstTripItem : Event()
+        data class ScrollToFirstTripItem(val offset: Int) : Event()
     }
 
     @Immutable
@@ -157,8 +154,6 @@ class TripResultViewModel(
         val events: List<Event> = emptyList(),
         val isLoadingPrevious: Boolean = false,
         val isLoading: Boolean = false,
-        val isLoadingNext: Boolean = false,
-        val previousItemsLoaded: Int = 0,
-
-        )
+        val isLoadingNext: Boolean = false
+    )
 }
