@@ -34,11 +34,20 @@ data class TripDto(
     val endWithTransferLeg: Boolean
         get() = legs.first().legType is TransferLegDto
 
+    val startWithTimedLeg: Boolean
+        get() = legs.first().legType is TimedLegDto
+
     val firstTimedLeg: TimedLegDto
         get() = legs.first { it.legType is TimedLegDto }.legType as TimedLegDto
 
     val lastTimedLeg: TimedLegDto
         get() = legs.last { it.legType is TimedLegDto }.legType as TimedLegDto
+
+    val departureDelayInMinutes: Long
+        get() = if (startWithTimedLeg) firstTimedLeg.legBoard.serviceDeparture.delay.toMinutes() else 0
+
+    val arrivalDelayInMinutes: Long
+        get() = if (lastTimedLeg.legAlight.serviceArrival.hasDelay) lastTimedLeg.legAlight.serviceArrival.delay.toMinutes() else 0
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

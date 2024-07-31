@@ -58,18 +58,32 @@ fun TripItem(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = trip.startTime.format(formatter),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
+            if (trip.departureDelayInMinutes > 0) {
+                Label(
+                    modifier = Modifier.padding(start = 4.dp),
+                    type = LabelType.RED,
+                    text = "+${trip.departureDelayInMinutes}'"
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = trip.endTime.format(formatter),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
+            if (trip.arrivalDelayInMinutes > 0) {
+                Label(
+                    modifier = Modifier.padding(start = 4.dp),
+                    type = LabelType.RED,
+                    text = "+${trip.arrivalDelayInMinutes}'"
+                )
+            }
         }
         Row(
             modifier = Modifier
@@ -242,8 +256,8 @@ private fun TripItemPreview() {
                 endTime = LocalDateTime.now().plusHours(1),
                 transfers = 0,
                 legs = listOf(
+                    PreviewData.timedLeg,
                     PreviewData.transferLeg,
-                    PreviewData.timedLeg
                 )
             )
         )
