@@ -77,7 +77,7 @@ internal class TripDeliveryHashCalculation {
 
         // ACTION
         val result = tikXml.read<TripDeliveryDto>(bufferedSource, TripDeliveryDto::class.java)
-        val filteredList = filterDuplicatedTrips(result.tripResults, mutableListOf(941504869))
+        val filteredList = filterDuplicatedTrips(result.tripResults, mutableListOf(780865468))
 
         // ASSERTION
         assertThat(result).isNotNull()
