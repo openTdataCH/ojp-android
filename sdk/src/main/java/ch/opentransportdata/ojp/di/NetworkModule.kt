@@ -17,6 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 /**
@@ -61,6 +62,7 @@ internal fun provideRetrofit(ojpHttpClient: OkHttpClient, tikXml: TikXml, initia
 internal fun provideTikXml(): TikXml {
     return TikXml.Builder()
         .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
+        .addTypeConverter(Duration::class.java, DurationTypeConverter())
         .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
         .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
         .addTypeConverter(PlaceTypeRestriction::class.java, PlaceTypeRestrictionConverter())

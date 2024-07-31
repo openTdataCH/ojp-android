@@ -16,9 +16,9 @@ import ch.opentransportdata.presentation.components.Label
 import ch.opentransportdata.presentation.components.LabelType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.PreviewData
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.time.Duration
 
 /**
  * Created by Michael Ruppen on 12.07.2024
@@ -37,7 +37,7 @@ fun TripDetailScreen(
             when (val legType = leg.legType) {
                 is TransferLegDto -> TransferLeg(modifier = Modifier.padding(all = 16.dp), leg = legType)
                 is ContinuousLegDto -> ContinuousLeg(modifier = Modifier.padding(all = 16.dp), leg = legType)
-                is TimedLegDto -> TimedLeg(leg = legType, duration = Duration.parseOrNull(leg.duration))
+                is TimedLegDto -> TimedLeg(leg = legType, duration = leg.duration)
             }
         }
     }
@@ -83,14 +83,14 @@ private fun TimedLeg(
             LegBoard(legBoard = leg.legBoard)
             Text(
                 modifier = Modifier.padding(start = 53.dp),
-                text = "${leg.service.publishedServiceName?.text} direction ${leg.service.destinationText?.text}",
+                text = "${leg.service.mode.name?.text} ${leg.service.publishedServiceName?.text} direction ${leg.service.destinationText?.text}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
             duration?.let {
                 Text(
                     modifier = Modifier.padding(start = 53.dp),
-                    text = "${duration.inWholeHours}h ${duration.inWholeMinutes.rem(60)}m",
+                    text = "${duration.toHours()}h ${duration.toMinutes().rem(60)}m",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -205,10 +205,9 @@ private fun ContinuousLeg(
     modifier: Modifier = Modifier,
     leg: ContinuousLegDto
 ) {
-    val duration = Duration.parseOrNull(leg.duration)
     Text(
         modifier = modifier,
-        text = "Walk ${duration?.inWholeMinutes}m to ${leg.legEnd.name?.text}",
+        text = "Walk ${leg.duration.toMinutes()}m to ${leg.legEnd.name?.text}",
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurface
     )
@@ -237,7 +236,7 @@ private fun TripDetailScreenPreview() {
         TripDetailScreen(
             trip = TripDto(
                 id = "1234",
-                duration = "P1H10M",
+                duration = Duration.parse("PT1H10M"),
                 startTime = LocalDateTime.now(),
                 endTime = LocalDateTime.now().plusHours(1).plusMinutes(10),
                 transfers = 1,

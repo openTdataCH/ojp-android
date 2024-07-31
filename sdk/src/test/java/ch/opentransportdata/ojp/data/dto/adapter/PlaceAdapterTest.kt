@@ -20,7 +20,6 @@ import org.junit.Test
 internal class PlaceAdapterTest {
 
     private val tikXml = TikXml.Builder()
-        .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
         .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
         .build()
 

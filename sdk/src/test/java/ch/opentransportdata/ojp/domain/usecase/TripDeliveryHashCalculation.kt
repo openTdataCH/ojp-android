@@ -4,12 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.TestUtils
-import ch.opentransportdata.ojp.data.dto.adapter.PlaceAdapter
-import ch.opentransportdata.ojp.data.dto.adapter.ServiceDeliveryAdapter
-import ch.opentransportdata.ojp.data.dto.adapter.TripResultAdapter
 import ch.opentransportdata.ojp.data.dto.converter.*
-import ch.opentransportdata.ojp.data.dto.response.PlaceDto
-import ch.opentransportdata.ojp.data.dto.response.ServiceDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
@@ -21,6 +16,7 @@ import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter
 import org.junit.Before
 import org.junit.Test
+import java.time.Duration
 
 /**
  * Created by Michael Ruppen on 10.07.2024
@@ -32,10 +28,8 @@ internal class TripDeliveryHashCalculation {
     @Before
     fun setUp() {
         tikXml = TikXml.Builder()
-            .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
-            .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
-            .addTypeAdapter(TripResultDto::class.java, TripResultAdapter())
             .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
+            .addTypeConverter(Duration::class.java, DurationTypeConverter())
             .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
             .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
             .addTypeConverter(PlaceTypeRestriction::class.java, PlaceTypeRestrictionConverter())

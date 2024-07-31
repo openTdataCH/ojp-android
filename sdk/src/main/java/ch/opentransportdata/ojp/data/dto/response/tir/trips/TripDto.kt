@@ -6,18 +6,18 @@ import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
+import java.time.Duration
 import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
-//todo: check nullability
 @Xml(name = "Trip")
 data class TripDto(
     @PropertyElement(name = "Id")
     override val id: String,
     @PropertyElement(name = "Duration")
-    val duration: String,
+    val duration: Duration,
     @PropertyElement(name = "StartTime")
     val startTime: LocalDateTime,
     @PropertyElement(name = "EndTime")
@@ -71,7 +71,7 @@ data class TripDto(
                 }
 
                 is TransferLegDto -> {
-                    result = 31 * result + legType.duration.hashCode()
+                    result = 31 * result + legType.duration.toString().hashCode()
                     result = 31 * result + legType.transferType.name.hashCode() //using string representation is mandatory!
                 }
             }

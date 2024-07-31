@@ -6,6 +6,7 @@ import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.*
 import ch.opentransportdata.ojp.domain.model.PtMode
 import ch.opentransportdata.ojp.domain.model.TransferType
+import java.time.Duration
 import java.time.LocalDateTime
 
 /**
@@ -15,7 +16,7 @@ object PreviewData {
 
     val transferLeg = LegDto(
         id = "111",
-        duration = "PT5M",
+        duration = Duration.parse("PT5M"),
         legType = TransferLegDto(
             transferType = TransferType.WALK,
             legStart = LegStartEndDto(
@@ -28,13 +29,13 @@ object PreviewData {
                 name = NameDto(text = "Olten"),
                 geoPosition = null
             ),
-            duration = "PT5M"
+            duration = Duration.parse("PT5M")
         )
     )
 
     val timedLeg = LegDto(
         id = "222",
-        duration = "PT1H",
+        duration = Duration.parse("PT1H"),
         legType = TimedLegDto(
             legBoard = LegBoardDto(
                 stopPointRef = "ch:1:sloid:10:3:6",

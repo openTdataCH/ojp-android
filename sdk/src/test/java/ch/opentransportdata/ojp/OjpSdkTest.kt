@@ -5,12 +5,8 @@ import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.data.dto.OjpDto
-import ch.opentransportdata.ojp.data.dto.adapter.PlaceAdapter
-import ch.opentransportdata.ojp.data.dto.adapter.ServiceDeliveryAdapter
 import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeTypeConverter
 import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
-import ch.opentransportdata.ojp.data.dto.response.PlaceDto
-import ch.opentransportdata.ojp.data.dto.response.ServiceDeliveryDto
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.PtMode
@@ -34,8 +30,6 @@ internal class OjpSdkTest {
         val xmlFile = "src/test/resources/response_custom_data_type_ptmode.xml"
         val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder()
-            .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
-            .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
             .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
             .build()
 
@@ -52,8 +46,6 @@ internal class OjpSdkTest {
         val xmlFile = "src/test/resources/response_custom_data_type_ptmode.xml"
         val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder()
-            .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
-            .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
             .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
             .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
             .build()

@@ -23,9 +23,9 @@ import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.PreviewData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.time.Duration
 
 /**
  * Created by Michael Ruppen on 28.06.2024
@@ -46,7 +46,6 @@ fun TripItem(
         }
     }
 
-    val duration = Duration.parseOrNull(trip.duration)
     val formatter = DateTimeFormatter.ofPattern("HH:mm")
     val platform = trip.firstTimedLeg.legBoard.estimatedQuay?.text ?: trip.firstTimedLeg.legBoard.plannedQuay?.text
 
@@ -107,7 +106,7 @@ fun TripItem(
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "${duration?.inWholeHours}h ${duration?.inWholeMinutes?.rem(60)}m",
+                text = "${trip.duration.toHours()}h ${trip.duration.toMinutes().rem(60)}m",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -251,7 +250,7 @@ private fun TripItemPreview() {
             hasDisruptions = true,
             trip = TripDto(
                 id = "1234",
-                duration = "PT1H",
+                duration = Duration.parse("PT1H"),
                 startTime = LocalDateTime.now(),
                 endTime = LocalDateTime.now().plusHours(1),
                 transfers = 0,
@@ -272,7 +271,7 @@ private fun TripItemSecondPreview() {
             hasDisruptions = false,
             trip = TripDto(
                 id = "1234",
-                duration = "PT1H18M",
+                duration = Duration.parse("PT1H18M"),
                 startTime = LocalDateTime.now(),
                 endTime = LocalDateTime.now().plusHours(1).plusMinutes(18),
                 transfers = 2,

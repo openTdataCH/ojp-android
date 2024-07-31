@@ -8,7 +8,6 @@ import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.TestUtils
 import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeTypeConverter
 import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
-import ch.opentransportdata.ojp.data.dto.response.PlaceDto
 import ch.opentransportdata.ojp.data.dto.response.ServiceDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
 import ch.opentransportdata.ojp.domain.model.PtMode
@@ -23,8 +22,6 @@ import org.junit.Test
 class ServiceDeliveryAdapterTest {
 
     private val tikXml = TikXml.Builder()
-        .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
-        .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
         .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
         .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
         .build()

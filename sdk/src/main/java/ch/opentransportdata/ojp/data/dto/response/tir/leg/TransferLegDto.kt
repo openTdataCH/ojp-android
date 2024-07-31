@@ -4,6 +4,7 @@ import ch.opentransportdata.ojp.domain.model.TransferType
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
+import java.time.Duration
 
 /**
  * Created by Michael Ruppen on 28.06.2024
@@ -18,5 +19,5 @@ data class TransferLegDto(
     @Element(name = "LegEnd")
     val legEnd: LegStartEndDto,
     @PropertyElement(name = "Duration")
-    val duration: String
+    val duration: Duration
 ) : AbstractLegType()
