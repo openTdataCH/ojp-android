@@ -25,9 +25,18 @@ data class LegIntermediateDto(
     @Element(name = "ServiceDeparture")
     val serviceDeparture: ServiceTimeDto,
     @PropertyElement(name = "Order")
-    val order: Int?
-    //todo: check for other needed elements...
-){
+    val order: Int?,
+    @PropertyElement(name = "RequestStop")
+    val requestStop: Boolean?,
+    @PropertyElement(name = "UnplannedStop")
+    val unplannedStop: Boolean?,
+    @PropertyElement(name = "NotServicedStop")
+    val notServicedStop: Boolean?,
+    @PropertyElement(name = "NoBoardingAtStop")
+    val noBoardingAtStop: Boolean?,
+    @PropertyElement(name = "NoAlightingAtStop")
+    val noAlightingAtStop: Boolean?,
+) {
     val isPlatformChanged: Boolean
         get() = estimatedQuay != null && plannedQuay?.text != estimatedQuay.text
 

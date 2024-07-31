@@ -11,40 +11,40 @@ import com.tickaroo.tikxml.annotation.Xml
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
-//todo: check nullability
 @Xml(name = "Service")
 data class ServiceDto(
     @Element(name = "Mode")
     val mode: ModeDto,
-    //todo: check if property element or element is the right choice, check if converter annotation is needed
-    @PropertyElement(name = "ConventionalModeOfOperation", converter = ConventionalModesOfOperationConverter::class)
+    @PropertyElement(name = "ConventionalModeOfOperation")
     val conventionalModeOfOperation: ConventionalModesOfOperation?,
     @PropertyElement(name = "TrainNumber")
     val trainNumber: String?,
     @PropertyElement(name = "siri:LineRef")
-    val lineRef: String?,
+    val lineRef: String,
     @PropertyElement(name = "siri:OperatorRef")
     val operatorRef: String?,
     @PropertyElement(name = "PublicCode")
     val publicCode: String?,
     @Element(name = "PublishedServiceName")
-    val publishedServiceName: NameDto?,
+    val publishedServiceName: NameDto,
     @Element(name = "ProductCategory")
     val productCategory: ProductCategoryDto?,
     @PropertyElement(name = "siri:DirectionRef")
     val directionRef: String?,
     @PropertyElement(name = "OperatingDayRef")
-    val operatingDayRef: String?,
+    val operatingDayRef: String,
     @PropertyElement(name = "OriginStopPointRef")
     val originStopPointRef: String?,
     @PropertyElement(name = "DestinationStopPointRef")
     val destinationStopPointRef: String?,
     @Element(name = "OriginText")
-    val originText: NameDto?,
+    val originText: NameDto,
     @Element(name = "DestinationText")
     val destinationText: NameDto?,
     @PropertyElement(name = "JourneyRef")
-    val journeyRef: String?,
+    val journeyRef: String,
     @Element(name = "Attribute")
-    val attributes: List<AttributeDto>?
+    val attributes: List<AttributeDto>?,
+    @PropertyElement(name = "siri:VehicleRef")
+    val vehicleRef: String?
 )

@@ -117,7 +117,8 @@ class TripResultViewModel(
                 params = TripParamsDto(
                     numberOfResults = 10,
                     includeIntermediateStops = true,
-                    includeAllRestrictedLines = true
+                    includeAllRestrictedLines = true,
+                    modeAndModeOfOperationFilter = null
                 )
             )
             when (response) {

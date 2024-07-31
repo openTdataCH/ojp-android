@@ -12,9 +12,9 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "ProductCategory")
 data class ProductCategoryDto(
     @Element(name = "Name")
-    val name: NameDto,
+    val name: NameDto?,
     @Element(name = "ShortName")
-    val shortName: NameDto,
+    val shortName: NameDto?,
     @PropertyElement(name = "ProductCategoryRef")
-    val productCategoryRef: String
+    val productCategoryRef: String?
 )

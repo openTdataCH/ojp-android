@@ -48,7 +48,12 @@ object PreviewData {
                     estimatedTime = LocalDateTime.now().plusMinutes(5)
                 ),
                 serviceArrival = null,
-                order = 1
+                order = 1,
+                requestStop = null,
+                unplannedStop = null,
+                notServicedStop = null,
+                noBoardingAtStop = null,
+                noAlightingAtStop = null
             ),
             legIntermediate = null,
             legAlight = LegAlightDto(
@@ -62,7 +67,12 @@ object PreviewData {
                     estimatedTime = null
                 ),
                 serviceDeparture = null,
-                order = 1
+                order = 1,
+                requestStop = null,
+                unplannedStop = null,
+                notServicedStop = null,
+                noBoardingAtStop = null,
+                noAlightingAtStop = null
             ),
             service = ServiceDto(
                 mode = ModeDto(
@@ -83,7 +93,8 @@ object PreviewData {
                 originText = NameDto(text = "Basel SBB"),
                 destinationText = NameDto(text = "Olten"),
                 journeyRef = "ch:1:sjyid:100061:2335-001",
-                attributes = emptyList()
+                attributes = emptyList(),
+                vehicleRef = null
             ),
             legTrack = null
         )
