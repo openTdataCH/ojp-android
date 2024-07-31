@@ -33,7 +33,7 @@ import kotlin.time.Duration
 @Composable
 fun TripItem(
     modifier: Modifier = Modifier,
-    responseContextDto: TripResponseContextDto? = null, //todo: think about only passing relevant data (if not too much)
+    responseContextDto: TripResponseContextDto? = null,
     trip: TripDto,
     hasDisruptions: Boolean,
 ) {

@@ -107,7 +107,6 @@ class MainActivity : ComponentActivity() {
 //                    destinationName = parameters.destination.place.placeType?.name() ?: "-"
                 )
             }
-            composable<TripDetails> { } // todo: implement
         }
     }
 

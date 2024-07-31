@@ -32,16 +32,12 @@ import kotlinx.coroutines.launch
 fun TripResultScreen(
     navHostController: NavHostController,
     viewModel: TripResultViewModel = viewModel(),
-//    originName: String,
-//    viaName: String? = null,
-//    destinationName: String
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     val state = viewModel.state.collectAsState()
-//    val reachedBottom by remember { derivedStateOf { listState.reachedBottom() } } //todo: check if these can be useful to simplify logic
-//    val reachedTop by remember { derivedStateOf { listState.reachedTop() } }
+
     var initialItemsLoaded by remember { mutableStateOf(false) }
     val detailBottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedTrip by remember { mutableStateOf<TripDto?>(null) }
