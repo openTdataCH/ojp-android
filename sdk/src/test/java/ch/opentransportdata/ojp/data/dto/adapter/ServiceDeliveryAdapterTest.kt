@@ -6,6 +6,7 @@ import assertk.assertions.isFalse
 import assertk.assertions.isGreaterThan
 import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.TestUtils
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeTypeConverter
 import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
 import ch.opentransportdata.ojp.data.dto.response.PlaceDto
 import ch.opentransportdata.ojp.data.dto.response.ServiceDeliveryDto
@@ -25,6 +26,7 @@ class ServiceDeliveryAdapterTest {
         .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
         .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
         .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
+        .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
         .build()
 
     @Test
@@ -38,7 +40,7 @@ class ServiceDeliveryAdapterTest {
 
         // ASSERTION
         assertThat(result).isNotNull()
-        assertThat(result.responseTimestamp).isEqualTo("2024-04-12T13:56:49.2188513+02:00")
+        assertThat(result.responseTimestamp.toString()).isEqualTo("2024-04-12T13:56:49.218851300")
         assertThat(result.producerRef).isEqualTo("MENTZ")
         assertThat(result.ojpDelivery.javaClass).isEqualTo(LocationInformationDeliveryDto::class.java)
 
