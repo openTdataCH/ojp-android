@@ -8,8 +8,14 @@ import com.tickaroo.tikxml.annotation.Xml
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
+@Xml(name = "TripResult")
 data class TripResultDto(
+    @PropertyElement(name = "Id")
     val id: String,
-    val trip: AbstractTripDto
-    //todo: check for more elements
+    @Element
+    val trip: AbstractTripDto,
+//    @Element(name = "TripFare")
+//    val tripFares: List<TripFare>, //not yet implemented on backend
+    @PropertyElement(name = "IsAlternativeOption")
+    val isAlternativeOption: Boolean?
 )

@@ -1,13 +1,7 @@
 package ch.opentransportdata.ojp.di
 
 import ch.opentransportdata.ojp.BuildConfig
-import ch.opentransportdata.ojp.data.dto.adapter.PlaceAdapter
-import ch.opentransportdata.ojp.data.dto.adapter.ServiceDeliveryAdapter
-import ch.opentransportdata.ojp.data.dto.adapter.TripResultAdapter
 import ch.opentransportdata.ojp.data.dto.converter.*
-import ch.opentransportdata.ojp.data.dto.response.PlaceDto
-import ch.opentransportdata.ojp.data.dto.response.ServiceDeliveryDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.di.interceptor.TokenInterceptor
 import ch.opentransportdata.ojp.domain.model.ConventionalModesOfOperation
@@ -66,9 +60,6 @@ internal fun provideRetrofit(ojpHttpClient: OkHttpClient, tikXml: TikXml, initia
 
 internal fun provideTikXml(): TikXml {
     return TikXml.Builder()
-        .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
-        .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
-        .addTypeAdapter(TripResultDto::class.java, TripResultAdapter())
         .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
         .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
         .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
