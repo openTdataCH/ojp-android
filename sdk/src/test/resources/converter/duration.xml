@@ -1,0 +1,20 @@
+<Leg>
+    <Id>2</Id>
+    <Duration>PT7M</Duration>
+    <TransferLeg>
+        <TransferType>walk</TransferType>
+        <LegStart>
+            <siri:StopPointRef>8503000</siri:StopPointRef>
+            <Name>
+                <Text xml:lang="de">Zürich HB</Text>
+            </Name>
+        </LegStart>
+        <LegEnd>
+            <siri:StopPointRef>8503000</siri:StopPointRef>
+            <Name>
+                <Text xml:lang="de">Zürich HB</Text>
+            </Name>
+        </LegEnd>
+        <Duration>PT7M</Duration>
+    </TransferLeg>
+</Leg>

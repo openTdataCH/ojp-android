@@ -15,6 +15,3 @@ data class TripResults(
     val via: PlaceResultDto? = null,
     val destination: PlaceResultDto
 )
-
-@Serializable
-object TripDetails //todo: add trip as param, when models exist

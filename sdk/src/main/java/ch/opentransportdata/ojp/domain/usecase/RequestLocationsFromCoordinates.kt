@@ -1,7 +1,7 @@
 package ch.opentransportdata.ojp.domain.usecase
 
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
-import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
+import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import ch.opentransportdata.ojp.utils.GeoLocationUtil
@@ -17,7 +17,7 @@ internal class RequestLocationsFromCoordinates(
     suspend operator fun invoke(
         longitude: Double,
         latitude: Double,
-        restrictions: List<PlaceTypeRestriction>
+        restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return when (val response =
             ojpRepository.placeResultsFromCoordinates(longitude = longitude, latitude = latitude, restrictions = restrictions)) {

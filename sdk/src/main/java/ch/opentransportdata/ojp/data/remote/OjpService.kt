@@ -11,7 +11,7 @@ import retrofit2.http.Url
 internal interface OjpService {
 
     @POST
-    suspend fun locationInformationRequest(
+    suspend fun serviceRequest(
         @Url url: String,
         @Body ojpDto: OjpDto
     ): OjpDto

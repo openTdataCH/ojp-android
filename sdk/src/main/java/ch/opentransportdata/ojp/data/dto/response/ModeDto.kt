@@ -2,6 +2,7 @@ package ch.opentransportdata.ojp.data.dto.response
 
 import android.os.Parcelable
 import ch.opentransportdata.ojp.domain.model.PtMode
+import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
@@ -17,5 +18,7 @@ import kotlinx.serialization.Serializable
 @Xml(name = "Mode")
 data class ModeDto(
     @PropertyElement(name = "PtMode")
-    val ptMode: PtMode
-) : Parcelable
+    val ptMode: PtMode,
+    @Element(name = "Name")
+    val name: NameDto?
+): Parcelable

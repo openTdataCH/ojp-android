@@ -8,5 +8,5 @@ import org.koin.dsl.module
  * Created by Michael Ruppen on 08.04.2024
  */
 internal val repositoryModule = module {
-    single<OjpRepository> { OjpRepositoryImpl(get()) }
+    single<OjpRepository> { OjpRepositoryImpl(get(), get()) }
 }

@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ch.opentransportdata.presentation.components.LocationInputRow
 import ch.opentransportdata.presentation.lir.name
+import ch.opentransportdata.presentation.navigation.TripResults
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import kotlinx.coroutines.launch
 
@@ -37,7 +38,6 @@ fun TirScreenComposable(
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.collectAsState()
 
-
     Scaffold(
         snackbarHost = {
             SnackbarHost(modifier = Modifier.imePadding(), hostState = snackBarHostState)
@@ -50,7 +50,7 @@ fun TirScreenComposable(
         ) {
             Header(
                 modifier = Modifier.padding(16.dp),
-                requestLocation = { viewModel.getCurrentLocation() },
+                requestLocation = { isOrigin, isDestination -> viewModel.getCurrentLocation(isOrigin, isDestination) },
                 origin = state.value.origin,
                 originTextValueChanged = { viewModel.fetchLocations(it, isOrigin = true) },
                 destination = state.value.destination,
@@ -70,7 +70,7 @@ fun TirScreenComposable(
                 LazyColumn {
                     items(
                         items = state.value.results,
-                        key = { item -> item.place.name.stationName + item.place.position.longitude + item.place.position.latitude + item.distance }
+                        key = { item -> item.place.name.text + item.place.position.longitude + item.place.position.latitude + item.distance }
                     ) { item ->
                         ListItem(
                             modifier = Modifier.clickable { viewModel.onLocationSelected(item) },
@@ -98,7 +98,16 @@ fun TirScreenComposable(
                 }
             }
 
-            is TirViewModel.Event.RequestTrip -> navHostController.navigate("/tir/results")
+            is TirViewModel.Event.RequestTrip -> {
+                navHostController.navigate(
+                    TripResults(
+                        origin = event.origin,
+                        via = event.via,
+                        destination = event.destination
+                    )
+                )
+                viewModel.resetData()
+            }
         }
         viewModel.eventHandled(event.id)
     }
@@ -107,7 +116,7 @@ fun TirScreenComposable(
 @Composable
 private fun Header(
     modifier: Modifier = Modifier,
-    requestLocation: () -> Unit,
+    requestLocation: (Boolean, Boolean) -> Unit,
     origin: TirViewModel.TextInput,
     originTextValueChanged: (String) -> Unit,
     destination: TirViewModel.TextInput,
@@ -121,38 +130,38 @@ private fun Header(
 //        horizontalAlignment = Alignment.End
     ) {
         LocationInputRow(
-            requestLocation = requestLocation,
+            requestLocation = { requestLocation(true, false) },
             textInputValue = origin.textInputValue,
             onTextValueChange = originTextValueChanged,
             supportingText = "From",
             hasFocus = origin.hasFocus,
             onFocusChange = { updateFocus(true, false, false) },
             isLocationSelected = origin.selectedLocation != null,
-            onClearInputClicked = {} //todo: implement clear to reset textInput
+            onClearInputClicked = { originTextValueChanged("") }
         )
 
         LocationInputRow(
             modifier = Modifier.padding(start = 72.dp, top = 16.dp, bottom = 16.dp),
             isLocationButtonEnabled = false,
-            requestLocation = requestLocation,
+            requestLocation = {},
             textInputValue = via.textInputValue,
             onTextValueChange = viaTextValueChanged,
             supportingText = "Via",
             hasFocus = via.hasFocus,
             onFocusChange = { updateFocus(false, true, false) },
             isLocationSelected = via.selectedLocation != null,
-            onClearInputClicked = {} //todo: implement clear to reset textInput
+            onClearInputClicked = { viaTextValueChanged("") }
         )
 
         LocationInputRow(
-            requestLocation = requestLocation,
+            requestLocation = { requestLocation(false, true) },
             textInputValue = destination.textInputValue,
             onTextValueChange = destinationTextValueChanged,
             supportingText = "To",
             hasFocus = destination.hasFocus,
             onFocusChange = { updateFocus(false, false, true) },
             isLocationSelected = destination.selectedLocation != null,
-            onClearInputClicked = {} //todo: implement clear to reset textInput
+            onClearInputClicked = { destinationTextValueChanged("") }
         )
     }
 

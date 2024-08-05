@@ -1,16 +1,13 @@
 package ch.opentransportdata.ojp.di
 
 import ch.opentransportdata.ojp.BuildConfig
-import ch.opentransportdata.ojp.data.dto.adapter.PlaceAdapter
-import ch.opentransportdata.ojp.data.dto.adapter.ServiceDeliveryAdapter
-import ch.opentransportdata.ojp.data.dto.converter.PlaceTypeRestrictionConverter
-import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
-import ch.opentransportdata.ojp.data.dto.response.PlaceDto
-import ch.opentransportdata.ojp.data.dto.response.ServiceDeliveryDto
+import ch.opentransportdata.ojp.data.dto.converter.*
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.di.interceptor.TokenInterceptor
+import ch.opentransportdata.ojp.domain.model.ConventionalModesOfOperation
 import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.PtMode
+import ch.opentransportdata.ojp.domain.model.TransferType
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter
@@ -20,6 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 /**
@@ -63,11 +61,13 @@ internal fun provideRetrofit(ojpHttpClient: OkHttpClient, tikXml: TikXml, initia
 
 internal fun provideTikXml(): TikXml {
     return TikXml.Builder()
-        .addTypeAdapter(PlaceDto::class.java, PlaceAdapter())
-        .addTypeAdapter(ServiceDeliveryDto::class.java, ServiceDeliveryAdapter())
+        .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
+        .addTypeConverter(Duration::class.java, DurationTypeConverter())
         .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
         .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
         .addTypeConverter(PlaceTypeRestriction::class.java, PlaceTypeRestrictionConverter())
+        .addTypeConverter(TransferType::class.java, TransferTypeConverter())
+        .addTypeConverter(ConventionalModesOfOperation::class.java, ConventionalModesOfOperationConverter())
         .exceptionOnUnreadXml(false)
         .build()
 }
