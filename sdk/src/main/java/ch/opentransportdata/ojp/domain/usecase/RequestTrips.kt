@@ -30,6 +30,9 @@ internal class RequestTrips(
         isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
     ): Result<TripDeliveryDto> {
+        // do not return or overwrite state, if user canceled the request (long running task or something)
+        if (!coroutineContext.isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
+
         state = state.copy(
             origin = origin,
             destination = destination,
@@ -38,9 +41,6 @@ internal class RequestTrips(
             isSearchForDepartureTime = isSearchForDepartureTime,
             params = params,
         )
-
-        //do not return or overwrite state, if user canceled the request (long running task or something)
-        if (!coroutineContext.isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
 
         return when (val response =
             ojpRepository.requestTrips(

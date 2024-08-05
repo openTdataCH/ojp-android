@@ -11,6 +11,7 @@ import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.presentation.MainActivity
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.UUID
@@ -19,7 +20,7 @@ import java.util.UUID
  * Created by Michael Ruppen on 02.07.2024
  */
 class TripResultViewModel(
-    private val savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val state = MutableStateFlow(UiState())
@@ -34,38 +35,37 @@ class TripResultViewModel(
 
     fun loadPreviousTrips() {
         if (state.value.isLoadingPrevious) return
-        state.value = state.value.copy(isLoadingPrevious = true)
+        state.update { it.copy(isLoadingPrevious = true) }
 
         val firstTrip = state.value.tripDelivery?.tripResults?.firstOrNull()
         if (firstTrip == null) {
             postEvent(Event.ShowSnackBar("No first trip available"))
+            state.update { it.copy(isLoadingPrevious = false) }
             return
         }
         val currentTrips = state.value.tripDelivery?.tripResults?.toMutableList() ?: mutableListOf()
-
 
         viewModelScope.launch {
             when (val response = MainActivity.ojpSdk.requestPreviousTrips()) {
                 is Result.Success -> {
                     currentTrips.addAll(0, response.data.tripResults)
-                    state.value = state.value.copy(tripDelivery = response.data.copy(tripResults = currentTrips))
+                    state.update { it.copy(tripDelivery = response.data.copy(tripResults = currentTrips)) }
                     postEvent(Event.ScrollToFirstTripItem(response.data.tripResults.size))
                 }
 
                 is Result.Error -> postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
-
             }
-
         }
     }
 
     fun loadNextTrips() {
         if (state.value.isLoadingNext) return
-        state.value = state.value.copy(isLoadingNext = true)
+        state.update { it.copy(isLoadingNext = true) }
 
         val lastTrip = state.value.tripDelivery?.tripResults?.lastOrNull()
         if (lastTrip == null) {
             postEvent(Event.ShowSnackBar("No last trip available"))
+            state.update { it.copy(isLoadingNext = false) }
             return
         }
         val currentTrips = state.value.tripDelivery?.tripResults?.toMutableList() ?: mutableListOf()
@@ -75,7 +75,7 @@ class TripResultViewModel(
                 is Result.Success -> {
                     Log.d("TripResultViewModel", "Fetching next trips successful")
                     currentTrips.addAll(response.data.tripResults)
-                    state.value = state.value.copy(tripDelivery = response.data.copy(tripResults = currentTrips))
+                    state.update { it.copy(tripDelivery = response.data.copy(tripResults = currentTrips)) }
                 }
 
                 is Result.Error -> {
@@ -83,8 +83,7 @@ class TripResultViewModel(
                     postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
                 }
             }
-            state.value = state.value.copy(isLoadingNext = false)
-
+            state.update { it.copy(isLoadingNext = false) }
         }
     }
 
@@ -93,12 +92,11 @@ class TripResultViewModel(
     }
 
     fun resetPreviousItemsCounter() {
-        state.value = state.value.copy(isLoadingPrevious = false)
+        state.update { it.copy(isLoadingPrevious = false) }
     }
 
     fun eventHandled(id: Long) {
-        val events = state.value.events.filterNot { it.id == id }
-        state.value = state.value.copy(events = events)
+        state.update { it.copy(events = it.events.filterNot { event -> event.id == id }) }
     }
 
     private fun requestTrips() {
@@ -108,7 +106,7 @@ class TripResultViewModel(
         }
 
         viewModelScope.launch {
-            state.value = state.value.copy(isLoading = true)
+            state.update { it.copy(isLoading = true) }
             val response = MainActivity.ojpSdk.requestTrips(
                 origin = origin,
                 destination = destination,
@@ -124,24 +122,22 @@ class TripResultViewModel(
             when (response) {
                 is Result.Success -> {
                     Log.d("TripResultViewModel", "Fetching trip was successful")
-                    state.value = state.value.copy(tripDelivery = response.data)
+                    state.update { it.copy(tripDelivery = response.data) }
                     postEvent(Event.ScrollToFirstTripItem(0))
                 }
 
                 is Result.Error -> {
                     Log.e("TripResultViewModel", "Error fetching trip results", response.error.exception)
-                    state.value = state.value.copy(tripDelivery = null)
+                    state.update { it.copy(tripDelivery = null) }
                     postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
                 }
             }
-            state.value = state.value.copy(isLoading = false)
-
+            state.update { it.copy(isLoading = false) }
         }
     }
 
     private fun postEvent(event: Event) {
-        val events = state.value.events + event
-        state.value = state.value.copy(events = events)
+        state.update { it.copy(events = it.events + event) }
     }
 
     sealed class Event(val id: Long = UUID.randomUUID().mostSignificantBits) {

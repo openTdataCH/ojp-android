@@ -18,14 +18,16 @@ import kotlinx.serialization.modules.subclass
  */
 
 val PlaceResultType = object : NavType<PlaceResultDto?>(isNullableAllowed = true) {
-    //needed for abstract classes to correctly resolve polymorphism
-    val module = SerializersModule {
-        polymorphic(AbstractPlaceDto::class) {
-            subclass(StopPlaceDto::class)
-            subclass(AddressDto::class)
+    // needed for abstract classes to correctly resolve polymorphism
+    private val json by lazy {
+        val module = SerializersModule {
+            polymorphic(AbstractPlaceDto::class) {
+                subclass(StopPlaceDto::class)
+                subclass(AddressDto::class)
+            }
         }
+        Json { serializersModule = module }
     }
-    val json = Json { serializersModule = module }
 
     override fun get(bundle: Bundle, key: String): PlaceResultDto? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
