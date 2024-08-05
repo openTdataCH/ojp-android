@@ -61,7 +61,7 @@ internal class RequestTrips(
         }
     }
 
-    suspend fun loadPrevious(): Result<TripDeliveryDto> {
+    suspend fun loadPrevious(numberOfResultsBefore: Int): Result<TripDeliveryDto> {
         if (state.origin == null || state.minDateTime == null) return Result.Error(OjpError.Unknown(Exception("Request trips first")))
 
         return invoke(
@@ -71,14 +71,14 @@ internal class RequestTrips(
             time = state.minDateTime!!,
             isSearchForDepartureTime = true,
             params = state.params?.copy(
-                numberOfResultsBefore = 5,
+                numberOfResultsBefore = numberOfResultsBefore,
                 numberOfResultsAfter = null,
                 numberOfResults = null
             ),
         )
     }
 
-    suspend fun loadNext(): Result<TripDeliveryDto> {
+    suspend fun loadNext(numberOfResultsAfter: Int): Result<TripDeliveryDto> {
         if (state.origin == null || state.maxDateTime == null) return Result.Error(OjpError.Unknown(Exception("Request trips first")))
 
         return invoke(
@@ -89,7 +89,7 @@ internal class RequestTrips(
             isSearchForDepartureTime = true,
             params = state.params?.copy(
                 numberOfResultsBefore = null,
-                numberOfResultsAfter = 5,
+                numberOfResultsAfter = numberOfResultsAfter,
                 numberOfResults = null
             ),
         )
