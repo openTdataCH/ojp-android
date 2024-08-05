@@ -79,6 +79,10 @@ internal class TripDeliveryHashCalculation {
         val result = tikXml.read<TripDeliveryDto>(bufferedSource, TripDeliveryDto::class.java)
         val filteredList = filterDuplicatedTrips(result.tripResults, mutableListOf(780865468))
 
+        println("Given hash: 780865468")
+        println("Hashes: ${result.tripResults.map { (it.trip as TripDto).hashCode() }}")
+        println("FilteredSize: ${filteredList.size}")
+
         // ASSERTION
         assertThat(result).isNotNull()
         assertThat(result.tripResults.size).isEqualTo(13)
