@@ -16,13 +16,12 @@ class LocalDateTimeTypeConverter : TypeConverter<LocalDateTime> {
         val zonedDateTime = ZonedDateTime.parse(value, formatter)
 
         // Convert to LocalDateTime in your local time zone
-        val localZoneId = ZoneId.systemDefault()
+        val localZoneId = ZoneId.of("UTC")
         return zonedDateTime.withZoneSameInstant(localZoneId).toLocalDateTime()
     }
 
     override fun write(value: LocalDateTime): String {
-        val currentOffset = ZoneOffset.systemDefault().rules.getOffset(value)
-        return value.toInstant(currentOffset).toString()
+        return value.toInstant(ZoneOffset.UTC).toString()
     }
 }
 

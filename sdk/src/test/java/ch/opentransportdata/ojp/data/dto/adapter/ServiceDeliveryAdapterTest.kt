@@ -38,9 +38,7 @@ class ServiceDeliveryAdapterTest {
         // ASSERTION
         assertThat(result).isNotNull()
 
-        println("Result parsed is: ${result.responseTimestamp}")
-
-        assertThat(result.responseTimestamp.toString()).isEqualTo("2024-04-12T13:56:49.218851300")
+        assertThat(result.responseTimestamp.toString()).isEqualTo("2024-04-12T11:56:49.218851300")
         assertThat(result.producerRef).isEqualTo("MENTZ")
         assertThat(result.ojpDelivery.javaClass).isEqualTo(LocationInformationDeliveryDto::class.java)
 
