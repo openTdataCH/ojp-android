@@ -63,3 +63,14 @@ kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+[bundles]
+compose = [
+    "activity-compose",
+    "viewModel-compose",
+    "material3",
+    "ui",
+    "ui-graphics",
+    "ui-tooling",
+    "ui-tooling-preview"
+]

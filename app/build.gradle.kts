@@ -55,23 +55,17 @@ android {
 }
 
 dependencies {
-
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(project(":sdk"))
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
     implementation(libs.navigation)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.accompanist.permission)
     implementation(libs.play.services)
-    implementation(libs.viewModel.compose)
 
     testImplementation(libs.junit)
     debugImplementation(libs.ui.tooling)
