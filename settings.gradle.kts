@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -17,6 +18,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "OJP Android SDK"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+rootProject.name = "OJP"
 include(":sdk")
 include(":app")

@@ -1,8 +1,10 @@
 [versions]
 agp = "8.4.2"
+androidTools = "31.2.2"
 assertk = "0.28.1"
 desugar_jdk_libs = "2.0.4"
 kotlin = "2.0.0"
+ksp = "2.0.0-1.0.22"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 extJunit = "1.1.5"
@@ -21,6 +23,14 @@ navigation = "2.8.0-beta04"
 serialization = "1.7.0"
 accompanistPermission = "0.32.0"
 playServices = "21.3.0"
+
+# Project versions
+projectApplicationId = "ch.opentransportdata"
+projectVersionName = "1.0"
+projectMinSdkVersion = "23"
+projectTargetSdkVersion = "34"
+projectCompileSdkVersion = "34"
+projectVersionCode = "1"
 
 [libraries]
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
@@ -48,11 +58,18 @@ ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
 navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 accompanist-permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermission" }
 play-services = { module = "com.google.android.gms:play-services-location", version.ref = "playServices" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+# Gradle
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -64,6 +81,11 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
+ojp-android-application = { id = "ojp.android.application", version = "unspecified" }
+ojp-android-application-compose = { id = "ojp.android.application.compose", version = "unspecified" }
+ojp-android-library = { id = "ojp.android.library", version = "unspecified" }
+ojp-android-ui = { id = "ojp.android.ui", version = "unspecified" }
+
 [bundles]
 compose = [
     "activity-compose",
@@ -71,6 +93,9 @@ compose = [
     "material3",
     "ui",
     "ui-graphics",
-    "ui-tooling",
     "ui-tooling-preview"
+]
+compose-debug = [
+    "ui-tooling",
+    "ui-test-manifest"
 ]
