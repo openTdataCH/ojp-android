@@ -1,6 +1,5 @@
 package ch.opentransportdata.presentation.tir.result
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +20,6 @@ import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.presentation.components.TripResultHeader
 import ch.opentransportdata.presentation.lir.name
 import ch.opentransportdata.presentation.tir.detail.TripDetailScreen
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -64,10 +62,24 @@ fun TripResultScreen(
                     val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.last().index
 
                     if (initialItemsLoaded && firstVisibleItemIndex < 1 && !state.value.isLoadingPrevious) {
+                        val oldFirstVisibleItemIndex = listState.firstVisibleItemIndex
+                        val oldFirstVisibleItemScrollOffset = listState.firstVisibleItemScrollOffset
+
                         viewModel.loadPreviousTrips()
+
+                        coroutineScope.launch {
+                            viewModel.state.collect { newState ->
+                                if (!newState.isLoadingPrevious) {
+                                    listState.scrollToItem(
+                                        oldFirstVisibleItemIndex + viewModel.previousItemsCount,
+                                        oldFirstVisibleItemScrollOffset
+                                    )
+                                }
+                            }
+                        }
                     }
 
-                    if (listState.isScrollInProgress && !initialItemsLoaded) {
+                    if (!initialItemsLoaded && firstVisibleItemIndex >= 0) {
                         initialItemsLoaded = true
                     }
 
@@ -161,18 +173,7 @@ fun TripResultScreen(
                     coroutineScope.launch { snackBarHostState.showSnackbar(message = event.message) }
                 }
 
-                is TripResultViewModel.Event.ScrollToFirstTripItem -> {
-                    coroutineScope.launch {
-                        val scrollItem = if (initialItemsLoaded) event.offset + 1 else 1
-                        try {
-                            listState.animateScrollToItem(index = scrollItem)
-                        } catch (e: Exception) {
-                            Log.d("TripResultScreen", "User is still dragging and that as higher priority")
-                            delay(2000) //delay the reset so it wont instantly load new items while still dragging
-                        }
-                        viewModel.resetPreviousItemsCounter()
-                    }
-                }
+                is TripResultViewModel.Event.ScrollToFirstTripItem -> viewModel.resetPreviousItemsCounter()
             }
             viewModel.eventHandled(event.id)
         }

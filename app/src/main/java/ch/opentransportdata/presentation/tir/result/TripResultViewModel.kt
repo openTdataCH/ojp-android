@@ -29,6 +29,9 @@ class TripResultViewModel(
     val via: PlaceResultDto? = savedStateHandle["via"]
     val destination: PlaceResultDto? = savedStateHandle["destination"]
 
+    var previousItemsCount = 0
+        private set
+
     init {
         requestTrips()
     }
@@ -48,12 +51,17 @@ class TripResultViewModel(
         viewModelScope.launch {
             when (val response = MainActivity.ojpSdk.requestPreviousTrips()) {
                 is Result.Success -> {
+                    // delay(2000)
+                    previousItemsCount = response.data.tripResults.size
                     currentTrips.addAll(0, response.data.tripResults)
-                    state.update { it.copy(tripDelivery = response.data.copy(tripResults = currentTrips)) }
-                    postEvent(Event.ScrollToFirstTripItem(response.data.tripResults.size))
+                    state.update { it.copy(tripDelivery = response.data.copy(tripResults = currentTrips), isLoadingPrevious = false) }
+                    postEvent(Event.ScrollToFirstTripItem(previousItemsCount))
                 }
 
-                is Result.Error -> postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
+                is Result.Error -> {
+                    postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
+                    state.update { it.copy(isLoadingPrevious = false) }
+                }
             }
         }
     }
