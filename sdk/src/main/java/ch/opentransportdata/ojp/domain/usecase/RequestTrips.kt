@@ -1,7 +1,7 @@
 package ch.opentransportdata.ojp.domain.usecase
 
+import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
-import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
@@ -23,9 +23,9 @@ internal class RequestTrips(
     private var state = TripRequestState()
 
     suspend operator fun invoke(
-        origin: PlaceResultDto,
-        destination: PlaceResultDto,
-        via: PlaceResultDto? = null,
+        origin: PlaceReferenceDto,
+        destination: PlaceReferenceDto,
+        via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
@@ -124,9 +124,9 @@ internal class RequestTrips(
     }
 
     data class TripRequestState(
-        val origin: PlaceResultDto? = null,
-        val destination: PlaceResultDto? = null,
-        val via: PlaceResultDto? = null,
+        val origin: PlaceReferenceDto? = null,
+        val destination: PlaceReferenceDto? = null,
+        val via: PlaceReferenceDto? = null,
         val time: LocalDateTime? = null,
         val isSearchForDepartureTime: Boolean = true,
         val params: TripParamsDto? = null,

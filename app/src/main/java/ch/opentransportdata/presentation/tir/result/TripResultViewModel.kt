@@ -5,9 +5,11 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.presentation.MainActivity
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,10 +109,28 @@ class TripResultViewModel(
 
         viewModelScope.launch {
             state.update { it.copy(isLoading = true) }
+            val originRef = PlaceReferenceDto(
+                ref = (origin.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+                stationName = (origin.place.placeType as? StopPlaceDto)?.name,
+                position = origin.place.position
+            )
+            val destinationRef = PlaceReferenceDto(
+                ref = (destination.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+                stationName = (destination.place.placeType as? StopPlaceDto)?.name,
+                position = destination.place.position
+            )
+            val viaRef = via?.let {
+                PlaceReferenceDto(
+                    ref = (it.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+                    stationName = (it.place.placeType as? StopPlaceDto)?.name,
+                    position = it.place.position
+                )
+            }
+
             val response = MainActivity.ojpSdk.requestTrips(
-                origin = origin,
-                destination = destination,
-                via = via,
+                origin = originRef,
+                destination = destinationRef,
+                via = viaRef,
                 time = LocalDateTime.now(),
                 params = TripParamsDto(
                     numberOfResults = 10,

@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp
 
+import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
@@ -77,9 +78,9 @@ class OjpSdk(
      * @return [TripDeliveryDto] object with related trip information
      */
     suspend fun requestTrips(
-        origin: PlaceResultDto,
-        destination: PlaceResultDto,
-        via: PlaceResultDto? = null,
+        origin: PlaceReferenceDto,
+        destination: PlaceReferenceDto,
+        via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean = true,
         params: TripParamsDto?
