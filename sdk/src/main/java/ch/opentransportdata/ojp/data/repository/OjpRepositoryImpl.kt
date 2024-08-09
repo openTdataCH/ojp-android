@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp.data.repository
 
+import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
@@ -58,9 +59,9 @@ internal class OjpRepositoryImpl(
     }
 
     override suspend fun requestTrips(
-        origin: PlaceResultDto,
-        destination: PlaceResultDto,
-        via: PlaceResultDto?,
+        origin: PlaceReferenceDto,
+        destination: PlaceReferenceDto,
+        via: PlaceReferenceDto?,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
         params: TripParamsDto?

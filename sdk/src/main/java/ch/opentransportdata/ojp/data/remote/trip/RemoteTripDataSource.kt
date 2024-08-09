@@ -1,8 +1,8 @@
 package ch.opentransportdata.ojp.data.remote.trip
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
+import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
-import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import java.time.LocalDateTime
 
 /**
@@ -10,9 +10,9 @@ import java.time.LocalDateTime
  */
 internal interface RemoteTripDataSource {
     suspend fun requestTrips(
-        origin: PlaceResultDto,
-        destination: PlaceResultDto,
-        via: PlaceResultDto? = null,
+        origin: PlaceReferenceDto,
+        destination: PlaceReferenceDto,
+        via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
         params: TripParamsDto?
