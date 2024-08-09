@@ -30,6 +30,7 @@
 -keep class ch.opentransportdata.ojp.data.dto.adapter.** { *; }
 -keep class ch.opentransportdata.ojp.data.dto.converter.** { *; }
 -keep class ch.opentransportdata.ojp.data.dto.response.** { *; }
+-keep class ch.opentransportdata.ojp.data.dto.request.tir.** { *; }
 
 # TikXML
 -keep class com.tickaroo.tikxml.** { *; }
