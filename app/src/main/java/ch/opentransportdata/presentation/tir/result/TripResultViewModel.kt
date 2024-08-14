@@ -10,6 +10,7 @@ import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
+import ch.opentransportdata.ojp.domain.model.RealtimeData
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.presentation.MainActivity
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -136,7 +137,8 @@ class TripResultViewModel(
                     numberOfResults = 10,
                     includeIntermediateStops = true,
                     includeAllRestrictedLines = true,
-                    modeAndModeOfOperationFilter = null
+                    modeAndModeOfOperationFilter = null,
+                    useRealtimeData = RealtimeData.EXPLANATORY
                 )
             )
             when (response) {

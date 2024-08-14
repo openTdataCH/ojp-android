@@ -4,10 +4,7 @@ import ch.opentransportdata.ojp.BuildConfig
 import ch.opentransportdata.ojp.data.dto.converter.*
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.di.interceptor.TokenInterceptor
-import ch.opentransportdata.ojp.domain.model.ConventionalModesOfOperation
-import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
-import ch.opentransportdata.ojp.domain.model.PtMode
-import ch.opentransportdata.ojp.domain.model.TransferType
+import ch.opentransportdata.ojp.domain.model.*
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter
@@ -68,6 +65,7 @@ internal fun provideTikXml(): TikXml {
         .addTypeConverter(PlaceTypeRestriction::class.java, PlaceTypeRestrictionConverter())
         .addTypeConverter(TransferType::class.java, TransferTypeConverter())
         .addTypeConverter(ConventionalModesOfOperation::class.java, ConventionalModesOfOperationConverter())
+        .addTypeConverter(RealtimeData::class.java, RealTimeDataConverter())
         .exceptionOnUnreadXml(false)
         .build()
 }

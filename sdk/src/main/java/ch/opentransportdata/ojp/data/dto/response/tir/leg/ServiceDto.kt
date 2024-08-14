@@ -1,6 +1,5 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
-import ch.opentransportdata.ojp.data.dto.converter.ConventionalModesOfOperationConverter
 import ch.opentransportdata.ojp.data.dto.response.ModeDto
 import ch.opentransportdata.ojp.data.dto.response.NameDto
 import ch.opentransportdata.ojp.domain.model.ConventionalModesOfOperation
