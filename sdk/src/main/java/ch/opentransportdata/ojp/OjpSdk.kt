@@ -85,15 +85,15 @@ class OjpSdk(
         isSearchForDepartureTime: Boolean = true,
         params: TripParamsDto?
     ): Result<TripDeliveryDto> {
-        return OjpKoinContext.koinApp.koin.get<RequestTrips>()
-            .invoke(
-                origin = origin,
-                destination = destination,
-                via = via,
-                time = time,
-                isSearchForDepartureTime = isSearchForDepartureTime,
-                params = params
-            )
+        OjpKoinContext.koinApp.koin.get<RequestTrips>().reset()
+        return OjpKoinContext.koinApp.koin.get<RequestTrips>().invoke(
+            origin = origin,
+            destination = destination,
+            via = via,
+            time = time,
+            isSearchForDepartureTime = isSearchForDepartureTime,
+            params = params
+        )
     }
 
     /**
@@ -118,14 +118,6 @@ class OjpSdk(
      */
     suspend fun requestNextTrips(numberOfResults: Int = 5): Result<TripDeliveryDto> {
         return OjpKoinContext.koinApp.koin.get<RequestTrips>().loadNext(numberOfResults)
-    }
-
-    /**
-     * Reset the current tripRequest state so no loadNext/Previous works anymore and a clean trip search can be done.
-     * Do not have to be called for initial [requestTrips] call
-     */
-    fun resetTripState() {
-        OjpKoinContext.koinApp.koin.get<RequestTrips>().reset()
     }
 
 }

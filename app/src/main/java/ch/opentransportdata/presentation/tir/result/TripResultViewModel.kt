@@ -90,10 +90,6 @@ class TripResultViewModel(
         }
     }
 
-    fun resetTripState() {
-        MainActivity.ojpSdk.resetTripState()
-    }
-
     fun resetPreviousItemsCounter() {
         state.update { it.copy(isLoadingPrevious = false) }
     }

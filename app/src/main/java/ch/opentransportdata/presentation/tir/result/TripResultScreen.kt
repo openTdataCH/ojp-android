@@ -83,10 +83,7 @@ fun TripResultScreen(
             TopAppBar(
                 title = { Text(text = "Trip results") },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        viewModel.resetTripState()
-                        navHostController.navigateUp()
-                    }) {
+                    IconButton(onClick = { navHostController.navigateUp() }) {
                         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "navigate back")
                     }
                 }
