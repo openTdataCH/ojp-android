@@ -1,17 +1,20 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.trips
 
+import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
+import kotlinx.parcelize.Parcelize
 import java.time.Duration
 import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
+@Parcelize
 @Xml(name = "Trip")
 data class TripDto(
     @PropertyElement(name = "Id")
@@ -26,7 +29,7 @@ data class TripDto(
     val transfers: Int,
     @Element(name = "Leg")
     val legs: List<LegDto>,
-) : AbstractTripDto() {
+) : AbstractTripDto(), Parcelable {
 
     val startWithTransferLeg: Boolean
         get() = legs.first().legType is TransferLegDto
