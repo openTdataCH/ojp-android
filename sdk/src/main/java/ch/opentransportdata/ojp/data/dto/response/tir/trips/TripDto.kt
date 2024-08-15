@@ -52,6 +52,9 @@ data class TripDto(
     val arrivalDelayInMinutes: Long
         get() = if (lastTimedLeg.legAlight.serviceArrival.hasDelay) lastTimedLeg.legAlight.serviceArrival.delay.toMinutes() else 0
 
+    val isCarTrainTrip: Boolean
+        get() = legs.any { it.legType is TimedLegDto && it.legType.service.isCarTrain } //todo: check if works
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

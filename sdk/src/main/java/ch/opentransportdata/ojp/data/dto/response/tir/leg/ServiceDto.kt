@@ -49,4 +49,9 @@ data class ServiceDto(
     val attributes: List<AttributeDto>?,
     @PropertyElement(name = "siri:VehicleRef")
     val vehicleRef: String?
-) : Parcelable
+) : Parcelable {
+
+    //workaround till pt-subModes get delivered correctly
+    val isCarTrain: Boolean
+        get() = lineRef.startsWith("atv")
+}

@@ -21,4 +21,8 @@ data class TimedLegDto(
     val service: ServiceDto,
     @Element(name = "LegTrack")
     val legTrack: LegTrackDto?
-) : AbstractLegType(), Parcelable
+) : AbstractLegType(), Parcelable{
+
+    val hasAnyPlatformChanges: Boolean
+        get() = legBoard.isPlatformChanged || legAlight.isPlatformChanged
+}

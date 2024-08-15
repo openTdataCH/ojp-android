@@ -24,4 +24,7 @@ data class ServiceTimeDto(
 
     val delay: Duration
         get() = if (estimatedTime != null) Duration.between(timetabledTime, estimatedTime) else Duration.ZERO
+
+    val mergedTime: LocalDateTime
+        get() = estimatedTime ?: timetabledTime
 }
