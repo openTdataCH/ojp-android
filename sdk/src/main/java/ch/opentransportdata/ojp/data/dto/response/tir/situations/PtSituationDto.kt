@@ -25,8 +25,6 @@ data class PtSituationDto(
     val validityPeriod: List<ValidityPeriodDto>,
     @PropertyElement(name = "siri:AlertCause")
     val alertCause: String?,
-    @PropertyElement(name = "siri:UnknownReason")
-    val unknownReason: String?,
     @PropertyElement(name = "siri:Priority")
     val priority: String?,
     @PropertyElement(name = "siri:ScopeType")
