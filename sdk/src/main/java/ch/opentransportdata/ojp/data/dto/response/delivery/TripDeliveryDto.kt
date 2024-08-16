@@ -20,9 +20,9 @@ data class TripDeliveryDto(
     @PropertyElement(name = "siri:DefaultLanguage")
     override val defaultLanguage: String?,
     @PropertyElement(name = "CalcTime")
-    val calcTime: String,
+    val calcTime: Int?,
     @Element(name = "TripResult")
-    val tripResults: List<TripResultDto>,
+    val tripResults: List<TripResultDto>?,
     @Element(name = "TripResponseContext")
     val responseContext: TripResponseContextDto?
 ) : AbstractDeliveryDto()

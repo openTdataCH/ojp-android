@@ -18,7 +18,7 @@ data class TimedLegDto(
     @Element(name = "LegAlight")
     val legAlight: LegAlightDto,
     @Element(name = "Service")
-    val service: ServiceDto,
+    val service: DatedJourneyDto,
     @Element(name = "LegTrack")
     val legTrack: LegTrackDto?
 ) : AbstractLegType(), Parcelable{

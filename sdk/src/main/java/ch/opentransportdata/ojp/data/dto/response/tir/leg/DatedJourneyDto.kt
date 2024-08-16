@@ -3,6 +3,7 @@ package ch.opentransportdata.ojp.data.dto.response.tir.leg
 import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.response.ModeDto
 import ch.opentransportdata.ojp.data.dto.response.NameDto
+import ch.opentransportdata.ojp.data.dto.response.tir.situations.SituationFullRef
 import ch.opentransportdata.ojp.domain.model.ConventionalModesOfOperation
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
@@ -14,7 +15,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 @Xml(name = "Service")
-data class ServiceDto(
+data class DatedJourneyDto(
     @Element(name = "Mode")
     val mode: ModeDto,
     @PropertyElement(name = "ConventionalModeOfOperation")
@@ -48,7 +49,9 @@ data class ServiceDto(
     @Element(name = "Attribute")
     val attributes: List<AttributeDto>?,
     @PropertyElement(name = "siri:VehicleRef")
-    val vehicleRef: String?
+    val vehicleRef: String?,
+    @PropertyElement(name = "siri:SituationFullRef")
+    val situationFullRef: SituationFullRef?
 ) : Parcelable {
 
     //workaround till pt-subModes get delivered correctly
