@@ -9,5 +9,5 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "Situations")
 data class SituationDto(
     @Element(name = "PtSituation")
-    val ptSituation: PtSituationDto?
+    val ptSituation: List<PtSituationDto>?
 )

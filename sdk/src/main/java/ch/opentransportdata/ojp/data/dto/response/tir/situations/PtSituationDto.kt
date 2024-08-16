@@ -16,17 +16,15 @@ data class PtSituationDto(
     @PropertyElement(name = "siri:ParticipantRef")
     val participantRef: String?,
     @PropertyElement(name = "siri:SituationNumber")
-    val situationNumber: String?,
+    val situationNumber: String,
     @PropertyElement(name = "siri:Version")
     val version: String?,
     @Element(name = "siri:Source")
     val source: SourceDto?,
     @Element(name = "siri:ValidityPeriod")
-    val validityPeriod: ValidityPeriodDto?,
+    val validityPeriod: List<ValidityPeriodDto>,
     @PropertyElement(name = "siri:AlertCause")
     val alertCause: String?,
-    @PropertyElement(name = "siri:UnknownReason")
-    val unknownReason: String?,
     @PropertyElement(name = "siri:Priority")
     val priority: String?,
     @PropertyElement(name = "siri:ScopeType")
@@ -38,5 +36,5 @@ data class PtSituationDto(
     @Element(name = "siri:Consequences")
     val consequences: ConsequencesDto?,
     @Element(name = "siri:PublishingActions")
-    val publishingActions: PublishingActionsDto?
+    val publishingActions: PublishingActionsDto
 )

@@ -54,7 +54,8 @@ internal class RequestTrips(
         ) {
             is Result.Success -> {
                 val delivery = response.data
-                Result.Success(delivery.copy(tripResults = filterDuplicatedTrips(delivery.tripResults)))
+                val filteredTrips = delivery.tripResults?.let { filterDuplicatedTrips(it) }
+                Result.Success(delivery.copy(tripResults = filteredTrips))
             }
 
             is Result.Error -> Result.Error(response.error)

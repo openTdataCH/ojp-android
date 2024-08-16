@@ -74,7 +74,7 @@ object PreviewData {
                 noBoardingAtStop = null,
                 noAlightingAtStop = null
             ),
-            service = ServiceDto(
+            service = DatedJourneyDto(
                 mode = ModeDto(
                     ptMode = PtMode.RAIL,
                     name = NameDto(text = "Zug")
@@ -94,7 +94,8 @@ object PreviewData {
                 destinationText = NameDto(text = "Olten"),
                 journeyRef = "ch:1:sjyid:100061:2335-001",
                 attributes = emptyList(),
-                vehicleRef = null
+                vehicleRef = null,
+                situationFullRef = null
             ),
             legTrack = null
         )

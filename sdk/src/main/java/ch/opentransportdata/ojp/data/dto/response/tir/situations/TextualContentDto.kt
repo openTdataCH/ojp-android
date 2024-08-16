@@ -10,15 +10,19 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "siri:TextualContent")
 data class TextualContentDto(
     @Element(name = "siri:SummaryContent")
-    val summaryContent: SummaryContentDto?,
+    val summaryContent: SummaryContentDto,
     @Element(name = "siri:ReasonContent")
     val reasonContent: ReasonContentDto?,
+    @Element(name = "siri:DescriptionContent")
+    val descriptionContent: List<DescriptionContent>?,
     @Element(name = "siri:ConsequenceContent")
-    val consequenceContent: ConsequenceContentDto?,
+    val consequenceContent: List<ConsequenceContentDto>?,
     @Element(name = "siri:RecommendationContent")
-    val recommendationContent: RecommendationContentDto?,
+    val recommendationContent: List<RecommendationContentDto>?,
     @Element(name = "siri:DurationContent")
     val durationContent: DurationContentDto?,
+    @Element(name = "siri:RemarkContent")
+    val remarkContent: List<RemarkContent>?
 )
 
 @Xml(name = "siri:SummaryContent")
@@ -49,4 +53,16 @@ data class RecommendationContentDto(
 data class DurationContentDto(
     @PropertyElement(name = "siri:DurationText")
     val durationText: String?
+)
+
+@Xml(name = "siri:DescriptionContent")
+data class DescriptionContent(
+    @PropertyElement(name = "siri:DescriptionText")
+    val descriptionText: String?
+)
+
+@Xml(name = "siri:RemarkContent")
+data class RemarkContent(
+    @PropertyElement(name = "siri:Remark")
+    val remark: String?
 )

@@ -49,7 +49,7 @@ internal class TripDeliveryHashCalculation {
 
         // ASSERTION
         assertThat(result).isNotNull()
-        assertThat(result.tripResults.size).isEqualTo(10)
+        assertThat(result.tripResults?.size).isEqualTo(10)
     }
 
     @Test
@@ -60,12 +60,12 @@ internal class TripDeliveryHashCalculation {
 
         // ACTION
         val result = tikXml.read<TripDeliveryDto>(bufferedSource, TripDeliveryDto::class.java)
-        val filteredList = filterDuplicatedTrips(result.tripResults, mutableListOf())
+        val filteredList = result.tripResults?.let { filterDuplicatedTrips(it, mutableListOf()) }
 
         // ASSERTION
         assertThat(result).isNotNull()
-        assertThat(result.tripResults.size).isEqualTo(13)
-        assertThat(filteredList.size).isEqualTo(10)
+        assertThat(result.tripResults?.size).isEqualTo(13)
+        assertThat(filteredList?.size).isEqualTo(10)
 
     }
 
@@ -77,12 +77,12 @@ internal class TripDeliveryHashCalculation {
 
         // ACTION
         val result = tikXml.read<TripDeliveryDto>(bufferedSource, TripDeliveryDto::class.java)
-        val filteredList = filterDuplicatedTrips(result.tripResults, mutableListOf(1701260880))
+        val filteredList = result.tripResults?.let { filterDuplicatedTrips(it, mutableListOf(1701260880)) }
 
         // ASSERTION
         assertThat(result).isNotNull()
-        assertThat(result.tripResults.size).isEqualTo(13)
-        assertThat(filteredList.size).isEqualTo(9)
+        assertThat(result.tripResults?.size).isEqualTo(13)
+        assertThat(filteredList?.size).isEqualTo(9)
 
     }
 

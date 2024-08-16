@@ -10,6 +10,7 @@ import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
+import ch.opentransportdata.ojp.domain.model.RealtimeData
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.presentation.MainActivity
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,9 +51,11 @@ class TripResultViewModel(
         viewModelScope.launch {
             when (val response = MainActivity.ojpSdk.requestPreviousTrips()) {
                 is Result.Success -> {
-                    currentTrips.addAll(0, response.data.tripResults)
-                    state.update { it.copy(tripDelivery = response.data.copy(tripResults = currentTrips)) }
-                    postEvent(Event.ScrollToFirstTripItem(response.data.tripResults.size))
+                    response.data.tripResults?.let { tripResults ->
+                        currentTrips.addAll(0, tripResults)
+                        state.update { it.copy(tripDelivery = response.data.copy(tripResults = currentTrips)) }
+                        postEvent(Event.ScrollToFirstTripItem(tripResults.size))
+                    }
                 }
 
                 is Result.Error -> postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
@@ -76,7 +79,7 @@ class TripResultViewModel(
             when (val response = MainActivity.ojpSdk.requestNextTrips()) {
                 is Result.Success -> {
                     Log.d("TripResultViewModel", "Fetching next trips successful")
-                    currentTrips.addAll(response.data.tripResults)
+                    response.data.tripResults?.let { currentTrips.addAll(it) }
                     state.update { it.copy(tripDelivery = response.data.copy(tripResults = currentTrips)) }
                 }
 
@@ -87,10 +90,6 @@ class TripResultViewModel(
             }
             state.update { it.copy(isLoadingNext = false) }
         }
-    }
-
-    fun resetTripState() {
-        MainActivity.ojpSdk.resetTripState()
     }
 
     fun resetPreviousItemsCounter() {
@@ -136,7 +135,8 @@ class TripResultViewModel(
                     numberOfResults = 10,
                     includeIntermediateStops = true,
                     includeAllRestrictedLines = true,
-                    modeAndModeOfOperationFilter = null
+                    modeAndModeOfOperationFilter = null,
+                    useRealtimeData = RealtimeData.EXPLANATORY
                 )
             )
             when (response) {

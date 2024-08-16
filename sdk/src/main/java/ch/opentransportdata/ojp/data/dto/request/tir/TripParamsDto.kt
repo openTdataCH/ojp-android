@@ -1,6 +1,6 @@
 package ch.opentransportdata.ojp.data.dto.request.tir
 
-import ch.opentransportdata.ojp.domain.model.PtMode
+import ch.opentransportdata.ojp.domain.model.RealtimeData
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
@@ -33,6 +33,9 @@ data class TripParamsDto(
 
     @PropertyElement(name = "IncludeAllRestrictedLines")
     val includeAllRestrictedLines: Boolean? = null,
+
+    @PropertyElement(name = "UseRealtimeData")
+    val useRealtimeData: RealtimeData? = null,
 
     @Element(name = "ModeAndModeOfOperationFilter")
     val modeAndModeOfOperationFilter: List<ModeAndModeOfOperationFilter>?
