@@ -45,5 +45,5 @@ data class LegBoardDto(
         get() = estimatedQuay != null && plannedQuay?.text != estimatedQuay.text
 
     val mergedQuay: NameDto?
-        get() = plannedQuay ?: estimatedQuay
+        get() = estimatedQuay ?: plannedQuay
 }
