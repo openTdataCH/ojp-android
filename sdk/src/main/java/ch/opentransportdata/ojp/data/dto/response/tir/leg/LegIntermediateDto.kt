@@ -40,7 +40,11 @@ data class LegIntermediateDto(
     @PropertyElement(name = "NoAlightingAtStop")
     val noAlightingAtStop: Boolean?,
 ) : Parcelable {
+
     val isPlatformChanged: Boolean
         get() = estimatedQuay != null && plannedQuay?.text != estimatedQuay.text
+
+    val mergedQuay: NameDto?
+        get() = estimatedQuay ?: plannedQuay
 
 }
