@@ -95,7 +95,7 @@ object PreviewData {
                 journeyRef = "ch:1:sjyid:100061:2335-001",
                 attributes = emptyList(),
                 vehicleRef = null,
-                situationFullRef = null
+                situationFullRefWrapper = null
             ),
             legTrack = null
         )
