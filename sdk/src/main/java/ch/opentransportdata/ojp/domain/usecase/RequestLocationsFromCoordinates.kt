@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.domain.usecase
 
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
@@ -15,14 +16,14 @@ internal class RequestLocationsFromCoordinates(
 ) {
 
     suspend operator fun invoke(
-        language: String,
+        languageCode: LanguageCode,
         longitude: Double,
         latitude: Double,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return when (val response =
             ojpRepository.placeResultsFromCoordinates(
-                language = language,
+                languageCode = languageCode,
                 longitude = longitude,
                 latitude = latitude,
                 restrictions = restrictions

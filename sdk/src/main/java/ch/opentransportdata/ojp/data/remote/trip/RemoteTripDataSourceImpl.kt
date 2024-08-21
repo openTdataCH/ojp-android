@@ -6,8 +6,9 @@ import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tir.*
 import ch.opentransportdata.ojp.data.remote.OjpService
+import ch.opentransportdata.ojp.domain.model.LanguageCode
+import ch.opentransportdata.ojp.domain.model.shortName
 import ch.opentransportdata.ojp.domain.usecase.Initializer
-import ch.opentransportdata.ojp.utils.languageCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
@@ -25,7 +26,7 @@ internal class RemoteTripDataSourceImpl(
 
 
     override suspend fun requestTrips(
-        language: String,
+        languageCode: LanguageCode,
         origin: PlaceReferenceDto,
         destination: PlaceReferenceDto,
         via: PlaceReferenceDto?,
@@ -49,7 +50,7 @@ internal class RemoteTripDataSourceImpl(
         }
 
         val request = createRequest(
-            language = language,
+            languageCode = languageCode,
             requestTime = requestTime,
             tripRequest = TripRequestDto(
                 requestTimestamp = requestTime,
@@ -63,12 +64,12 @@ internal class RemoteTripDataSourceImpl(
         return@withContext ojpService.serviceRequest(url, request)
     }
 
-    private fun createRequest(language: String, requestTime: LocalDateTime, tripRequest: TripRequestDto): OjpDto {
+    private fun createRequest(languageCode: LanguageCode, requestTime: LocalDateTime, tripRequest: TripRequestDto): OjpDto {
         return OjpDto(
             ojpRequest = OjpRequestDto(
                 serviceRequest = ServiceRequestDto(
                     serviceRequestContext = ServiceRequestContextDto(
-                        language = language.languageCode()
+                        language = languageCode.shortName
                     ),
                     requestTimestamp = requestTime,
                     requestorRef = initializer.requesterReference,

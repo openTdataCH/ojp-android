@@ -7,6 +7,7 @@ import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDe
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.remote.location.RemoteLocationInformationDataSource
 import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource
+import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
@@ -28,12 +29,12 @@ internal class OjpRepositoryImpl(
 ) : OjpRepository {
 
     override suspend fun placeResultsFromSearchTerm(
-        language: String,
+        languageCode: LanguageCode,
         term: String,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return try {
-            val response = remoteDataSource.searchLocationBySearchTerm(language, term, restrictions).ojpResponse
+            val response = remoteDataSource.searchLocationBySearchTerm(languageCode, term, restrictions).ojpResponse
             val delivery = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
             val result = delivery?.placeResults ?: emptyList()
             Result.Success(result)
@@ -44,13 +45,14 @@ internal class OjpRepositoryImpl(
     }
 
     override suspend fun placeResultsFromCoordinates(
-        language: String,
+        languageCode: LanguageCode,
         longitude: Double,
         latitude: Double,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return try {
-            val response = remoteDataSource.searchLocationByCoordinates(language, longitude, latitude, restrictions).ojpResponse
+            val response =
+                remoteDataSource.searchLocationByCoordinates(languageCode, longitude, latitude, restrictions).ojpResponse
             val delivery = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
             val result = delivery?.placeResults ?: emptyList()
             Result.Success(result)
@@ -61,7 +63,7 @@ internal class OjpRepositoryImpl(
     }
 
     override suspend fun requestTrips(
-        language: String,
+        languageCode: LanguageCode,
         origin: PlaceReferenceDto,
         destination: PlaceReferenceDto,
         via: PlaceReferenceDto?,
@@ -71,7 +73,7 @@ internal class OjpRepositoryImpl(
     ): Result<TripDeliveryDto> {
         return try {
             val response = tripDataSource.requestTrips(
-                language = language,
+                languageCode = languageCode,
                 origin = origin,
                 destination = destination,
                 via = via,

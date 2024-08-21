@@ -14,6 +14,7 @@ import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.presentation.MainActivity
 import ch.opentransportdata.presentation.lir.name
+import ch.opentransportdata.presentation.utils.toOjpLanguageCode
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,7 +60,7 @@ class TirViewModel : ViewModel() {
 
                 else -> {
                     when (val result = MainActivity.ojpSdk.requestLocationsFromCoordinates(
-                        language = Locale.getDefault().language,
+                        languageCode = Locale.getDefault().language.toOjpLanguageCode(),
                         longitude = currentLocation.longitude,
                         latitude = currentLocation.latitude,
                         restrictions = LocationInformationParams(
@@ -119,7 +120,7 @@ class TirViewModel : ViewModel() {
         searchScope.coroutineContext.cancelChildren()
         searchScope.launch {
             when (val result = MainActivity.ojpSdk.requestLocationsFromSearchTerm(
-                language = Locale.getDefault().language,
+                languageCode = Locale.getDefault().language.toOjpLanguageCode(),
                 term = input,
                 restrictions = LocationInformationParams(
                     types = placeTypeRestriction,

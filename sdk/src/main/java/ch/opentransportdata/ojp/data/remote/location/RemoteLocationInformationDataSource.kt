@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.data.remote.location
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
+import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 
 /**
@@ -8,6 +9,16 @@ import ch.opentransportdata.ojp.domain.model.LocationInformationParams
  */
 internal interface RemoteLocationInformationDataSource {
 
-    suspend fun searchLocationBySearchTerm(language: String, term: String, restrictions: LocationInformationParams): OjpDto
-    suspend fun searchLocationByCoordinates(language: String, longitude: Double, latitude: Double, restrictions: LocationInformationParams): OjpDto
+    suspend fun searchLocationBySearchTerm(
+        languageCode: LanguageCode,
+        term: String,
+        restrictions: LocationInformationParams
+    ): OjpDto
+
+    suspend fun searchLocationByCoordinates(
+        languageCode: LanguageCode,
+        longitude: Double,
+        latitude: Double,
+        restrictions: LocationInformationParams
+    ): OjpDto
 }
