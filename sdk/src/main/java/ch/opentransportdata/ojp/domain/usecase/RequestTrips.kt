@@ -5,6 +5,7 @@ import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
+import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
@@ -23,6 +24,7 @@ internal class RequestTrips(
     private var state = TripRequestState()
 
     suspend operator fun invoke(
+        languageCode: LanguageCode,
         origin: PlaceReferenceDto,
         destination: PlaceReferenceDto,
         via: PlaceReferenceDto? = null,
@@ -34,6 +36,7 @@ internal class RequestTrips(
         if (!coroutineContext.isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
 
         state = state.copy(
+            languageCode = languageCode,
             origin = origin,
             destination = destination,
             via = via,
@@ -44,6 +47,7 @@ internal class RequestTrips(
 
         return when (val response =
             ojpRepository.requestTrips(
+                languageCode = languageCode,
                 origin = origin,
                 destination = destination,
                 via = via,
@@ -66,6 +70,7 @@ internal class RequestTrips(
         if (state.origin == null || state.minDateTime == null) return Result.Error(OjpError.Unknown(Exception("Request trips first")))
 
         return invoke(
+            languageCode = state.languageCode!!,
             origin = state.origin!!,
             destination = state.destination!!,
             via = state.via,
@@ -83,6 +88,7 @@ internal class RequestTrips(
         if (state.origin == null || state.maxDateTime == null) return Result.Error(OjpError.Unknown(Exception("Request trips first")))
 
         return invoke(
+            languageCode = state.languageCode!!,
             origin = state.origin!!,
             destination = state.destination!!,
             via = state.via,
@@ -125,6 +131,7 @@ internal class RequestTrips(
     }
 
     data class TripRequestState(
+        val languageCode: LanguageCode? = null,
         val origin: PlaceReferenceDto? = null,
         val destination: PlaceReferenceDto? = null,
         val via: PlaceReferenceDto? = null,

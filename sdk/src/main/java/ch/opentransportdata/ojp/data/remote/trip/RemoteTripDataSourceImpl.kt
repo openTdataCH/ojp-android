@@ -2,10 +2,12 @@ package ch.opentransportdata.ojp.data.remote.trip
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
+import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tir.*
-import ch.opentransportdata.ojp.data.dto.response.NameDto
 import ch.opentransportdata.ojp.data.remote.OjpService
+import ch.opentransportdata.ojp.domain.model.LanguageCode
+import ch.opentransportdata.ojp.domain.model.shortName
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,6 +26,7 @@ internal class RemoteTripDataSourceImpl(
 
 
     override suspend fun requestTrips(
+        languageCode: LanguageCode,
         origin: PlaceReferenceDto,
         destination: PlaceReferenceDto,
         via: PlaceReferenceDto?,
@@ -47,6 +50,7 @@ internal class RemoteTripDataSourceImpl(
         }
 
         val request = createRequest(
+            languageCode = languageCode,
             requestTime = requestTime,
             tripRequest = TripRequestDto(
                 requestTimestamp = requestTime,
@@ -60,10 +64,13 @@ internal class RemoteTripDataSourceImpl(
         return@withContext ojpService.serviceRequest(url, request)
     }
 
-    private fun createRequest(requestTime: LocalDateTime, tripRequest: TripRequestDto): OjpDto {
+    private fun createRequest(languageCode: LanguageCode, requestTime: LocalDateTime, tripRequest: TripRequestDto): OjpDto {
         return OjpDto(
             ojpRequest = OjpRequestDto(
                 serviceRequest = ServiceRequestDto(
+                    serviceRequestContext = ServiceRequestContextDto(
+                        language = languageCode.shortName
+                    ),
                     requestTimestamp = requestTime,
                     requestorRef = initializer.requesterReference,
                     tripRequest = tripRequest

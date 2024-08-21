@@ -2,6 +2,7 @@ package ch.opentransportdata.ojp.data.dto.response.tir.trips
 
 import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.ContinuousLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
 import com.tickaroo.tikxml.annotation.Element
@@ -29,13 +30,29 @@ data class TripDto(
     val transfers: Int,
     @Element(name = "Leg")
     val legs: List<LegDto>,
+    @PropertyElement(name = "Unplanned")
+    val unplanned: Boolean?, //not yet delivered from backend
+    @PropertyElement(name = "Cancelled")
+    val cancelled: Boolean?,
+    @PropertyElement(name = "Deviation")
+    val deviation: Boolean?,
+    @PropertyElement(name = "Delayed")
+    val delayed: Boolean?, //not yet delivered from backend
+    @PropertyElement(name = "Infeasible")
+    val infeasible: Boolean?
 ) : AbstractTripDto(), Parcelable {
 
     val startWithTransferLeg: Boolean
         get() = legs.first().legType is TransferLegDto
 
     val endWithTransferLeg: Boolean
-        get() = legs.first().legType is TransferLegDto
+        get() = legs.last().legType is TransferLegDto
+
+    val startWithContinuousLeg: Boolean
+        get() = legs.first().legType is ContinuousLegDto
+
+    val endWithContinuousLeg: Boolean
+        get() = legs.last().legType is ContinuousLegDto
 
     val startWithTimedLeg: Boolean
         get() = legs.first().legType is TimedLegDto
@@ -69,7 +86,7 @@ data class TripDto(
         legs.forEach { leg ->
             when (val legType = leg.legType) {
                 is TimedLegDto -> {
-                    result = 31 * result + legType.service.publishedServiceName?.text.hashCode()
+                    result = 31 * result + legType.service.publishedServiceName.text.hashCode()
                     result = 31 * result + legType.legBoard.stopPointName.text.hashCode()
                     result = 31 * result + legType.legBoard.serviceDeparture.timetabledTime.hashCode()
                     result = 31 * result + legType.legAlight.serviceArrival.timetabledTime.hashCode()

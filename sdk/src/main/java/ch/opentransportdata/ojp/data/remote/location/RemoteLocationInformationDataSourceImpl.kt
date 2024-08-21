@@ -3,10 +3,13 @@ package ch.opentransportdata.ojp.data.remote.location
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.converter.PlaceTypeRestrictionConverter
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
+import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
 import ch.opentransportdata.ojp.data.dto.request.lir.*
 import ch.opentransportdata.ojp.data.remote.OjpService
+import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
+import ch.opentransportdata.ojp.domain.model.shortName
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.utils.GeoLocationUtil.initWithGeoLocationAndBoxSize
 import kotlinx.coroutines.Dispatchers
@@ -26,12 +29,14 @@ internal class RemoteLocationInformationDataSourceImpl(
         get() = initializer.baseUrl + initializer.endpoint
 
     override suspend fun searchLocationBySearchTerm(
+        languageCode: LanguageCode,
         term: String,
         restrictions: LocationInformationParams
     ): OjpDto = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
 
         val request = createRequest(
+            languageCode = languageCode,
             requestTime = requestTime,
             locationInformationRequest = LocationInformationRequestDto(
                 requestTimestamp = requestTime,
@@ -44,12 +49,15 @@ internal class RemoteLocationInformationDataSourceImpl(
     }
 
     override suspend fun searchLocationByCoordinates(
-        longitude: Double, latitude: Double,
+        languageCode: LanguageCode,
+        longitude: Double,
+        latitude: Double,
         restrictions: LocationInformationParams
     ): OjpDto = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
 
         val request = createRequest(
+            languageCode = languageCode,
             requestTime = requestTime,
             locationInformationRequest = LocationInformationRequestDto(
                 requestTimestamp = requestTime,
@@ -65,10 +73,17 @@ internal class RemoteLocationInformationDataSourceImpl(
         return@withContext ojpService.serviceRequest(url, request)
     }
 
-    private fun createRequest(requestTime: LocalDateTime, locationInformationRequest: LocationInformationRequestDto): OjpDto {
+    private fun createRequest(
+        languageCode: LanguageCode,
+        requestTime: LocalDateTime,
+        locationInformationRequest: LocationInformationRequestDto
+    ): OjpDto {
         return OjpDto(
             ojpRequest = OjpRequestDto(
                 serviceRequest = ServiceRequestDto(
+                    serviceRequestContext = ServiceRequestContextDto(
+                        language = languageCode.shortName
+                    ),
                     requestTimestamp = requestTime,
                     requestorRef = initializer.requesterReference,
                     locationInformationRequest = locationInformationRequest

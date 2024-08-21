@@ -13,10 +13,12 @@ import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
 import ch.opentransportdata.ojp.domain.model.RealtimeData
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.presentation.MainActivity
+import ch.opentransportdata.presentation.utils.toOjpLanguageCode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.util.Locale
 import java.util.UUID
 
 /**
@@ -127,6 +129,7 @@ class TripResultViewModel(
             }
 
             val response = MainActivity.ojpSdk.requestTrips(
+                languageCode = Locale.getDefault().language.toOjpLanguageCode(),
                 origin = originRef,
                 destination = destinationRef,
                 via = viaRef,

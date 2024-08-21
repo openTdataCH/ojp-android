@@ -12,6 +12,9 @@ import java.time.LocalDateTime
  */
 @Xml(name = "ServiceRequest")
 internal data class ServiceRequestDto(
+    @Element(name = "siri:ServiceRequestContext")
+    val serviceRequestContext: ServiceRequestContextDto,
+
     @PropertyElement(name = "siri:RequestTimestamp")
     val requestTimestamp: LocalDateTime,
 
@@ -21,6 +24,6 @@ internal data class ServiceRequestDto(
     @Element(name = "OJPLocationInformationRequest")
     val locationInformationRequest: LocationInformationRequestDto? = null,
 
-    @Element(name= "OJPTripRequest")
+    @Element(name = "OJPTripRequest")
     val tripRequest: TripRequestDto? = null,
 )

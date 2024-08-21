@@ -7,10 +7,7 @@ import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeTypeConverter
 import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
-import ch.opentransportdata.ojp.domain.model.LocationInformationParams
-import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
-import ch.opentransportdata.ojp.domain.model.PtMode
-import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.*
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.TypeConverterNotFoundException
@@ -103,6 +100,7 @@ internal class OjpSdkTest {
 
             // ACTION
             val result = ojpSdk.requestLocationsFromSearchTerm(
+                languageCode = LanguageCode.DE,
                 term = term,
                 restrictions = LocationInformationParams(
                     types = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS),
@@ -131,7 +129,9 @@ internal class OjpSdkTest {
 
             // ACTION
             val result = ojpSdk.requestLocationsFromSearchTerm(
-                term = term, restrictions = LocationInformationParams(
+                languageCode = LanguageCode.DE,
+                term = term,
+                restrictions = LocationInformationParams(
                     types = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.TOPOGRAPHIC_PLACE),
                     numberOfResults = 10,
                     ptModeIncluded = true

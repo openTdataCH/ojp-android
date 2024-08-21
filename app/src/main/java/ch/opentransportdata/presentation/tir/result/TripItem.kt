@@ -91,7 +91,7 @@ fun TripItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
-            if (trip.startWithTransferLeg) {
+            if (trip.startWithTransferLeg || trip.startWithContinuousLeg) {
                 Text(
                     modifier = Modifier.padding(end = 4.dp),
                     text = trip.firstTimedLeg.legBoard.serviceDeparture.timetabledTime.format(formatter),
@@ -100,7 +100,7 @@ fun TripItem(
                 )
             }
             Text(
-                text = "${trip.firstTimedLeg.service.publishedServiceName?.text} direction ${trip.firstTimedLeg.service.destinationText?.text}",
+                text = "${trip.firstTimedLeg.service.publishedServiceName.text} direction ${trip.firstTimedLeg.service.destinationText?.text}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -257,7 +257,12 @@ private fun TripItemPreview() {
                 legs = listOf(
                     PreviewData.timedLeg,
                     PreviewData.transferLeg,
-                )
+                ),
+                unplanned = null,
+                cancelled = false,
+                deviation = false,
+                delayed = false,
+                infeasible = false
             )
         )
     }
@@ -278,7 +283,12 @@ private fun TripItemSecondPreview() {
                 legs = listOf(
                     PreviewData.transferLeg,
                     PreviewData.timedLeg
-                )
+                ),
+                unplanned = null,
+                cancelled = false,
+                deviation = false,
+                delayed = false,
+                infeasible = false
             )
         )
     }
