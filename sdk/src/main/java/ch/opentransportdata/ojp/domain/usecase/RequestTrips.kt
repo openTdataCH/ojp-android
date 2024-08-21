@@ -23,6 +23,7 @@ internal class RequestTrips(
     private var state = TripRequestState()
 
     suspend operator fun invoke(
+        language: String,
         origin: PlaceReferenceDto,
         destination: PlaceReferenceDto,
         via: PlaceReferenceDto? = null,
@@ -34,6 +35,7 @@ internal class RequestTrips(
         if (!coroutineContext.isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
 
         state = state.copy(
+            language = language,
             origin = origin,
             destination = destination,
             via = via,
@@ -44,6 +46,7 @@ internal class RequestTrips(
 
         return when (val response =
             ojpRepository.requestTrips(
+                language = language,
                 origin = origin,
                 destination = destination,
                 via = via,
@@ -66,6 +69,7 @@ internal class RequestTrips(
         if (state.origin == null || state.minDateTime == null) return Result.Error(OjpError.Unknown(Exception("Request trips first")))
 
         return invoke(
+            language = state.language!!,
             origin = state.origin!!,
             destination = state.destination!!,
             via = state.via,
@@ -83,6 +87,7 @@ internal class RequestTrips(
         if (state.origin == null || state.maxDateTime == null) return Result.Error(OjpError.Unknown(Exception("Request trips first")))
 
         return invoke(
+            language = state.language!!,
             origin = state.origin!!,
             destination = state.destination!!,
             via = state.via,
@@ -125,6 +130,7 @@ internal class RequestTrips(
     }
 
     data class TripRequestState(
+        val language: String? = null,
         val origin: PlaceReferenceDto? = null,
         val destination: PlaceReferenceDto? = null,
         val via: PlaceReferenceDto? = null,

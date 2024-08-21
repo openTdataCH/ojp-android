@@ -13,10 +13,12 @@ internal class RequestLocationsFromSearchTerm(
 ) {
 
     suspend operator fun invoke(
+        language: String,
         text: String,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
-        return when (val response = ojpRepository.placeResultsFromSearchTerm(term = text, restrictions = restrictions)) {
+        return when (val response =
+            ojpRepository.placeResultsFromSearchTerm(language = language, term = text, restrictions = restrictions)) {
             is Result.Success -> Result.Success(response.data)
             is Result.Error -> Result.Error(response.error)
         }

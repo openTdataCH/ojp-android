@@ -37,37 +37,42 @@ class OjpSdk(
     /**
      * Request a list of Place Results based on the given geographical point
      *
-     *
+     * @param language The languageCode for the desired results. Currently supported code: de, en, it and fr. Fallback is de
      * @param longitude The longitude of the geographical point
      * @param latitude The latitude of the geographical point
      * @param restrictions Restrictions that should be used for results
      * @return List of [PlaceResultDto] sorted by the nearest point
      */
     suspend fun requestLocationsFromCoordinates(
+        language: String,
         longitude: Double,
         latitude: Double,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
-        return OjpKoinContext.koinApp.koin.get<RequestLocationsFromCoordinates>().invoke(longitude, latitude, restrictions)
+        return OjpKoinContext.koinApp.koin.get<RequestLocationsFromCoordinates>()
+            .invoke(language, longitude, latitude, restrictions)
     }
 
     /**
      * Request a list of Place Results based on the given search term
      *
+     * @param language The languageCode for the desired results. Currently supported code: de, en, it and fr. Fallback is de
      * @param term The given search term
      * @param restrictions Restrictions that should be used for results
      * @return List of [PlaceResultDto] that contains the search term
      */
     suspend fun requestLocationsFromSearchTerm(
+        language: String,
         term: String,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
-        return OjpKoinContext.koinApp.koin.get<RequestLocationsFromSearchTerm>().invoke(term, restrictions)
+        return OjpKoinContext.koinApp.koin.get<RequestLocationsFromSearchTerm>().invoke(language, term, restrictions)
     }
 
     /**
      * Request a list of trips
      *
+     * @param language The languageCode for the desired results. Currently supported code: de, en, it and fr. Fallback is de
      * @param origin The origin where the trip starts
      * @param destination The destination where the trip ends
      * @param via The via station which the trip should cover
@@ -78,6 +83,7 @@ class OjpSdk(
      * @return [TripDeliveryDto] object with related trip information
      */
     suspend fun requestTrips(
+        language: String,
         origin: PlaceReferenceDto,
         destination: PlaceReferenceDto,
         via: PlaceReferenceDto? = null,
@@ -87,6 +93,7 @@ class OjpSdk(
     ): Result<TripDeliveryDto> {
         OjpKoinContext.koinApp.koin.get<RequestTrips>().reset()
         return OjpKoinContext.koinApp.koin.get<RequestTrips>().invoke(
+            language = language,
             origin = origin,
             destination = destination,
             via = via,

@@ -10,6 +10,7 @@ import java.time.LocalDateTime
  */
 internal interface RemoteTripDataSource {
     suspend fun requestTrips(
+        language: String,
         origin: PlaceReferenceDto,
         destination: PlaceReferenceDto,
         via: PlaceReferenceDto? = null,

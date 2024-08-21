@@ -8,6 +8,6 @@ import ch.opentransportdata.ojp.domain.model.LocationInformationParams
  */
 internal interface RemoteLocationInformationDataSource {
 
-    suspend fun searchLocationBySearchTerm(term: String, restrictions: LocationInformationParams): OjpDto
-    suspend fun searchLocationByCoordinates(longitude: Double, latitude: Double, restrictions: LocationInformationParams): OjpDto
+    suspend fun searchLocationBySearchTerm(language: String, term: String, restrictions: LocationInformationParams): OjpDto
+    suspend fun searchLocationByCoordinates(language: String, longitude: Double, latitude: Double, restrictions: LocationInformationParams): OjpDto
 }

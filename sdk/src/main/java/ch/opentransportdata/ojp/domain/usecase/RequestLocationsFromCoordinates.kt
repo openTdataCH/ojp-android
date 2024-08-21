@@ -15,12 +15,18 @@ internal class RequestLocationsFromCoordinates(
 ) {
 
     suspend operator fun invoke(
+        language: String,
         longitude: Double,
         latitude: Double,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return when (val response =
-            ojpRepository.placeResultsFromCoordinates(longitude = longitude, latitude = latitude, restrictions = restrictions)) {
+            ojpRepository.placeResultsFromCoordinates(
+                language = language,
+                longitude = longitude,
+                latitude = latitude,
+                restrictions = restrictions
+            )) {
             is Result.Success -> {
                 val sortedList = sortByDistance(longitude, latitude, response.data)
                 Result.Success(sortedList)

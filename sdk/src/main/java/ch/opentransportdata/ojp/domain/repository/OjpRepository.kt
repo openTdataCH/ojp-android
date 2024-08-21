@@ -10,17 +10,20 @@ import java.time.LocalDateTime
 
 internal interface OjpRepository {
     suspend fun placeResultsFromSearchTerm(
+        language: String,
         term: String,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>>
 
     suspend fun placeResultsFromCoordinates(
+        language: String,
         longitude: Double,
         latitude: Double,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>>
 
     suspend fun requestTrips(
+        language: String,
         origin: PlaceReferenceDto,
         destination: PlaceReferenceDto,
         via: PlaceReferenceDto? = null,

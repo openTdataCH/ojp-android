@@ -28,11 +28,12 @@ internal class OjpRepositoryImpl(
 ) : OjpRepository {
 
     override suspend fun placeResultsFromSearchTerm(
+        language: String,
         term: String,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return try {
-            val response = remoteDataSource.searchLocationBySearchTerm(term, restrictions).ojpResponse
+            val response = remoteDataSource.searchLocationBySearchTerm(language, term, restrictions).ojpResponse
             val delivery = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
             val result = delivery?.placeResults ?: emptyList()
             Result.Success(result)
@@ -43,12 +44,13 @@ internal class OjpRepositoryImpl(
     }
 
     override suspend fun placeResultsFromCoordinates(
+        language: String,
         longitude: Double,
         latitude: Double,
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return try {
-            val response = remoteDataSource.searchLocationByCoordinates(longitude, latitude, restrictions).ojpResponse
+            val response = remoteDataSource.searchLocationByCoordinates(language, longitude, latitude, restrictions).ojpResponse
             val delivery = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
             val result = delivery?.placeResults ?: emptyList()
             Result.Success(result)
@@ -59,6 +61,7 @@ internal class OjpRepositoryImpl(
     }
 
     override suspend fun requestTrips(
+        language: String,
         origin: PlaceReferenceDto,
         destination: PlaceReferenceDto,
         via: PlaceReferenceDto?,
@@ -68,6 +71,7 @@ internal class OjpRepositoryImpl(
     ): Result<TripDeliveryDto> {
         return try {
             val response = tripDataSource.requestTrips(
+                language = language,
                 origin = origin,
                 destination = destination,
                 via = via,

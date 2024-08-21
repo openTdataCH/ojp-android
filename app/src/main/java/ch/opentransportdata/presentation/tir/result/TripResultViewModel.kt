@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.util.Locale
 import java.util.UUID
 
 /**
@@ -127,6 +128,7 @@ class TripResultViewModel(
             }
 
             val response = MainActivity.ojpSdk.requestTrips(
+                language = Locale.getDefault().language,
                 origin = originRef,
                 destination = destinationRef,
                 via = viaRef,
