@@ -103,6 +103,7 @@ internal class OjpSdkTest {
 
             // ACTION
             val result = ojpSdk.requestLocationsFromSearchTerm(
+                language = "de",
                 term = term,
                 restrictions = LocationInformationParams(
                     types = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS),
@@ -131,7 +132,9 @@ internal class OjpSdkTest {
 
             // ACTION
             val result = ojpSdk.requestLocationsFromSearchTerm(
-                term = term, restrictions = LocationInformationParams(
+                language = "de",
+                term = term,
+                restrictions = LocationInformationParams(
                     types = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.TOPOGRAPHIC_PLACE),
                     numberOfResults = 10,
                     ptModeIncluded = true
