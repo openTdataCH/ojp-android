@@ -8,7 +8,6 @@ import java.time.LocalDateTime
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
-//todo: check for nullability & which are necessary
 @Xml(name = "PtSituation")
 data class PtSituationDto(
     @PropertyElement(name = "siri:CreationTime")
@@ -36,5 +35,5 @@ data class PtSituationDto(
     @Element(name = "siri:Consequences")
     val consequences: ConsequencesDto?,
     @Element(name = "siri:PublishingActions")
-    val publishingActions: PublishingActionsDto
+    val publishingActions: PublishingActionsDto?
 )

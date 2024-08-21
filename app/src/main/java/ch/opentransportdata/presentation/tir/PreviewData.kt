@@ -35,7 +35,7 @@ object PreviewData {
 
     val timedLeg = LegDto(
         id = "222",
-        duration = Duration.parse("PT1H"),
+        duration = Duration.parse("PT1H10M"),
         legType = TimedLegDto(
             legBoard = LegBoardDto(
                 stopPointRef = "ch:1:sloid:10:3:6",
@@ -63,7 +63,7 @@ object PreviewData {
                 estimatedQuay = null,
                 nameSuffix = null,
                 serviceArrival = ServiceTimeDto(
-                    timetabledTime = LocalDateTime.now(),//"2024-07-01T16:28:00Z",
+                    timetabledTime = LocalDateTime.now().plusHours(1).plusMinutes(10),//"2024-07-01T16:28:00Z",
                     estimatedTime = null
                 ),
                 serviceDeparture = null,

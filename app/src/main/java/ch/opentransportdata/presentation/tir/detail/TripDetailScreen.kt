@@ -83,14 +83,14 @@ private fun TimedLeg(
             LegBoard(legBoard = leg.legBoard)
             Text(
                 modifier = Modifier.padding(start = 53.dp),
-                text = "${leg.service.mode.name?.text} ${leg.service.publishedServiceName?.text} direction ${leg.service.destinationText?.text}",
+                text = "${leg.service.mode.name?.text} ${leg.service.publishedServiceName.text} direction ${leg.service.destinationText?.text}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
             duration?.let {
                 Text(
                     modifier = Modifier.padding(start = 53.dp),
-                    text = "${duration.toHours()}h ${duration.toMinutes().rem(60)}m",
+                    text = "${duration.toHoursPart()}h ${duration.toMinutesPart()}m",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -243,7 +243,12 @@ private fun TripDetailScreenPreview() {
                 legs = listOf(
                     PreviewData.timedLeg,
                     PreviewData.transferLeg,
-                )
+                ),
+                unplanned = null,
+                cancelled = false,
+                deviation = false,
+                delayed = false,
+                infeasible = false
             )
         )
     }
