@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Warning
@@ -59,7 +60,7 @@ fun TripItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = trip.startTime.format(formatter),
+                text = trip.firstTimedLeg.legBoard.serviceDeparture.mergedTime.format(formatter),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -72,7 +73,7 @@ fun TripItem(
             }
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = trip.endTime.format(formatter),
+                text = trip.lastTimedLeg.legAlight.serviceArrival.mergedTime.format(formatter),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -112,43 +113,79 @@ fun TripItem(
             )
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+        Row(
+            modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            HorizontalDivider(modifier = Modifier.align(Alignment.Center))
-            Surface(
-                modifier = Modifier
-                    .size(4.dp)
-                    .align(Alignment.CenterStart),
-                color = MaterialTheme.colorScheme.primary,
-                shape = CircleShape,
-                content = {}
-            )
-            Surface(
-                modifier = Modifier
-                    .size(4.dp)
-                    .align(Alignment.CenterEnd),
-                color = MaterialTheme.colorScheme.primary,
-                shape = CircleShape,
-                content = {}
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
+            if (trip.startWithTransferLeg || trip.startWithContinuousLeg) {
+                Icon(
+                    modifier = Modifier
+                        .padding(end = 2.dp)
+                        .size(16.dp),
+                    imageVector = Icons.Default.DirectionsWalk,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    modifier = Modifier.padding(end = 4.dp),
+                    text = "${trip.legs.first().duration?.toMinutesPart()}'",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+            Box(
+                modifier = Modifier.weight(1f)
             ) {
-                repeat(trip.transfers) {
-                    Surface(
-                        modifier = Modifier.size(4.dp),
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = CircleShape,
-                        content = {}
-                    )
+                HorizontalDivider(modifier = Modifier.align(Alignment.Center))
+                Surface(
+                    modifier = Modifier
+                        .size(4.dp)
+                        .align(Alignment.CenterStart),
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = CircleShape,
+                    content = {}
+                )
+                Surface(
+                    modifier = Modifier
+                        .size(4.dp)
+                        .align(Alignment.CenterEnd),
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = CircleShape,
+                    content = {}
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    repeat(trip.transfers) {
+                        Surface(
+                            modifier = Modifier.size(4.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = CircleShape,
+                            content = {}
+                        )
+                    }
                 }
+            }
+
+            if (trip.endWithTransferLeg || trip.endWithContinuousLeg) {
+                Icon(
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .size(16.dp),
+                    imageVector = Icons.Default.DirectionsWalk,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    modifier = Modifier.padding(start = 2.dp),
+                    text = "${trip.legs.last().duration?.toMinutesPart()}'",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
 
