@@ -1,9 +1,10 @@
 package ch.opentransportdata.presentation.lir
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -20,6 +21,7 @@ import ch.opentransportdata.ojp.data.dto.response.place.AbstractPlaceDto
 import ch.opentransportdata.ojp.data.dto.response.place.AddressDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
 import ch.opentransportdata.presentation.components.LocationInputRow
+import ch.opentransportdata.presentation.components.LocationResultList
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import kotlinx.coroutines.launch
 
@@ -64,24 +66,7 @@ fun LirScreenComposable(
                     strokeWidth = 2.dp,
                 )
             } else {
-                LazyColumn {
-                    items(
-                        items = state.value.results,
-                        key = { item -> item.place.name.text + item.place.position.longitude + item.place.position.latitude + item.distance }
-                    ) { item ->
-                        ListItem(
-                            headlineContent = {
-                                Text(
-                                    text = item.place.placeType?.name() ?: "undef",
-                                    style = MaterialTheme.typography.titleSmall
-                                )
-                            }
-                        )
-                        if (state.value.results.last() != item) {
-                            HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-                        }
-                    }
-                }
+                LocationResultList(items = state.value.results, onLocationSelected = null)
             }
         }
     }
