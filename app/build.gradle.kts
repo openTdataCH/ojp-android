@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.accompanist.permission)
     implementation(libs.play.services)
     implementation(libs.viewModel.compose)
+    implementation(libs.compose.icons)
 
     testImplementation(libs.junit)
     debugImplementation(libs.ui.tooling)

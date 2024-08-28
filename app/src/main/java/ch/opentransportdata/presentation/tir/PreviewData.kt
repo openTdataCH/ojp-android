@@ -1,7 +1,7 @@
 package ch.opentransportdata.presentation.tir
 
-import ch.opentransportdata.ojp.data.dto.response.ModeDto
-import ch.opentransportdata.ojp.data.dto.response.NameDto
+import ch.opentransportdata.ojp.data.dto.response.*
+import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
 import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.*
 import ch.opentransportdata.ojp.domain.model.PtMode
@@ -13,6 +13,70 @@ import java.time.LocalDateTime
  * Created by Michael Ruppen on 03.07.2024
  */
 object PreviewData {
+
+    val boatLocation = PlaceResultDto(
+        place = PlaceDto(
+            placeType = StopPlaceDto(
+                stopPlaceRef = "8507150",
+                name = NameDto("Thun (See)"),
+                privateCodes = emptyList(),
+                topographicPlaceRef = null
+            ),
+            name = NameDto("Thun (See) (Thun)"),
+            position = GeoPositionDto(longitude = 7.63132, latitude = 46.75411),
+            mode = listOf(ModeDto(ptMode = PtMode.WATER, name = null))
+        ),
+        complete = true,
+        probability = 0.8
+    )
+    val trainLocation = PlaceResultDto(
+        place = PlaceDto(
+            placeType = StopPlaceDto(
+                stopPlaceRef = "8507100",
+                name = NameDto("Thun"),
+                privateCodes = emptyList(),
+                topographicPlaceRef = null
+            ),
+            name = NameDto("Thun (Thun)"),
+            position = GeoPositionDto(longitude = 7.62961, latitude = 46.75485),
+            mode = listOf(ModeDto(ptMode = PtMode.RAIL, name = null))
+        ),
+        complete = true,
+        probability = 0.8
+    )
+
+    val tramLocation = PlaceResultDto(
+        place = PlaceDto(
+            placeType = StopPlaceDto(
+                stopPlaceRef = "8571393",
+                name = NameDto("Bern, Eigerplatz"),
+                privateCodes = emptyList(),
+                topographicPlaceRef = null
+            ),
+            name = NameDto("Bern, Eigerplatz (Bern)"),
+            position = GeoPositionDto(longitude = 7.43099, latitude = 46.94114),
+            mode = listOf(ModeDto(ptMode = PtMode.TRAM, name = null))
+        ),
+        complete = true,
+        probability = 0.748
+    )
+
+    val busLocation = PlaceResultDto(
+        place = PlaceDto(
+            placeType = StopPlaceDto(
+                stopPlaceRef = "8579896",
+                name = NameDto("Bern, Hirschengraben"),
+                privateCodes = emptyList(),
+                topographicPlaceRef = null
+            ),
+            name = NameDto("Bern, Hirschengraben (Bern)"),
+            position = GeoPositionDto(longitude = 7.43778, latitude = 46.94607),
+            mode = listOf(ModeDto(ptMode = PtMode.BUS, name = null))
+        ),
+        complete = true,
+        probability = 0.748
+    )
+
 
     val transferLeg = LegDto(
         id = "111",

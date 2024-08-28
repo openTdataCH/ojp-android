@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.SwapCalls
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -50,7 +50,7 @@ fun TripResultHeader(
                     .padding(end = 8.dp),
                 onClick = swapSearch
             ) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = null)
+                Icon(imageVector = Icons.Default.SwapCalls, contentDescription = null)
             }
         }
     }
