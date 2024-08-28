@@ -36,7 +36,12 @@ fun TripDetailScreen(
         trip.legs.forEach { leg ->
             when (val legType = leg.legType) {
                 is TransferLegDto -> TransferLeg(modifier = Modifier.padding(all = 16.dp), leg = legType)
-                is ContinuousLegDto -> ContinuousLeg(modifier = Modifier.padding(all = 16.dp), leg = legType)
+                is ContinuousLegDto -> ContinuousLeg(
+                    modifier = Modifier.padding(all = 16.dp),
+                    leg = legType,
+                    isStartLeg = leg == trip.legs.first()
+                )
+
                 is TimedLegDto -> TimedLeg(leg = legType, duration = leg.duration)
             }
         }
@@ -203,15 +208,18 @@ private fun LegAlight(
 @Composable
 private fun ContinuousLeg(
     modifier: Modifier = Modifier,
-    leg: ContinuousLegDto
+    leg: ContinuousLegDto,
+    isStartLeg: Boolean
 ) {
+    if (!isStartLeg) HorizontalDivider()
+    val destinationText = if (leg.legEnd.name?.text.isNullOrBlank()) "" else "to ${leg.legEnd.name?.text}"
     Text(
         modifier = modifier,
-        text = "Walk ${leg.duration.toMinutes()}m to ${leg.legEnd.name?.text}",
+        text = "Walk ${leg.duration.toMinutes()}m $destinationText",
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurface
     )
-    HorizontalDivider()
+    if (isStartLeg) HorizontalDivider()
 }
 
 @Composable
