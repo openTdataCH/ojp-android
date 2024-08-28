@@ -33,8 +33,7 @@ fun LocationResultList(
             items = sortedItems,
             key = { item -> item.place.name.text + item.place.position.longitude + item.place.position.latitude + item.distance }
         ) { item ->
-            val listItemModifier = Modifier
-            if (onLocationSelected != null) listItemModifier.then(Modifier.clickable { onLocationSelected(item) })
+            val listItemModifier = if (onLocationSelected != null) Modifier.clickable { onLocationSelected(item) } else Modifier
 
             ListItem(
                 modifier = listItemModifier,
