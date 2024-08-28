@@ -25,14 +25,17 @@ import java.util.UUID
  * Created by Michael Ruppen on 02.07.2024
  */
 class TripResultViewModel(
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val state = MutableStateFlow(UiState())
 
-    val origin: PlaceResultDto? = savedStateHandle["origin"]
-    val via: PlaceResultDto? = savedStateHandle["via"]
-    val destination: PlaceResultDto? = savedStateHandle["destination"]
+    val origin: PlaceResultDto?
+        get() = savedStateHandle["origin"]
+    val via: PlaceResultDto?
+        get() = savedStateHandle["via"]
+    val destination: PlaceResultDto?
+        get() = savedStateHandle["destination"]
 
     init {
         requestTrips()
@@ -94,6 +97,13 @@ class TripResultViewModel(
         }
     }
 
+    fun swapSearch() {
+        val currentOrigin = origin
+        savedStateHandle["origin"] = destination
+        savedStateHandle["destination"] = currentOrigin
+        requestTrips()
+    }
+
     fun resetPreviousItemsCounter() {
         state.update { it.copy(isLoadingPrevious = false) }
     }
@@ -111,14 +121,14 @@ class TripResultViewModel(
         viewModelScope.launch {
             state.update { it.copy(isLoading = true) }
             val originRef = PlaceReferenceDto(
-                ref = (origin.place.placeType as? StopPlaceDto)?.stopPlaceRef,
-                stationName = (origin.place.placeType as? StopPlaceDto)?.name,
-                position = origin.place.position
+                ref = (origin!!.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+                stationName = (origin!!.place.placeType as? StopPlaceDto)?.name,
+                position = origin!!.place.position
             )
             val destinationRef = PlaceReferenceDto(
-                ref = (destination.place.placeType as? StopPlaceDto)?.stopPlaceRef,
-                stationName = (destination.place.placeType as? StopPlaceDto)?.name,
-                position = destination.place.position
+                ref = (destination!!.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+                stationName = (destination!!.place.placeType as? StopPlaceDto)?.name,
+                position = destination!!.place.position
             )
             val viaRef = via?.let {
                 PlaceReferenceDto(

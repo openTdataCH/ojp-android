@@ -101,7 +101,8 @@ fun TripResultScreen(
             TripResultHeader(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 originName = viewModel.origin?.place?.placeType?.name() ?: "-",
-                destinationName = viewModel.destination?.place?.placeType?.name() ?: "-"
+                destinationName = viewModel.destination?.place?.placeType?.name() ?: "-",
+                swapSearch = { viewModel.swapSearch() }
             )
             HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
 
