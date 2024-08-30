@@ -1,17 +1,18 @@
 package ch.opentransportdata.presentation.tir.result
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsWalk
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Shuffle
+import androidx.compose.material.icons.outlined.SubdirectoryArrowRight
+import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -22,8 +23,6 @@ import ch.opentransportdata.presentation.components.Label
 import ch.opentransportdata.presentation.components.LabelType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.PreviewData
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,16 +35,16 @@ fun TripItem(
     modifier: Modifier = Modifier,
     responseContextDto: TripResponseContextDto? = null,
     trip: TripDto,
-    hasDisruptions: Boolean,
 ) {
-    var isPriceVisible by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
-    LaunchedEffect(key1 = Unit) {
-        coroutineScope.launch {
-            delay(2000)
-            isPriceVisible = true
-        }
-    }
+    //use when fare price is delivered from backend
+//    var isPriceVisible by remember { mutableStateOf(false) }
+//    val coroutineScope = rememberCoroutineScope()
+//    LaunchedEffect(key1 = Unit) {
+//        coroutineScope.launch {
+//            delay(2000)
+//            isPriceVisible = true
+//        }
+//    }
 
     val formatter = DateTimeFormatter.ofPattern("HH:mm")
     val platform = trip.firstTimedLeg.legBoard.estimatedQuay?.text ?: trip.firstTimedLeg.legBoard.plannedQuay?.text
@@ -68,7 +67,7 @@ fun TripItem(
                 Label(
                     modifier = Modifier.padding(start = 4.dp),
                     type = LabelType.RED,
-                    text = "+${trip.departureDelayInMinutes}'"
+                    text = "+${trip.departureDelayInMinutes}´"
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -107,7 +106,7 @@ fun TripItem(
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "${trip.duration.toHours()}h ${trip.duration.toMinutes().rem(60)}m",
+                text = "${trip.duration.toHours()}h ${trip.duration.toMinutes().rem(60)}min",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -129,7 +128,7 @@ fun TripItem(
 
                 Text(
                     modifier = Modifier.padding(end = 4.dp),
-                    text = "${trip.legs.first().duration?.toMinutesPart()}'",
+                    text = "${trip.legs.first().duration?.toMinutesPart()}´",
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -183,7 +182,7 @@ fun TripItem(
 
                 Text(
                     modifier = Modifier.padding(start = 2.dp),
-                    text = "${trip.legs.last().duration?.toMinutesPart()}'",
+                    text = "${trip.legs.last().duration?.toMinutesPart()}´",
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -193,11 +192,18 @@ fun TripItem(
             modifier = Modifier.padding(top = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 platform?.let {
+                    if (trip.firstTimedLeg.legBoard.isPlatformChanged) {
+                        Icon(
+                            modifier = Modifier
+                                .padding(start = 2.dp)
+                                .size(20.dp),
+                            imageVector = Icons.Outlined.Shuffle,
+                            contentDescription = "origin platform changed",
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
                     Text(
                         modifier = Modifier.padding(end = 8.dp),
                         text = "Pl. $it",
@@ -227,20 +233,46 @@ fun TripItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
-                if (hasDisruptions) {
-                    Label(
-                        type = LabelType.RED,
-                        icon = Icons.Default.Warning
+                if (trip.cancelled == true) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 2.dp)
+                            .size(20.dp),
+                        imageVector = Icons.Outlined.Cancel,
+                        contentDescription = "trip is cancelled",
+                        tint = MaterialTheme.colorScheme.error
                     )
                 }
-                AnimatedVisibility(visible = isPriceVisible) {
-                    Label(
-                        modifier = Modifier.padding(start = 8.dp),
-                        type = LabelType.GREEN,
-                        icon = Icons.Default.FavoriteBorder,
-                        text = "from CHF 25.20"
+                if (trip.deviation == true) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 2.dp)
+                            .size(20.dp),
+                        imageVector = Icons.Outlined.SubdirectoryArrowRight,
+                        contentDescription = "trip is redirected",
+                        tint = MaterialTheme.colorScheme.error
                     )
                 }
+
+                if (trip.infeasible == true) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 2.dp)
+                            .size(20.dp),
+                        imageVector = Icons.Rounded.WarningAmber,
+                        contentDescription = "trip is infeasible",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+
+//                AnimatedVisibility(visible = isPriceVisible) {
+//                    Label(
+//                        modifier = Modifier.padding(start = 8.dp),
+//                        type = LabelType.GREEN,
+//                        icon = Icons.Default.FavoriteBorder,
+//                        text = "from CHF 25.20"
+//                    )
+//                }
             }
         }
 
@@ -284,7 +316,6 @@ private fun ClassOccupancy(
 private fun TripItemPreview() {
     OJPAndroidSDKTheme {
         TripItem(
-            hasDisruptions = true,
             trip = TripDto(
                 id = "1234",
                 duration = Duration.parse("PT1H"),
@@ -310,7 +341,6 @@ private fun TripItemPreview() {
 private fun TripItemSecondPreview() {
     OJPAndroidSDKTheme {
         TripItem(
-            hasDisruptions = false,
             trip = TripDto(
                 id = "1234",
                 duration = Duration.parse("PT1H18M"),
@@ -322,10 +352,10 @@ private fun TripItemSecondPreview() {
                     PreviewData.timedLeg
                 ),
                 unplanned = null,
-                cancelled = false,
-                deviation = false,
+                cancelled = true,
+                deviation = true,
                 delayed = false,
-                infeasible = false
+                infeasible = true
             )
         )
     }

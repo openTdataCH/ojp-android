@@ -52,7 +52,10 @@ fun TripResultScreen(
             sheetState = detailBottomSheet,
             dragHandle = { BottomSheetDefaults.DragHandle() },
         ) {
-            TripDetailScreen(trip = selectedTrip!!)
+            TripDetailScreen(
+                trip = selectedTrip!!,
+                situations = state.value.tripDelivery?.responseContext?.situation?.ptSituation
+            )
         }
     }
 
@@ -135,7 +138,6 @@ fun TripResultScreen(
                         modifier = Modifier.clickable {
                             selectedTrip = item.trip as TripDto
                         },
-                        hasDisruptions = false,
                         trip = item.trip as TripDto,
                         responseContextDto = state.value.tripDelivery?.responseContext
                     )

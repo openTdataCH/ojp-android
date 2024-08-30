@@ -164,4 +164,72 @@ object PreviewData {
             legTrack = null
         )
     )
+
+    val cancelledTimedLeg = LegDto(
+        id = "345",
+        duration = Duration.parse("PT1H10M"),
+        legType = TimedLegDto(
+            legBoard = LegBoardDto(
+                stopPointRef = "ch:1:sloid:10:3:6",
+                stopPointName = NameDto(text = "Basel SBB"),
+                plannedQuay = NameDto(text = "6"),
+                estimatedQuay = NameDto(text = "6"),
+                nameSuffix = null,
+                serviceDeparture = ServiceTimeDto(
+                    timetabledTime = LocalDateTime.now(),//"2024-07-01T16:03:00Z",
+                    estimatedTime = LocalDateTime.now().plusMinutes(5)
+                ),
+                serviceArrival = null,
+                order = 1,
+                requestStop = null,
+                unplannedStop = null,
+                notServicedStop = true,
+                noBoardingAtStop = null,
+                noAlightingAtStop = null
+            ),
+            legIntermediate = null,
+            legAlight = LegAlightDto(
+                stopPointRef = "ch:1:sloid:218:7:12",
+                stopPointName = NameDto(text = "Olten"),
+                plannedQuay = NameDto(text = "12"),
+                estimatedQuay = null,
+                nameSuffix = null,
+                serviceArrival = ServiceTimeDto(
+                    timetabledTime = LocalDateTime.now().plusHours(1).plusMinutes(10),//"2024-07-01T16:28:00Z",
+                    estimatedTime = null
+                ),
+                serviceDeparture = null,
+                order = 1,
+                requestStop = null,
+                unplannedStop = null,
+                notServicedStop = true,
+                noBoardingAtStop = null,
+                noAlightingAtStop = null
+            ),
+            service = DatedJourneyDto(
+                mode = ModeDto(
+                    ptMode = PtMode.RAIL,
+                    name = NameDto(text = "Zug")
+                ),
+                conventionalModeOfOperation = null,
+                trainNumber = "2335",
+                lineRef = "ojp:91026:C",
+                operatorRef = null,
+                publicCode = null,
+                publishedServiceName = NameDto(text = "IR26"),
+                productCategory = null,
+                directionRef = "R",
+                operatingDayRef = "2024-07-01",
+                originStopPointRef = "ch:1:sloid:10:3:6",
+                destinationStopPointRef = "ch:1:sloid:218:7:12",
+                originText = NameDto(text = "Basel SBB"),
+                destinationText = NameDto(text = "Olten"),
+                journeyRef = "ch:1:sjyid:100061:2335-001",
+                attributes = emptyList(),
+                vehicleRef = null,
+                situationFullRefWrapper = null
+            ),
+            legTrack = null
+        )
+    )
 }
