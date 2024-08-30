@@ -9,7 +9,7 @@ import com.tickaroo.tikxml.annotation.Xml
  * Created by Michael Ruppen on 31.07.2024
  */
 @Xml(name = "ModeAndModeOfOperationFilter")
-data class ModeAndModeOfOperationFilterDto(
+internal data class ModeAndModeOfOperationFilterDto(
     @Element(name = "PtMode")
     val ptMode: List<PtModeType>?,
     @PropertyElement(name = "Exclude")
@@ -19,7 +19,7 @@ data class ModeAndModeOfOperationFilterDto(
 
 //workaround for tikXml: https://github.com/Tickaroo/tikxml/issues/46
 @Xml
-data class PtModeType(
+internal data class PtModeType(
     @TextContent
     val type: String
 )
