@@ -6,12 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
-import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
-import ch.opentransportdata.ojp.domain.model.RealtimeData
-import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.*
 import ch.opentransportdata.presentation.MainActivity
 import ch.opentransportdata.presentation.utils.toOjpLanguageCode
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,14 +23,17 @@ import java.util.UUID
  * Created by Michael Ruppen on 02.07.2024
  */
 class TripResultViewModel(
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val state = MutableStateFlow(UiState())
 
-    val origin: PlaceResultDto? = savedStateHandle["origin"]
-    val via: PlaceResultDto? = savedStateHandle["via"]
-    val destination: PlaceResultDto? = savedStateHandle["destination"]
+    val origin: PlaceResultDto?
+        get() = savedStateHandle["origin"]
+    val via: PlaceResultDto?
+        get() = savedStateHandle["via"]
+    val destination: PlaceResultDto?
+        get() = savedStateHandle["destination"]
 
     init {
         requestTrips()
@@ -94,6 +95,13 @@ class TripResultViewModel(
         }
     }
 
+    fun swapSearch() {
+        val currentOrigin = origin
+        savedStateHandle["origin"] = destination
+        savedStateHandle["destination"] = currentOrigin
+        requestTrips()
+    }
+
     fun resetPreviousItemsCounter() {
         state.update { it.copy(isLoadingPrevious = false) }
     }
@@ -111,14 +119,14 @@ class TripResultViewModel(
         viewModelScope.launch {
             state.update { it.copy(isLoading = true) }
             val originRef = PlaceReferenceDto(
-                ref = (origin.place.placeType as? StopPlaceDto)?.stopPlaceRef,
-                stationName = (origin.place.placeType as? StopPlaceDto)?.name,
-                position = origin.place.position
+                ref = (origin!!.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+                stationName = (origin!!.place.placeType as? StopPlaceDto)?.name,
+                position = origin!!.place.position
             )
             val destinationRef = PlaceReferenceDto(
-                ref = (destination.place.placeType as? StopPlaceDto)?.stopPlaceRef,
-                stationName = (destination.place.placeType as? StopPlaceDto)?.name,
-                position = destination.place.position
+                ref = (destination!!.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+                stationName = (destination!!.place.placeType as? StopPlaceDto)?.name,
+                position = destination!!.place.position
             )
             val viaRef = via?.let {
                 PlaceReferenceDto(
@@ -127,6 +135,11 @@ class TripResultViewModel(
                     position = it.place.position
                 )
             }
+            //example if you want only water trips when both stations are water
+            val modeFilter =
+                if (origin!!.place.mode?.any { it.ptMode == PtMode.WATER } == true && destination!!.place.mode?.any { it.ptMode == PtMode.WATER } == true) {
+                    listOf(PtMode.WATER)
+                } else emptyList()
 
             val response = MainActivity.ojpSdk.requestTrips(
                 languageCode = Locale.getDefault().language.toOjpLanguageCode(),
@@ -134,11 +147,16 @@ class TripResultViewModel(
                 destination = destinationRef,
                 via = viaRef,
                 time = LocalDateTime.now(),
-                params = TripParamsDto(
+                params = TripParams(
                     numberOfResults = 10,
                     includeIntermediateStops = true,
                     includeAllRestrictedLines = true,
-                    modeAndModeOfOperationFilter = null,
+                    modeAndModeOfOperationFilter = listOf(
+                        ModeAndModeOfOperationFilter(
+                            ptMode = modeFilter,
+                            exclude = false
+                        )
+                    ),
                     useRealtimeData = RealtimeData.EXPLANATORY
                 )
             )

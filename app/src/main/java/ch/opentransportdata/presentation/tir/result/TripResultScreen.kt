@@ -52,7 +52,10 @@ fun TripResultScreen(
             sheetState = detailBottomSheet,
             dragHandle = { BottomSheetDefaults.DragHandle() },
         ) {
-            TripDetailScreen(trip = selectedTrip!!)
+            TripDetailScreen(
+                trip = selectedTrip!!,
+                situations = state.value.tripDelivery?.responseContext?.situation?.ptSituation
+            )
         }
     }
 
@@ -101,7 +104,8 @@ fun TripResultScreen(
             TripResultHeader(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 originName = viewModel.origin?.place?.placeType?.name() ?: "-",
-                destinationName = viewModel.destination?.place?.placeType?.name() ?: "-"
+                destinationName = viewModel.destination?.place?.placeType?.name() ?: "-",
+                swapSearch = { viewModel.swapSearch() }
             )
             HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
 
@@ -134,7 +138,6 @@ fun TripResultScreen(
                         modifier = Modifier.clickable {
                             selectedTrip = item.trip as TripDto
                         },
-                        hasDisruptions = false,
                         trip = item.trip as TripDto,
                         responseContextDto = state.value.tripDelivery?.responseContext
                     )

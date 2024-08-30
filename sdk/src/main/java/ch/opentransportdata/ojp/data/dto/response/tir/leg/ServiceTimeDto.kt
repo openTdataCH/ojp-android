@@ -19,8 +19,11 @@ data class ServiceTimeDto(
     val estimatedTime: LocalDateTime?,
 ) : Parcelable {
 
+    /**
+     * Only considered a delay if duration between estimated and timetabled time is >= 1 minute
+     */
     val hasDelay: Boolean
-        get() = estimatedTime != null && delay.toMinutes().toInt() > 0 //todo: check if 30sec = 0 minutes
+        get() = estimatedTime != null && delay.toMinutes() > 0
 
     val delay: Duration
         get() = if (estimatedTime != null) Duration.between(timetabledTime, estimatedTime) else Duration.ZERO

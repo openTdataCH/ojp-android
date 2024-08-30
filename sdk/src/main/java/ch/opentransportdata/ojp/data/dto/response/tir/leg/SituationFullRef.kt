@@ -1,4 +1,4 @@
-package ch.opentransportdata.ojp.data.dto.response.tir.situations
+package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import android.os.Parcelable
 import com.tickaroo.tikxml.annotation.PropertyElement

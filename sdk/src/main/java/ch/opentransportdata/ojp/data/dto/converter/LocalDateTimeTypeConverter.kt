@@ -12,7 +12,7 @@ import java.time.format.DateTimeParseException
 /**
  * Created by Michael Ruppen on 05.07.2024
  */
-class LocalDateTimeTypeConverter : TypeConverter<LocalDateTime> {
+internal class LocalDateTimeTypeConverter : TypeConverter<LocalDateTime> {
 
     override fun read(value: String): LocalDateTime {
         return try {

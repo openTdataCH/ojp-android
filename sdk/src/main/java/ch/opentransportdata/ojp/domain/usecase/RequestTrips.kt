@@ -1,12 +1,12 @@
 package ch.opentransportdata.ojp.domain.usecase
 
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
-import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import kotlinx.coroutines.isActive
@@ -30,7 +30,7 @@ internal class RequestTrips(
         via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
-        params: TripParamsDto?
+        params: TripParams?
     ): Result<TripDeliveryDto> {
         // do not return or overwrite state, if user canceled the request (long running task or something)
         if (!coroutineContext.isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
@@ -137,7 +137,7 @@ internal class RequestTrips(
         val via: PlaceReferenceDto? = null,
         val time: LocalDateTime? = null,
         val isSearchForDepartureTime: Boolean = true,
-        val params: TripParamsDto? = null,
+        val params: TripParams? = null,
         val minDateTime: LocalDateTime? = null,
         val maxDateTime: LocalDateTime? = null,
         val existingHashes: MutableList<Int> = mutableListOf()

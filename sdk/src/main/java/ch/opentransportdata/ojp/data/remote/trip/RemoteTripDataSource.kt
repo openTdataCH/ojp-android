@@ -2,8 +2,8 @@ package ch.opentransportdata.ojp.data.remote.trip
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
-import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
+import ch.opentransportdata.ojp.domain.model.TripParams
 import java.time.LocalDateTime
 
 /**
@@ -17,6 +17,6 @@ internal interface RemoteTripDataSource {
         via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
-        params: TripParamsDto?
+        params: TripParams?
     ): OjpDto
 }

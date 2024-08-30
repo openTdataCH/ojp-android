@@ -3,7 +3,6 @@ package ch.opentransportdata.ojp.data.dto.response.tir.leg
 import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.response.ModeDto
 import ch.opentransportdata.ojp.data.dto.response.NameDto
-import ch.opentransportdata.ojp.data.dto.response.tir.situations.SituationFullRefs
 import ch.opentransportdata.ojp.domain.model.ConventionalModesOfOperation
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement

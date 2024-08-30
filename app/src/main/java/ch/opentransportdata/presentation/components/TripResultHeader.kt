@@ -1,13 +1,14 @@
 package ch.opentransportdata.presentation.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SwapCalls
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -20,7 +21,8 @@ import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 fun TripResultHeader(
     modifier: Modifier = Modifier,
     originName: String,
-    destinationName: String
+    destinationName: String,
+    swapSearch: () -> Unit
 ) {
 
     Surface(
@@ -28,18 +30,28 @@ fun TripResultHeader(
         shape = RoundedCornerShape(8.dp),
         tonalElevation = 1.dp
     ) {
-        Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)) {
-            Text(
-                modifier = Modifier.padding(all = 8.dp),
-                text = originName,
-                style = MaterialTheme.typography.titleLarge
-            )
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 8.dp))
-            Text(
-                modifier = Modifier.padding(all = 8.dp),
-                text = destinationName,
-                style = MaterialTheme.typography.titleLarge
-            )
+        Box {
+            Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)) {
+                Text(
+                    modifier = Modifier.padding(all = 8.dp),
+                    text = originName,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 48.dp))
+                Text(
+                    modifier = Modifier.padding(all = 8.dp),
+                    text = destinationName,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+            OutlinedIconButton(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 8.dp),
+                onClick = swapSearch
+            ) {
+                Icon(imageVector = Icons.Default.SwapCalls, contentDescription = null)
+            }
         }
     }
 }
@@ -50,7 +62,8 @@ private fun TripResultHeaderPreview() {
     OJPAndroidSDKTheme {
         TripResultHeader(
             originName = "Bern, Eigerplatz",
-            destinationName = "Basel SBB"
+            destinationName = "Basel SBB",
+            swapSearch = {}
         )
     }
 }

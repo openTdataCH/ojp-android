@@ -5,6 +5,7 @@ import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.ContinuousLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.situations.PtSituationDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
@@ -70,7 +71,17 @@ data class TripDto(
         get() = if (lastTimedLeg.legAlight.serviceArrival.hasDelay) lastTimedLeg.legAlight.serviceArrival.delay.toMinutes() else 0
 
     val isCarTrainTrip: Boolean
-        get() = legs.any { it.legType is TimedLegDto && it.legType.service.isCarTrain } //todo: check if works
+        get() = legs.any { it.legType is TimedLegDto && it.legType.service.isCarTrain }
+
+    val hasAnyDisruption: Boolean
+        get() = this.cancelled == true
+                || this.infeasible == true
+                || this.deviation == true
+                || this.legs.any { it.legType is TimedLegDto && it.legType.hasAnyPlatformChanges }
+
+    fun getPtSituationsForTrip(situations: List<PtSituationDto>): List<PtSituationDto> {
+        return this.legs.mapNotNull { it.legType as? TimedLegDto }.flatMap { it.getPtSituationsForLeg(situations) }.distinct()
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
