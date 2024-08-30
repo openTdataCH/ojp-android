@@ -1,7 +1,6 @@
 package ch.opentransportdata.ojp.data.repository
 
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
-import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
@@ -10,6 +9,7 @@ import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import com.tickaroo.tikxml.TypeAdapterNotFoundException
@@ -69,7 +69,7 @@ internal class OjpRepositoryImpl(
         via: PlaceReferenceDto?,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
-        params: TripParamsDto?
+        params: TripParams?
     ): Result<TripDeliveryDto> {
         return try {
             val response = tripDataSource.requestTrips(

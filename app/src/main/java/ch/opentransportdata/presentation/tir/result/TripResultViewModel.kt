@@ -6,12 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
-import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
-import ch.opentransportdata.ojp.domain.model.RealtimeData
-import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.*
 import ch.opentransportdata.presentation.MainActivity
 import ch.opentransportdata.presentation.utils.toOjpLanguageCode
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -137,6 +135,11 @@ class TripResultViewModel(
                     position = it.place.position
                 )
             }
+            //example if you want only water trips when both stations are water
+            val modeFilter =
+                if (origin!!.place.mode?.any { it.ptMode == PtMode.WATER } == true && destination!!.place.mode?.any { it.ptMode == PtMode.WATER } == true) {
+                    listOf(PtMode.WATER)
+                } else emptyList()
 
             val response = MainActivity.ojpSdk.requestTrips(
                 languageCode = Locale.getDefault().language.toOjpLanguageCode(),
@@ -144,11 +147,16 @@ class TripResultViewModel(
                 destination = destinationRef,
                 via = viaRef,
                 time = LocalDateTime.now(),
-                params = TripParamsDto(
+                params = TripParams(
                     numberOfResults = 10,
                     includeIntermediateStops = true,
                     includeAllRestrictedLines = true,
-                    modeAndModeOfOperationFilter = null,
+                    modeAndModeOfOperationFilter = listOf(
+                        ModeAndModeOfOperationFilter(
+                            ptMode = modeFilter,
+                            exclude = false
+                        )
+                    ),
                     useRealtimeData = RealtimeData.EXPLANATORY
                 )
             )

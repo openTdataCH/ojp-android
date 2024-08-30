@@ -1,13 +1,13 @@
 package ch.opentransportdata.ojp
 
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
-import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.di.context.OjpKoinContext
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
@@ -90,7 +90,7 @@ class OjpSdk(
         via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean = true,
-        params: TripParamsDto?
+        params: TripParams
     ): Result<TripDeliveryDto> {
         OjpKoinContext.koinApp.koin.get<RequestTrips>().reset()
         return OjpKoinContext.koinApp.koin.get<RequestTrips>().invoke(
