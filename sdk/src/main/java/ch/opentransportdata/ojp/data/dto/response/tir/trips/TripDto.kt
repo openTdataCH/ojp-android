@@ -80,11 +80,7 @@ data class TripDto(
                 || this.legs.any { it.legType is TimedLegDto && it.legType.hasAnyPlatformChanges }
 
     fun getPtSituationsForTrip(situations: List<PtSituationDto>): List<PtSituationDto> {
-        val situationRefsOfTrip = this.legs.mapNotNull { it.legType as? TimedLegDto }
-            .flatMap { timedLeg ->
-                timedLeg.service.situationFullRefWrapper?.situationFullRefs?.map { it.situationNumber } ?: emptyList()
-            }
-        return situations.filter { situation -> situationRefsOfTrip.contains(situation.situationNumber) }
+        return this.legs.mapNotNull { it.legType as? TimedLegDto }.flatMap { it.getPtSituationsForLeg(situations) }.distinct()
     }
 
     override fun equals(other: Any?): Boolean {
