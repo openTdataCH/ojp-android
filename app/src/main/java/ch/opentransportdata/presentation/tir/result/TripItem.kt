@@ -265,6 +265,17 @@ fun TripItem(
                     )
                 }
 
+                if(!responseContextDto?.situation?.ptSituation?.let { trip.getPtSituationsForTrip(it) }.isNullOrEmpty()){
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 2.dp)
+                            .size(20.dp),
+                        imageVector = Icons.Rounded.WarningAmber,
+                        contentDescription = "trip has a special issue",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+
 //                AnimatedVisibility(visible = isPriceVisible) {
 //                    Label(
 //                        modifier = Modifier.padding(start = 8.dp),
