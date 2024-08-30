@@ -90,7 +90,7 @@ class OjpSdk(
         via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean = true,
-        params: TripParams
+        params: TripParams?
     ): Result<TripDeliveryDto> {
         OjpKoinContext.koinApp.koin.get<RequestTrips>().reset()
         return OjpKoinContext.koinApp.koin.get<RequestTrips>().invoke(
