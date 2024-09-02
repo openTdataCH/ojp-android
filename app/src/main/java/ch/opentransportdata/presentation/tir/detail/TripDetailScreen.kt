@@ -96,7 +96,7 @@ fun TripDetailScreen(
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
-                if (consideredSituations.any { it.priority == "1" }) {
+                if (consideredSituations.any { it.priority == 1 }) {
                     Icon(
                         modifier = Modifier
                             .padding(start = 2.dp)
@@ -106,7 +106,7 @@ fun TripDetailScreen(
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
-                if (consideredSituations.any { it.priority == "3" }) {
+                if (consideredSituations.any { it.priority == 3 }) {
                     Icon(
                         modifier = Modifier
                             .padding(start = 2.dp)
@@ -116,7 +116,7 @@ fun TripDetailScreen(
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
-                if (consideredSituations.any { it.priority == "4" }) {
+                if (consideredSituations.any { it.priority == 4 }) {
                     Icon(
                         modifier = Modifier
                             .padding(start = 2.dp)
@@ -415,9 +415,9 @@ private fun TransferLeg(
 @Composable
 fun PtSituationDto.icon(): ImageVector {
     return when (this.priority) {
-        "1" -> Icons.Outlined.FlashOn
-        "3" -> Icons.Rounded.WarningAmber
-        "4" -> Icons.Outlined.Info
+        1 -> Icons.Outlined.FlashOn
+        3 -> Icons.Rounded.WarningAmber
+        4 -> Icons.Outlined.Info
         else -> Icons.Rounded.WarningAmber
     }
 }
