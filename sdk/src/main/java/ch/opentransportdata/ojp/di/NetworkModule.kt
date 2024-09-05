@@ -11,6 +11,7 @@ import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -24,9 +25,10 @@ internal val networkModule = module {
     single { provideLoggingInterceptor() }
     single(named("ojpHttpClient")) { provideOkHttpClient(get(), get()) }
     single(named("ojpRetrofit")) { provideRetrofit(get(named("ojpHttpClient")), get(), get()) }
-    single { provideTikXml() }
+    single { provideTikXml(get()) }
     single<TokenInterceptor> { TokenInterceptor(get()) }
     single { provideOjpService(get(named("ojpRetrofit"))) }
+    factoryOf(::LocalDateTimeTypeConverter)
 }
 
 internal fun provideLoggingInterceptor(): HttpLoggingInterceptor {
@@ -56,9 +58,9 @@ internal fun provideRetrofit(ojpHttpClient: OkHttpClient, tikXml: TikXml, initia
         .build()
 }
 
-internal fun provideTikXml(): TikXml {
+internal fun provideTikXml(initializer: Initializer): TikXml {
     return TikXml.Builder()
-        .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
+        .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter(initializer))
         .addTypeConverter(Duration::class.java, DurationTypeConverter())
         .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
         .addTypeConverter(PtMode::class.java, PtModeTypeConverter())

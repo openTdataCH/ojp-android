@@ -11,20 +11,31 @@ import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
 import ch.opentransportdata.ojp.data.dto.response.ServiceDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
 import ch.opentransportdata.ojp.domain.model.PtMode
+import ch.opentransportdata.ojp.domain.usecase.Initializer
 import com.tickaroo.tikxml.TikXml
 import okio.Buffer
 import org.junit.Assert.assertThrows
+import org.junit.Before
 import org.junit.Test
+import java.time.ZoneId
 
 /**
  * Created by Michael Ruppen on 17.05.2024
  */
 class ServiceDeliveryAdapterTest {
 
-    private val tikXml = TikXml.Builder()
-        .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
-        .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
-        .build()
+    private val initializer = Initializer()
+    private lateinit var tikXml: TikXml
+
+    @Before
+    fun setUp(){
+        initializer.defaultTimeZone = ZoneId.of("Europe/Zurich")
+        tikXml = TikXml.Builder()
+            .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
+            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter(initializer))
+            .build()
+
+    }
 
     @Test
     fun `Delivery type LocationInformation, parsing successful`() {
@@ -38,7 +49,7 @@ class ServiceDeliveryAdapterTest {
         // ASSERTION
         assertThat(result).isNotNull()
 
-        assertThat(result.responseTimestamp.toString()).isEqualTo("2024-04-12T11:56:49.218851300")
+        assertThat(result.responseTimestamp.toString()).isEqualTo("2024-04-12T13:56:49.218851300")
         assertThat(result.producerRef).isEqualTo("MENTZ")
         assertThat(result.ojpDelivery.javaClass).isEqualTo(LocationInformationDeliveryDto::class.java)
 

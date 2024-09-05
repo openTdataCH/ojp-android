@@ -14,6 +14,7 @@ import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
 import ch.opentransportdata.ojp.domain.usecase.RequestTrips
 import timber.log.Timber
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 /**
  * Created by Michael Ruppen on 08.04.2024
@@ -22,17 +23,19 @@ import java.time.LocalDateTime
  * @param endpoint The specific endpoint on the baseUrl to request ex: ojp20 => https://api.opentransportdata.swiss/ojp20
  * @param requesterReference The reference for requests to help tracking on the OJP backend
  * @param httpHeaders Define custom http headers ex. key: "Authorization" value: "Bearer xyz"
+ * @param defaultTimeZone Set the timeZone you want the dateTimes to be parsed at, default is "Europe/Zurich"
  */
 class OjpSdk(
     baseUrl: String,
     endpoint: String,
     requesterReference: String,
-    httpHeaders: HashMap<String, String> = hashMapOf()
+    httpHeaders: HashMap<String, String> = hashMapOf(),
+    defaultTimeZone: ZoneId = ZoneId.of("Europe/Zurich"),
 ) {
 
     init {
         Timber.i("Initialize SDK")
-        OjpKoinContext.koinApp.koin.get<Initializer>().init(baseUrl, endpoint, requesterReference, httpHeaders)
+        OjpKoinContext.koinApp.koin.get<Initializer>().init(baseUrl, endpoint, requesterReference, httpHeaders, defaultTimeZone)
     }
 
     /**
