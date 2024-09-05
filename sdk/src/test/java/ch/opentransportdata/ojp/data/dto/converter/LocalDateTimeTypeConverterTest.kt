@@ -102,6 +102,6 @@ class LocalDateTimeTypeConverterTest {
         val result = dateTimeConverter.write(time)
 
         // ASSERTION
-        assertThat(result).isNotEqualTo("2024-09-05T15:02:49.258568Z")
+        assertThat(result).isEqualTo("2024-09-05T15:02:49.258568Z")
     }
 }

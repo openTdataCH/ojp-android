@@ -25,6 +25,7 @@ internal class LocalDateTimeTypeConverter(private val initializer: Initializer) 
     }
 
     override fun write(value: LocalDateTime): String {
-        return value.toInstant(ZoneOffset.UTC).toString()
+        val instant = value.atZone(initializer.defaultTimeZone).toInstant()
+        return DateTimeFormatter.ISO_INSTANT.format(instant)
     }
 }
