@@ -17,18 +17,21 @@ import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter
 import org.junit.Before
 import org.junit.Test
 import java.time.Duration
+import java.time.ZoneId
 
 /**
  * Created by Michael Ruppen on 10.07.2024
  */
-internal class TripDeliveryHashCalculation {
+internal class TripDeliveryHashCalculationTest {
 
     private lateinit var tikXml: TikXml
+    private val initializer = Initializer()
 
     @Before
     fun setUp() {
+        initializer.defaultTimeZone = ZoneId.of("Europe/Zurich")
         tikXml = TikXml.Builder()
-            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
+            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter(initializer))
             .addTypeConverter(Duration::class.java, DurationTypeConverter())
             .addTypeConverter(String::class.java, HtmlEscapeStringConverter())
             .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
@@ -77,7 +80,7 @@ internal class TripDeliveryHashCalculation {
 
         // ACTION
         val result = tikXml.read<TripDeliveryDto>(bufferedSource, TripDeliveryDto::class.java)
-        val filteredList = result.tripResults?.let { filterDuplicatedTrips(it, mutableListOf(1701260880)) }
+        val filteredList = result.tripResults?.let { filterDuplicatedTrips(it, mutableListOf(620261135)) }
 
         // ASSERTION
         assertThat(result).isNotNull()

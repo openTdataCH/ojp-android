@@ -9,11 +9,14 @@ import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeTypeConverter
 import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
 import ch.opentransportdata.ojp.domain.model.*
 import ch.opentransportdata.ojp.domain.model.error.OjpError
+import ch.opentransportdata.ojp.domain.usecase.Initializer
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.TypeConverterNotFoundException
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
+import org.junit.Before
 import org.junit.Test
+import java.time.ZoneId
 
 
 /**
@@ -21,13 +24,20 @@ import org.junit.Test
  */
 internal class OjpSdkTest {
 
+    private val initializer = Initializer()
+
+    @Before
+    fun setUp(){
+        initializer.defaultTimeZone = ZoneId.of("Europe/Zurich")
+    }
+
     @Test
     fun `XML data that contains the custom data type PtMode which is not registered should throw a TypeConverterNotFoundException`() {
         // GIVEN
         val xmlFile = "src/test/resources/response_custom_data_type_ptmode.xml"
         val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder()
-            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
+            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter(initializer))
             .build()
 
         // ACTION
@@ -44,7 +54,7 @@ internal class OjpSdkTest {
         val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder()
             .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
-            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
+            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter(initializer))
             .build()
 
         // ACTION
@@ -60,7 +70,7 @@ internal class OjpSdkTest {
         val xmlFile = "src/test/resources/response_missing_element_requestorref.xml"
         val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder()
-            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
+            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter(initializer))
             .build()
 
         // ACTION
@@ -76,7 +86,7 @@ internal class OjpSdkTest {
         val xmlFile = "src/test/resources/response_valid.xml"
         val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder()
-            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter())
+            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter(initializer))
             .build()
 
         // ACTION
