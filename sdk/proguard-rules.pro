@@ -26,7 +26,7 @@
 -keeppackagenames doNotKeepAThing
 
 -keep class ch.opentransportdata.ojp.domain.model.** { *; }
--keep class ch.opentransportdata.ojp.domain.usecase.Initializer
+-keepclasseswithmembers class ch.opentransportdata.ojp.domain.usecase.Initializer { *; }
 -keep class ch.opentransportdata.ojp.OjpSdk{ *; }
 -keep class ch.opentransportdata.ojp.data.dto.converter.** { *; }
 -keep class ch.opentransportdata.ojp.data.dto.response.** { *; }
