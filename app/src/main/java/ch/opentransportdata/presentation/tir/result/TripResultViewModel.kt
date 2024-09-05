@@ -141,6 +141,15 @@ class TripResultViewModel(
                     listOf(PtMode.WATER)
                 } else emptyList()
 
+            val modeAndModeOfOperationFilter = if (modeFilter.isNotEmpty()) {
+                listOf(
+                    ModeAndModeOfOperationFilter(
+                        ptMode = modeFilter,
+                        exclude = false
+                    )
+                )
+            } else emptyList()
+
             val response = MainActivity.ojpSdk.requestTrips(
                 languageCode = Locale.getDefault().language.toOjpLanguageCode(),
                 origin = originRef,
@@ -151,12 +160,7 @@ class TripResultViewModel(
                     numberOfResults = 10,
                     includeIntermediateStops = true,
                     includeAllRestrictedLines = true,
-                    modeAndModeOfOperationFilter = listOf(
-                        ModeAndModeOfOperationFilter(
-                            ptMode = modeFilter,
-                            exclude = false
-                        )
-                    ),
+                    modeAndModeOfOperationFilter = modeAndModeOfOperationFilter,
                     useRealtimeData = RealtimeData.EXPLANATORY
                 )
             )
