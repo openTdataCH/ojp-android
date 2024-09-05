@@ -27,7 +27,7 @@ data class TextualContentDto(
     @Element(name = "siri:RemarkContent")
     val remarkContent: List<RemarkContent>?,
     @Element(name = "siri:InfoLink")
-    val infoLink: InfoLink?
+    val infoLink: List<InfoLink>?
 ) : Parcelable
 
 @Parcelize
