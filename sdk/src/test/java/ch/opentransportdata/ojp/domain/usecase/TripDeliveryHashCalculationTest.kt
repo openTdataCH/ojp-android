@@ -22,7 +22,7 @@ import java.time.ZoneId
 /**
  * Created by Michael Ruppen on 10.07.2024
  */
-internal class TripDeliveryHashCalculation {
+internal class TripDeliveryHashCalculationTest {
 
     private lateinit var tikXml: TikXml
     private val initializer = Initializer()
