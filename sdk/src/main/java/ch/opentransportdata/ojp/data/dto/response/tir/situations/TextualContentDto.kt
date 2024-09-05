@@ -25,7 +25,9 @@ data class TextualContentDto(
     @Element(name = "siri:DurationContent")
     val durationContent: DurationContentDto?,
     @Element(name = "siri:RemarkContent")
-    val remarkContent: List<RemarkContent>?
+    val remarkContent: List<RemarkContent>?,
+    @Element(name = "siri:InfoLink")
+    val infoLink: InfoLink?
 ) : Parcelable
 
 @Parcelize
@@ -75,4 +77,13 @@ data class DescriptionContent(
 data class RemarkContent(
     @PropertyElement(name = "siri:Remark")
     val remark: String?
+) : Parcelable
+
+@Parcelize
+@Xml(name = "siri:InfoLink")
+data class InfoLink(
+    @PropertyElement(name = "siri:Uri")
+    val uri: String,
+    @PropertyElement(name = "siri:Label")
+    val label: String?
 ) : Parcelable
