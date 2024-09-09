@@ -71,7 +71,7 @@ data class TripDto(
 
     /**
      * If the trip has [TimedLegDto.isCancelled], [isInfeasible] or [TimedLegDto.hasAnyPlatformChanges]
-     * set to ture, it is marked to have disruptions
+     * set to true, it is marked to have disruptions
      */
     val hasAnyDisruption: Boolean
         get() = this.legs.any { it.legType is TimedLegDto && it.legType.isCancelled }
