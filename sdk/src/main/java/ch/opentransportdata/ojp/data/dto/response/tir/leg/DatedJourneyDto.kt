@@ -50,7 +50,13 @@ data class DatedJourneyDto(
     @PropertyElement(name = "siri:VehicleRef")
     val vehicleRef: String?,
     @Element(name = "SituationFullRefs")
-    val situationFullRefWrapper: SituationFullRefs?
+    val situationFullRefWrapper: SituationFullRefs?,
+    @PropertyElement(name = "Unplanned")
+    val unplanned: Boolean?, //not yet delivered from backend
+    @PropertyElement(name = "Cancelled")
+    val cancelled: Boolean?,
+    @PropertyElement(name = "Deviation")
+    val deviation: Boolean?
 ) : Parcelable {
 
     //workaround till pt-subModes get delivered correctly

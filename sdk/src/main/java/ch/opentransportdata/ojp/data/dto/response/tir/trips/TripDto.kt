@@ -33,10 +33,6 @@ data class TripDto(
     val legs: List<LegDto>,
     @PropertyElement(name = "Unplanned")
     val unplanned: Boolean?, //not yet delivered from backend
-    @PropertyElement(name = "Cancelled")
-    val cancelled: Boolean?,
-    @PropertyElement(name = "Deviation")
-    val deviation: Boolean?,
     @PropertyElement(name = "Delayed")
     val delayed: Boolean?, //not yet delivered from backend
     @PropertyElement(name = "Infeasible")
@@ -73,11 +69,24 @@ data class TripDto(
     val isCarTrainTrip: Boolean
         get() = legs.any { it.legType is TimedLegDto && it.legType.service.isCarTrain }
 
+    /**
+     * If the trip has [TimedLegDto.isCancelled], [isInfeasible] or [TimedLegDto.hasAnyPlatformChanges]
+     * set to true, it is marked to have disruptions
+     */
     val hasAnyDisruption: Boolean
-        get() = this.cancelled == true
-                || this.infeasible == true
-                || this.deviation == true
+        get() = this.legs.any { it.legType is TimedLegDto && it.legType.isCancelled }
+                || isInfeasible
+//                || this.deviation == true
                 || this.legs.any { it.legType is TimedLegDto && it.legType.hasAnyPlatformChanges }
+
+    /**
+     * [infeasible] flag is also set when trip is cancelled. [isInfeasible] shows if the trip is infeasible but not cancelled
+     */
+    val isInfeasible: Boolean
+        get() = this.legs.none { it.legType is TimedLegDto && it.legType.isCancelled } && this.infeasible == true
+
+    val isCancelled: Boolean
+        get() = this.legs.any { it.legType is TimedLegDto && it.legType.isCancelled }
 
     fun getPtSituationsForTrip(situations: List<PtSituationDto>): List<PtSituationDto> {
         return this.legs.mapNotNull { it.legType as? TimedLegDto }.flatMap { it.getPtSituationsForLeg(situations) }.distinct()

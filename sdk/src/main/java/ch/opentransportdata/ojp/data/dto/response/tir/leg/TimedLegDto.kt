@@ -27,15 +27,18 @@ data class TimedLegDto(
     val hasAnyPlatformChanges: Boolean
         get() = legBoard.isPlatformChanged || legAlight.isPlatformChanged
 
-    //temporary solution till backend fills data
+    /**
+     * [DatedJourneyDto.cancelled] is for the whole service. [isCancelled] checks if the leg for the requested trip is cancelled
+     */
     val isCancelled: Boolean
-        get() = legBoard.notServicedStop == true && legAlight.notServicedStop == true
+        get() = legBoard.notServicedStop == true || legAlight.notServicedStop == true
 
     val isPartCancelled: Boolean
         get() = legIntermediate?.any { it.notServicedStop == true } == true
 
     fun getPtSituationsForLeg(situations: List<PtSituationDto>): List<PtSituationDto> {
-        val situationRefsOfTrip = this.service.situationFullRefWrapper?.situationFullRefs?.map { it.situationNumber } ?: emptyList()
+        val situationRefsOfTrip =
+            this.service.situationFullRefWrapper?.situationFullRefs?.map { it.situationNumber } ?: emptyList()
 
         return situations.filter { situation -> situationRefsOfTrip.contains(situation.situationNumber) }
     }
