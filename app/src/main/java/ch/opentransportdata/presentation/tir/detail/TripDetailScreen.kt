@@ -7,8 +7,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.rounded.HideSource
 import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -32,6 +32,7 @@ import java.time.format.DateTimeFormatter
 /**
  * Created by Michael Ruppen on 12.07.2024
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TripDetailScreen(
     trip: TripDto,
@@ -45,85 +46,45 @@ fun TripDetailScreen(
     ) {
         val consideredSituations = situations?.let { trip.getPtSituationsForTrip(it) } ?: emptyList()
         if (trip.hasAnyDisruption) {
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Text(
+                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
+                text = "Disruptions: ",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            FlowRow(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(
-                    text = "Disruptions: ",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                if (trip.cancelled == true) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 2.dp)
-                            .size(20.dp),
-                        imageVector = Icons.Outlined.Cancel,
-                        contentDescription = "trip is cancelled",
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
-                if (trip.deviation == true) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 2.dp)
-                            .size(20.dp),
-                        imageVector = Icons.Outlined.SubdirectoryArrowRight,
-                        contentDescription = "trip is redirected",
-                        tint = MaterialTheme.colorScheme.error
+                if (trip.isCancelled) {
+                    Label(
+                        icon = Icons.Outlined.Cancel,
+                        type = LabelType.RED,
+                        text = "Cancelled"
                     )
                 }
 
-                if (trip.infeasible == true) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 2.dp)
-                            .size(20.dp),
-                        imageVector = Icons.Rounded.WarningAmber,
-                        contentDescription = "trip is infeasible",
-                        tint = MaterialTheme.colorScheme.error
+                if (trip.isInfeasible) {
+                    Label(
+                        icon = Icons.Outlined.WarningAmber,
+                        type = LabelType.RED,
+                        text = "Trip not feasible"
                     )
                 }
 
                 if (trip.legs.mapNotNull { it.legType as? TimedLegDto }.any { it.isPartCancelled }) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 2.dp)
-                            .size(20.dp),
-                        imageVector = Icons.Rounded.HideSource,
-                        contentDescription = "trip is part cancelled",
-                        tint = MaterialTheme.colorScheme.error
+                    Label(
+                        icon = Icons.Outlined.HideSource,
+                        type = LabelType.RED,
+                        text = "Stops skipped"
                     )
                 }
-                if (consideredSituations.any { it.priority == 1 }) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 2.dp)
-                            .size(20.dp),
-                        imageVector = Icons.Outlined.FlashOn,
-                        contentDescription = "emergency issue",
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
-                if (consideredSituations.any { it.priority == 3 }) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 2.dp)
-                            .size(20.dp),
-                        imageVector = Icons.Rounded.WarningAmber,
-                        contentDescription = "planned/unplanned issue",
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
-                if (consideredSituations.any { it.priority == 4 }) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 2.dp)
-                            .size(20.dp),
-                        imageVector = Icons.Outlined.Info,
-                        contentDescription = "general information",
-                        tint = MaterialTheme.colorScheme.error
+                if (trip.legs.mapNotNull { it.legType as? TimedLegDto }.any { it.hasAnyPlatformChanges }) {
+                    Label(
+                        icon = Icons.Outlined.Shuffle,
+                        type = LabelType.RED,
+                        text = "Platform changes"
                     )
                 }
             }
@@ -146,6 +107,7 @@ fun TripDetailScreen(
                 )
             }
         }
+        Spacer(modifier = Modifier.height(48.dp))
     }
 }
 
@@ -389,12 +351,23 @@ private fun ContinuousLeg(
         isLastLeg && !leg.legStart.name?.text.isNullOrBlank() -> "from ${leg.legStart.name?.text}"
         else -> ""
     }
-    Text(
+    Row(
         modifier = modifier,
-        text = "Walk ${leg.duration.toMinutes()}min $destinationText",
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface
-    )
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.DirectionsWalk,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            modifier = modifier,
+            text = "Walk ${leg.duration.toMinutes()}min $destinationText",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
 }
 
 @Composable
@@ -402,14 +375,23 @@ private fun TransferLeg(
     modifier: Modifier = Modifier,
     leg: TransferLegDto
 ) {
-//    HorizontalDivider()
-    Text(
+    Row(
         modifier = modifier,
-        text = "Change to ${leg.legEnd.name?.text}",
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface
-    )
-//    HorizontalDivider()
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.DirectionsWalk,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            modifier = Modifier.padding(start = 4.dp),
+            text = "Change to ${leg.legEnd.name?.text}",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
 }
 
 @Composable
@@ -440,8 +422,6 @@ private fun TripDetailScreenPreview() {
                     PreviewData.cancelledTimedLeg
                 ),
                 unplanned = null,
-                cancelled = true,
-                deviation = false,
                 delayed = false,
                 infeasible = false
             ),

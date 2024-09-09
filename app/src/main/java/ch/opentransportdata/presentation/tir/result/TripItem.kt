@@ -9,7 +9,6 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Shuffle
-import androidx.compose.material.icons.outlined.SubdirectoryArrowRight
 import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -233,7 +232,7 @@ fun TripItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
-                if (trip.cancelled == true) {
+                if (trip.isCancelled) {
                     Icon(
                         modifier = Modifier
                             .padding(start = 2.dp)
@@ -243,18 +242,18 @@ fun TripItem(
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
-                if (trip.deviation == true) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 2.dp)
-                            .size(20.dp),
-                        imageVector = Icons.Outlined.SubdirectoryArrowRight,
-                        contentDescription = "trip is redirected",
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
+//                if (trip.deviation) {
+//                    Icon(
+//                        modifier = Modifier
+//                            .padding(start = 2.dp)
+//                            .size(20.dp),
+//                        imageVector = Icons.Outlined.SubdirectoryArrowRight,
+//                        contentDescription = "trip is redirected",
+//                        tint = MaterialTheme.colorScheme.error
+//                    )
+//                }
 
-                if (trip.infeasible == true) {
+                if (trip.isInfeasible) {
                     Icon(
                         modifier = Modifier
                             .padding(start = 2.dp)
@@ -338,8 +337,6 @@ private fun TripItemPreview() {
                     PreviewData.transferLeg,
                 ),
                 unplanned = null,
-                cancelled = false,
-                deviation = false,
                 delayed = false,
                 infeasible = false
             )
@@ -363,8 +360,6 @@ private fun TripItemSecondPreview() {
                     PreviewData.timedLeg
                 ),
                 unplanned = null,
-                cancelled = true,
-                deviation = true,
                 delayed = false,
                 infeasible = true
             )
