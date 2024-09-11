@@ -216,30 +216,18 @@ private fun SituationInfoDialog(
             Column {
                 ListItem(
                     modifier = Modifier.fillMaxWidth(),
-                    overlineContent = {
-                        Text(text = "Summary")
-                    },
-                    headlineContent = {
-                        Text(text = summaryText ?: "-")
-                    },
+                    overlineContent = { Text(text = "Summary") },
+                    headlineContent = { Text(text = summaryText) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent)
                 )
                 ListItem(
-                    overlineContent = {
-                        Text(text = "Duration")
-                    },
-                    headlineContent = {
-                        Text(text = durationText ?: "-")
-                    },
+                    overlineContent = { Text(text = "Duration") },
+                    headlineContent = { Text(text = durationText) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent)
                 )
                 ListItem(
-                    overlineContent = {
-                        Text(text = "Reason")
-                    },
-                    headlineContent = {
-                        Text(text = reasonText ?: "-")
-                    },
+                    overlineContent = { Text(text = "Reason") },
+                    headlineContent = { Text(text = reasonText) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent)
                 )
             }
