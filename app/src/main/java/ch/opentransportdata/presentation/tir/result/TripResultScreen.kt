@@ -209,9 +209,6 @@ private fun SituationInfoDialog(
                 Text(text = "OK")
             }
         },
-        title = {
-            Text(text = "Situation")
-        },
         text = {
             Column {
                 ListItem(
