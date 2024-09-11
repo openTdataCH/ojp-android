@@ -137,19 +137,19 @@ private fun TimedLeg(
                 Surface(
                     modifier = Modifier.size(4.dp),
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = if (leg.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
                     content = {}
                 )
                 VerticalDivider(
                     modifier = Modifier.padding(start = 1.5.dp, top = 1.dp, bottom = 1.dp),
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = if (leg.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
                 )
                 Surface(
                     modifier = Modifier
                         .size(4.dp)
                         .align(Alignment.BottomStart),
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = if (leg.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
                     content = {}
                 )
             }

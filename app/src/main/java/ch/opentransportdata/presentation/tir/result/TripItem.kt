@@ -134,12 +134,15 @@ fun TripItem(
             Box(
                 modifier = Modifier.weight(1f)
             ) {
-                HorizontalDivider(modifier = Modifier.align(Alignment.Center))
+                HorizontalDivider(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outlineVariant
+                )
                 Surface(
                     modifier = Modifier
                         .size(4.dp)
                         .align(Alignment.CenterStart),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                     shape = CircleShape,
                     content = {}
                 )
@@ -147,7 +150,7 @@ fun TripItem(
                     modifier = Modifier
                         .size(4.dp)
                         .align(Alignment.CenterEnd),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                     shape = CircleShape,
                     content = {}
                 )
@@ -161,7 +164,7 @@ fun TripItem(
                     repeat(trip.transfers) {
                         Surface(
                             modifier = Modifier.size(4.dp),
-                            color = MaterialTheme.colorScheme.primary,
+                            color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                             shape = CircleShape,
                             content = {}
                         )
@@ -264,7 +267,7 @@ fun TripItem(
                     )
                 }
 
-                if(!responseContextDto?.situation?.ptSituation?.let { trip.getPtSituationsForTrip(it) }.isNullOrEmpty()){
+                if (!responseContextDto?.situation?.ptSituation?.let { trip.getPtSituationsForTrip(it) }.isNullOrEmpty()) {
                     Icon(
                         modifier = Modifier
                             .padding(start = 2.dp)
