@@ -12,7 +12,6 @@ koin = "3.5.3"
 retrofit2 = "2.11.0"
 okHttp = "4.12.0"
 tikXml = "0.9.0_13-SNAPSHOT"
-jodaTime = "2.12.6"
 dokka = "1.9.20"
 lifecycleRuntimeKtx = "2.8.2"
 activityCompose = "1.9.0"
@@ -38,7 +37,6 @@ tikAnnotation = { module = "com.tickaroo.tikxml:annotation", version.ref = "tikX
 tikConverters = { module = "com.tickaroo.tikxml:converter-htmlescape", version.ref = "tikXml" }
 tikRetrofit = { module = "com.tickaroo.tikxml:retrofit-converter", version.ref = "tikXml" }
 tikProcessor = { module = "com.tickaroo.tikxml:processor", version.ref = "tikXml" }
-joda = { module = "joda-time:joda-time", version.ref = "jodaTime" }
 dokka = { module = "org.jetbrains.dokka:android-documentation-plugin", version.ref = "dokka" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 viewModel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
