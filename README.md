@@ -30,6 +30,19 @@ dependencies {
     implementation 'com.github.team-odmch:ojp-android:0.0.1'
 }
 ```
+- Additionally you may need to enable coreLibraryDesugaring to use Java8 features below API 26 (we use LocalDateTime for parsing)
+```
+compileOptions {
+    isCoreLibraryDesugaringEnabled = true
+    ...
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
+    ...
+}
+```
+
 ## Usage
 ### Initializing
 Initialize the SDK with your custom configuration:
