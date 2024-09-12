@@ -134,6 +134,8 @@ fun TripItem(
             Box(
                 modifier = Modifier.weight(1f)
             ) {
+                val color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+
                 HorizontalDivider(
                     modifier = Modifier.align(Alignment.Center),
                     color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outlineVariant
@@ -142,7 +144,7 @@ fun TripItem(
                     modifier = Modifier
                         .size(4.dp)
                         .align(Alignment.CenterStart),
-                    color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    color = color,
                     shape = CircleShape,
                     content = {}
                 )
@@ -150,7 +152,7 @@ fun TripItem(
                     modifier = Modifier
                         .size(4.dp)
                         .align(Alignment.CenterEnd),
-                    color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    color = color,
                     shape = CircleShape,
                     content = {}
                 )
@@ -164,7 +166,7 @@ fun TripItem(
                     repeat(trip.transfers) {
                         Surface(
                             modifier = Modifier.size(4.dp),
-                            color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                            color = color,
                             shape = CircleShape,
                             content = {}
                         )

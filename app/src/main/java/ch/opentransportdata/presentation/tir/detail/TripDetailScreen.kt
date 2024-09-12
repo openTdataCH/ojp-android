@@ -26,6 +26,7 @@ import ch.opentransportdata.presentation.components.Label
 import ch.opentransportdata.presentation.components.LabelType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.PreviewData
+import ch.opentransportdata.presentation.utils.toFormattedString
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -134,26 +135,27 @@ private fun TimedLeg(
                 .padding(vertical = 8.dp)
                 .height(IntrinsicSize.Min)
         ) {
-
             Box(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
+                val color = if (leg.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+
                 Surface(
                     modifier = Modifier.size(4.dp),
                     shape = CircleShape,
-                    color = if (leg.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                    color = color,
                     content = {}
                 )
                 VerticalDivider(
                     modifier = Modifier.padding(start = 1.5.dp, top = 1.dp, bottom = 1.dp),
-                    color = if (leg.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                    color = color
                 )
                 Surface(
                     modifier = Modifier
                         .size(4.dp)
                         .align(Alignment.BottomStart),
                     shape = CircleShape,
-                    color = if (leg.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                    color = color,
                     content = {}
                 )
             }
@@ -169,7 +171,7 @@ private fun TimedLeg(
                 duration?.let {
                     Text(
                         modifier = Modifier.padding(start = 53.dp),
-                        text = "${duration.toHoursPart()}h ${duration.toMinutesPart()}min", //Todo: create a to stringFormatter
+                        text = duration.toFormattedString(),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
