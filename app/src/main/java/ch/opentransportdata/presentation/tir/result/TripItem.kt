@@ -22,6 +22,7 @@ import ch.opentransportdata.presentation.components.Label
 import ch.opentransportdata.presentation.components.LabelType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.PreviewData
+import ch.opentransportdata.presentation.utils.toFormattedString
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -105,7 +106,7 @@ fun TripItem(
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "${trip.duration.toHours()}h ${trip.duration.toMinutes().rem(60)}min",
+                text = trip.duration.toFormattedString(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -127,7 +128,7 @@ fun TripItem(
 
                 Text(
                     modifier = Modifier.padding(end = 4.dp),
-                    text = "${trip.legs.first().duration?.toMinutesPart()}´",
+                    text = "${trip.legs.first().duration?.toFormattedString()}´",
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -186,7 +187,7 @@ fun TripItem(
 
                 Text(
                     modifier = Modifier.padding(start = 2.dp),
-                    text = "${trip.legs.last().duration?.toMinutesPart()}´",
+                    text = "${trip.legs.last().duration?.toFormattedString()}´",
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
