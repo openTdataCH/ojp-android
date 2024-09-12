@@ -20,11 +20,13 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.*
 import ch.opentransportdata.ojp.data.dto.response.tir.situations.PtSituationDto
+import ch.opentransportdata.ojp.data.dto.response.tir.situations.PublishingActionDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.presentation.components.Label
 import ch.opentransportdata.presentation.components.LabelType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.PreviewData
+import ch.opentransportdata.presentation.utils.toFormattedString
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,7 +38,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TripDetailScreen(
     trip: TripDto,
-    situations: List<PtSituationDto>?
+    situations: List<PtSituationDto>?,
+    showSituation: (PublishingActionDto) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -73,7 +76,7 @@ fun TripDetailScreen(
                     )
                 }
 
-                if (trip.legs.mapNotNull { it.legType as? TimedLegDto }.any { it.isPartCancelled }) {
+                if (trip.legs.mapNotNull { it.legType as? TimedLegDto }.any { it.isPartCancelled } && !trip.isCancelled) {
                     Label(
                         icon = Icons.Outlined.HideSource,
                         type = LabelType.RED,
@@ -103,7 +106,8 @@ fun TripDetailScreen(
                 is TimedLegDto -> TimedLeg(
                     leg = legType,
                     duration = leg.duration,
-                    situations = legType.getPtSituationsForLeg(consideredSituations)
+                    situations = legType.getPtSituationsForLeg(consideredSituations),
+                    showSituation = showSituation
                 )
             }
         }
@@ -116,40 +120,42 @@ private fun TimedLeg(
     modifier: Modifier = Modifier,
     leg: TimedLegDto,
     duration: Duration?,
-    situations: List<PtSituationDto>? = null
+    situations: List<PtSituationDto>? = null,
+    showSituation: (PublishingActionDto) -> Unit,
 ) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
         shape = RoundedCornerShape(16.dp),
-        tonalElevation = 2.dp //todo: check use 0 or 3 imo
+        tonalElevation = 2.dp
     ) {
         Row(
             modifier = Modifier
                 .padding(vertical = 8.dp)
                 .height(IntrinsicSize.Min)
         ) {
-
             Box(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
+                val color = if (leg.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+
                 Surface(
                     modifier = Modifier.size(4.dp),
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = color,
                     content = {}
                 )
                 VerticalDivider(
                     modifier = Modifier.padding(start = 1.5.dp, top = 1.dp, bottom = 1.dp),
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = color
                 )
                 Surface(
                     modifier = Modifier
                         .size(4.dp)
                         .align(Alignment.BottomStart),
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = color,
                     content = {}
                 )
             }
@@ -165,7 +171,7 @@ private fun TimedLeg(
                 duration?.let {
                     Text(
                         modifier = Modifier.padding(start = 53.dp),
-                        text = "${duration.toHoursPart()}h ${duration.toMinutesPart()}min",
+                        text = duration.toFormattedString(),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -175,30 +181,30 @@ private fun TimedLeg(
                         modifier = Modifier.padding(start = 53.dp),
                         icon = Icons.Outlined.Cancel,
                         text = "Cancelled",
-                        onSituationClicked = {}
+                        onSituationClicked = null
                     )
                 }
 
-                if (leg.isPartCancelled) {
+                if (leg.isPartCancelled && !leg.isCancelled) {
                     Situation(
                         modifier = Modifier.padding(start = 53.dp),
                         icon = Icons.Outlined.HideSource,
                         text = "Part cancelled",
-                        onSituationClicked = {}
+                        onSituationClicked = null
                     )
                 }
-                val publishingActions = situations?.filter { it.publishingActions?.publishingActions != null }
+                val publishingActions = situations
+                    ?.filter { it.publishingActions?.publishingActions != null }
                     ?.flatMap { it.publishingActions?.publishingActions!! }
 
-                publishingActions?.forEach {
+                publishingActions?.forEach { action ->
                     Situation(
                         modifier = Modifier.padding(start = 53.dp),
                         icon = Icons.Rounded.WarningAmber, //todo find better solution
-                        text = it.passengerInformationAction?.textualContent?.summaryContent?.summaryText ?: "-",
-                        onSituationClicked = {}
+                        text = action.passengerInformationAction?.textualContent?.summaryContent?.summaryText ?: "-",
+                        onSituationClicked = { showSituation(action) }
                     )
                 }
-
 
                 Spacer(modifier = Modifier.height(16.dp))
                 LegAlight(legAlight = leg.legAlight)
@@ -212,11 +218,11 @@ private fun Situation(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     text: String,
-    onSituationClicked: () -> Unit
+    onSituationClicked: (() -> Unit)?
 ) {
+    val customModifier = if (onSituationClicked != null) modifier.clickable { onSituationClicked() } else modifier
     Row(
-        modifier = modifier
-            .clickable { onSituationClicked() }
+        modifier = customModifier
             .padding(vertical = 2.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -235,7 +241,9 @@ private fun Situation(
             color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodyMedium
         )
-        Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
+        onSituationClicked?.let {
+            Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null)
+        }
 
     }
 }
@@ -268,7 +276,7 @@ private fun LegBoard(
             if (legBoard.serviceDeparture.hasDelay) {
                 Label(
                     type = LabelType.RED,
-                    text = "+ ${legBoard.serviceDeparture.delay.toMinutes()}´"
+                    text = "+${legBoard.serviceDeparture.delay.toMinutes()}´"
                 )
             }
 
@@ -317,7 +325,7 @@ private fun LegAlight(
             if (legAlight.serviceArrival.hasDelay) {
                 Label(
                     type = LabelType.RED,
-                    text = "+ ${legAlight.serviceArrival.delay.toMinutes()}´"
+                    text = "+${legAlight.serviceArrival.delay.toMinutes()}´"
                 )
             }
 
@@ -425,7 +433,8 @@ private fun TripDetailScreenPreview() {
                 delayed = false,
                 infeasible = false
             ),
-            situations = emptyList()
+            situations = emptyList(),
+            showSituation = {}
         )
     }
 }

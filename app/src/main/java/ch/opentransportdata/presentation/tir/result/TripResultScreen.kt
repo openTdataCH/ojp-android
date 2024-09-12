@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -14,9 +15,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import ch.opentransportdata.ojp.data.dto.response.tir.situations.PublishingActionDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.presentation.components.TripResultHeader
 import ch.opentransportdata.presentation.lir.name
@@ -41,6 +44,7 @@ fun TripResultScreen(
     var initialItemsLoaded by remember { mutableStateOf(false) }
     val detailBottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedTrip by remember { mutableStateOf<TripDto?>(null) }
+    var selectedAction by remember { mutableStateOf<PublishingActionDto?>(null) }
 
     if (selectedTrip != null) {
         ModalBottomSheet(
@@ -54,7 +58,8 @@ fun TripResultScreen(
         ) {
             TripDetailScreen(
                 trip = selectedTrip!!,
-                situations = state.value.tripDelivery?.responseContext?.situation?.ptSituation
+                situations = state.value.tripDelivery?.responseContext?.situation?.ptSituation,
+                showSituation = { selectedAction = it }
             )
         }
     }
@@ -177,4 +182,52 @@ fun TripResultScreen(
             viewModel.eventHandled(event.id)
         }
     }
+
+    if (selectedAction != null) {
+        SituationInfoDialog(
+            dismissAction = { selectedAction = null },
+            summaryText = selectedAction?.passengerInformationAction?.textualContent?.summaryContent?.summaryText ?: "-",
+            durationText = selectedAction?.passengerInformationAction?.textualContent?.durationContent?.durationText ?: "-",
+            reasonText = selectedAction?.passengerInformationAction?.textualContent?.reasonContent?.reasonText ?: "-",
+        )
+    }
+}
+
+@Composable
+private fun SituationInfoDialog(
+    modifier: Modifier = Modifier,
+    dismissAction: () -> Unit,
+    summaryText: String,
+    durationText: String,
+    reasonText: String
+) {
+    AlertDialog(
+        modifier = modifier,
+        onDismissRequest = dismissAction,
+        confirmButton = {
+            TextButton(onClick = dismissAction) {
+                Text(text = "OK")
+            }
+        },
+        text = {
+            Column {
+                ListItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    overlineContent = { Text(text = "Summary") },
+                    headlineContent = { Text(text = summaryText) },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+                )
+                ListItem(
+                    overlineContent = { Text(text = "Duration") },
+                    headlineContent = { Text(text = durationText) },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+                )
+                ListItem(
+                    overlineContent = { Text(text = "Reason") },
+                    headlineContent = { Text(text = reasonText) },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+                )
+            }
+        }
+    )
 }

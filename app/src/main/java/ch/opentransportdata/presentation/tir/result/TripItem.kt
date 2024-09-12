@@ -22,6 +22,7 @@ import ch.opentransportdata.presentation.components.Label
 import ch.opentransportdata.presentation.components.LabelType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.PreviewData
+import ch.opentransportdata.presentation.utils.toFormattedString
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -105,7 +106,7 @@ fun TripItem(
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "${trip.duration.toHours()}h ${trip.duration.toMinutes().rem(60)}min",
+                text = trip.duration.toFormattedString(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -127,19 +128,24 @@ fun TripItem(
 
                 Text(
                     modifier = Modifier.padding(end = 4.dp),
-                    text = "${trip.legs.first().duration?.toMinutesPart()}´",
+                    text = "${trip.legs.first().duration?.toFormattedString()}´",
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
             Box(
                 modifier = Modifier.weight(1f)
             ) {
-                HorizontalDivider(modifier = Modifier.align(Alignment.Center))
+                val color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+
+                HorizontalDivider(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = if (trip.isCancelled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outlineVariant
+                )
                 Surface(
                     modifier = Modifier
                         .size(4.dp)
                         .align(Alignment.CenterStart),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = color,
                     shape = CircleShape,
                     content = {}
                 )
@@ -147,7 +153,7 @@ fun TripItem(
                     modifier = Modifier
                         .size(4.dp)
                         .align(Alignment.CenterEnd),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = color,
                     shape = CircleShape,
                     content = {}
                 )
@@ -161,7 +167,7 @@ fun TripItem(
                     repeat(trip.transfers) {
                         Surface(
                             modifier = Modifier.size(4.dp),
-                            color = MaterialTheme.colorScheme.primary,
+                            color = color,
                             shape = CircleShape,
                             content = {}
                         )
@@ -181,7 +187,7 @@ fun TripItem(
 
                 Text(
                     modifier = Modifier.padding(start = 2.dp),
-                    text = "${trip.legs.last().duration?.toMinutesPart()}´",
+                    text = "${trip.legs.last().duration?.toFormattedString()}´",
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -264,7 +270,7 @@ fun TripItem(
                     )
                 }
 
-                if(!responseContextDto?.situation?.ptSituation?.let { trip.getPtSituationsForTrip(it) }.isNullOrEmpty()){
+                if (!responseContextDto?.situation?.ptSituation?.let { trip.getPtSituationsForTrip(it) }.isNullOrEmpty()) {
                     Icon(
                         modifier = Modifier
                             .padding(start = 2.dp)
