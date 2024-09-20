@@ -1,5 +1,7 @@
 package ch.opentransportdata.ojp.di
 
+import ch.opentransportdata.ojp.data.local.trip.LocalTripDataSource
+import ch.opentransportdata.ojp.data.local.trip.LocalTripDataSourceImpl
 import ch.opentransportdata.ojp.data.remote.location.RemoteLocationInformationDataSource
 import ch.opentransportdata.ojp.data.remote.location.RemoteLocationInformationDataSourceImpl
 import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource
@@ -12,4 +14,5 @@ import org.koin.dsl.module
 internal val dataSourceModule = module {
     single<RemoteLocationInformationDataSource> { RemoteLocationInformationDataSourceImpl(get(), get()) }
     single<RemoteTripDataSource> { RemoteTripDataSourceImpl(get(), get()) }
+    single<LocalTripDataSource> { LocalTripDataSourceImpl(get()) }
 }
