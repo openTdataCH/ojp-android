@@ -15,6 +15,7 @@ import ch.opentransportdata.presentation.utils.toOjpLanguageCode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.InputStream
 import java.time.LocalDateTime
 import java.util.Locale
 import java.util.UUID
@@ -104,6 +105,22 @@ class TripResultViewModel(
 
     fun resetPreviousItemsCounter() {
         state.update { it.copy(isLoadingPrevious = false) }
+    }
+
+    fun requestMockTrips(source: InputStream) {
+        viewModelScope.launch {
+            when (val response = MainActivity.ojpSdk.requestMockTrips(source)) {
+                is Result.Success -> {
+                    Log.d("TripResultViewModel", "Mock data successfully parsed")
+                    state.update { it.copy(tripDelivery = response.data.copy(tripResults = response.data.tripResults)) }
+                }
+
+                is Result.Error -> {
+                    Log.e("TripResultViewModel", "Error parsing mock file", response.error.exception)
+                    postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
+                }
+            }
+        }
     }
 
     fun eventHandled(id: Long) {
