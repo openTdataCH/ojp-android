@@ -7,6 +7,7 @@ import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
+import java.io.InputStream
 import java.time.LocalDateTime
 
 internal interface OjpRepository {
@@ -31,5 +32,9 @@ internal interface OjpRepository {
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
         params: TripParams?
+    ): Result<TripDeliveryDto>
+
+    suspend fun requestMockTrips(
+        stream: InputStream
     ): Result<TripDeliveryDto>
 }

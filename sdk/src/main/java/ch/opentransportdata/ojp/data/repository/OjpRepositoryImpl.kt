@@ -4,6 +4,7 @@ import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
+import ch.opentransportdata.ojp.data.local.trip.LocalTripDataSource
 import ch.opentransportdata.ojp.data.remote.location.RemoteLocationInformationDataSource
 import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource
 import ch.opentransportdata.ojp.domain.model.LanguageCode
@@ -18,6 +19,7 @@ import com.tickaroo.tikxml.XmlDataException
 import kotlinx.coroutines.CancellationException
 import retrofit2.HttpException
 import timber.log.Timber
+import java.io.InputStream
 import java.time.LocalDateTime
 
 /**
@@ -25,7 +27,8 @@ import java.time.LocalDateTime
  */
 internal class OjpRepositoryImpl(
     private val remoteDataSource: RemoteLocationInformationDataSource,
-    private val tripDataSource: RemoteTripDataSource
+    private val tripDataSource: RemoteTripDataSource,
+    private val localTripDataSource: LocalTripDataSource
 ) : OjpRepository {
 
     override suspend fun placeResultsFromSearchTerm(
@@ -89,6 +92,16 @@ internal class OjpRepositoryImpl(
         }
     }
 
+    override suspend fun requestMockTrips(stream: InputStream): Result<TripDeliveryDto> {
+        return try {
+            val response = localTripDataSource.requestMockTrips(stream)
+            val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripDeliveryDto
+            if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null"))) //todo: challenge handling
+        } catch (exception: Exception) {
+            val error = handleError(exception)
+            Result.Error(error)
+        }
+    }
 
     private fun handleError(exception: Exception): OjpError {
         return when (exception) {

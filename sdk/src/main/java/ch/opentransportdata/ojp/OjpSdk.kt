@@ -8,11 +8,9 @@ import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
-import ch.opentransportdata.ojp.domain.usecase.Initializer
-import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
-import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
-import ch.opentransportdata.ojp.domain.usecase.RequestTrips
+import ch.opentransportdata.ojp.domain.usecase.*
 import timber.log.Timber
+import java.io.InputStream
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -129,6 +127,16 @@ class OjpSdk(
      */
     suspend fun requestNextTrips(numberOfResults: Int = 5): Result<TripDeliveryDto> {
         return OjpKoinContext.koinApp.koin.get<RequestTrips>().loadNext(numberOfResults)
+    }
+
+    /**
+     * You can read an XML file of a tripRequest and use this function to get the parsed version out of it.
+     * This method is only used so you can have a real cased parsed object and for example test your UI.
+     *
+     * @param stream The xml file that should get parsed and returned
+     */
+    suspend fun requestMockTrips(stream: InputStream): Result<TripDeliveryDto> {
+        return OjpKoinContext.koinApp.koin.get<RequestMockTrips>().invoke(stream)
     }
 
 }

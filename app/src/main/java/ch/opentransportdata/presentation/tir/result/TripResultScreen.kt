@@ -16,14 +16,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import ch.opentransportdata.R
 import ch.opentransportdata.ojp.data.dto.response.tir.situations.PublishingActionDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.presentation.components.TripResultHeader
 import ch.opentransportdata.presentation.lir.name
 import ch.opentransportdata.presentation.tir.detail.TripDetailScreen
+import ch.opentransportdata.presentation.utils.FileReader
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -40,6 +43,7 @@ fun TripResultScreen(
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     val state = viewModel.state.collectAsState()
+    val context = LocalContext.current
 
     var initialItemsLoaded by remember { mutableStateOf(false) }
     val detailBottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -62,6 +66,12 @@ fun TripResultScreen(
                 showSituation = { selectedAction = it }
             )
         }
+    }
+
+    //use for testing only
+    LaunchedEffect(Unit) {
+        val source = FileReader().read(context.resources, R.raw.zuerich_bern_no_issues)
+//        viewModel.requestMockTrips(source)
     }
 
     LaunchedEffect(listState) {
