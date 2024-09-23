@@ -58,7 +58,7 @@ fun TripResultScreen(
         ) {
             TripDetailScreen(
                 trip = selectedTrip!!,
-                situations = state.value.tripDelivery?.responseContext?.situation?.ptSituation,
+                situations = state.value.tripDelivery?.responseContext?.situation?.ptSituation?.filter { it.publishingActions != null },
                 showSituation = { selectedAction = it }
             )
         }

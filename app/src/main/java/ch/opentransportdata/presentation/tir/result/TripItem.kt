@@ -270,7 +270,8 @@ fun TripItem(
                     )
                 }
 
-                if (!responseContextDto?.situation?.ptSituation?.let { trip.getPtSituationsForTrip(it) }.isNullOrEmpty()) {
+                if (!responseContextDto?.situation?.ptSituation?.filter { it.publishingActions != null }
+                        ?.let { trip.getPtSituationsForTrip(it) }.isNullOrEmpty()) {
                     Icon(
                         modifier = Modifier
                             .padding(start = 2.dp)
