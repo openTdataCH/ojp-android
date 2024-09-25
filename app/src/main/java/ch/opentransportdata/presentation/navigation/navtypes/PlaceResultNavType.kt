@@ -12,6 +12,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
+import java.util.Base64
 
 /**
  * Created by Michael Ruppen on 05.07.2024
@@ -39,7 +40,9 @@ val PlaceResultType = object : NavType<PlaceResultDto?>(isNullableAllowed = true
     }
 
     override fun parseValue(value: String): PlaceResultDto? {
-        return json.decodeFromString<PlaceResultDto?>(value)
+        //utf-8 decoding needed for location with special characters like "/"
+        val base64Decoded = String(Base64.getUrlDecoder().decode(value))
+        return json.decodeFromString<PlaceResultDto?>(base64Decoded)
     }
 
     override fun put(bundle: Bundle, key: String, value: PlaceResultDto?) {
@@ -47,7 +50,9 @@ val PlaceResultType = object : NavType<PlaceResultDto?>(isNullableAllowed = true
     }
 
     override fun serializeAsValue(value: PlaceResultDto?): String {
-        return json.encodeToString(value)
+        //utf-8 encoding needed for location with special characters like "/"
+        val jsonEncoded = json.encodeToString(value)
+        return Base64.getUrlEncoder().encodeToString(jsonEncoded.toByteArray())
     }
 
     override val name: String = PlaceResultDto::class.java.name
