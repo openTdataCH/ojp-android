@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ import ch.opentransportdata.presentation.components.Label
 import ch.opentransportdata.presentation.components.LabelType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.PreviewData
+import ch.opentransportdata.presentation.utils.icon
 import ch.opentransportdata.presentation.utils.toFormattedString
 import java.time.Duration
 import java.time.LocalDateTime
@@ -42,6 +44,9 @@ fun TripDetailScreen(
     showSituation: (PublishingActionDto) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val timedLegs = trip.legs.mapNotNull { it.legType as? TimedLegDto }
+    val attributes = timedLegs.flatMap { it.service.attributes ?: emptyList() }.filter { it.icon() != null }.distinct()
+
     Column(
         modifier = Modifier
             .navigationBarsPadding()
@@ -76,14 +81,14 @@ fun TripDetailScreen(
                     )
                 }
 
-                if (trip.legs.mapNotNull { it.legType as? TimedLegDto }.any { it.isPartCancelled } && !trip.isCancelled) {
+                if (timedLegs.any { it.isPartCancelled } && !trip.isCancelled) {
                     Label(
                         icon = Icons.Outlined.HideSource,
                         type = LabelType.RED,
                         text = "Stops skipped"
                     )
                 }
-                if (trip.legs.mapNotNull { it.legType as? TimedLegDto }.any { it.hasAnyPlatformChanges }) {
+                if (timedLegs.any { it.hasAnyPlatformChanges }) {
                     Label(
                         icon = Icons.Outlined.Shuffle,
                         type = LabelType.RED,
@@ -111,10 +116,15 @@ fun TripDetailScreen(
                 )
             }
         }
+
+        if (attributes.isNotEmpty()) {
+            Attributes(attributes = attributes)
+        }
         Spacer(modifier = Modifier.height(48.dp))
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TimedLeg(
     modifier: Modifier = Modifier,
@@ -123,6 +133,7 @@ private fun TimedLeg(
     situations: List<PtSituationDto>? = null,
     showSituation: (PublishingActionDto) -> Unit,
 ) {
+    val attributes = leg.service.attributes?.filter { it.icon() != null } ?: emptyList()
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -175,6 +186,20 @@ private fun TimedLeg(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
+                }
+                if (attributes.isNotEmpty()) {
+                    FlowRow(
+                        modifier = Modifier.padding(start = 53.dp),
+                        horizontalArrangement = Arrangement.spacedBy(3.dp)
+                    ) {
+                        attributes.forEach { attribute ->
+                            Icon(
+                                modifier = Modifier.height(24.dp),
+                                painter = painterResource(attribute.icon()!!),
+                                contentDescription = null
+                            )
+                        }
+                    }
                 }
                 if (leg.isCancelled) {
                     Situation(
@@ -400,6 +425,48 @@ private fun TransferLeg(
             color = MaterialTheme.colorScheme.onSurface
         )
     }
+}
+
+@Composable
+private fun Attributes(
+    modifier: Modifier = Modifier,
+    attributes: List<AttributeDto>
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+        ) {
+            Text(
+                modifier = Modifier.padding(bottom = 4.dp),
+                text = "Legend",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            attributes.forEach {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier.width(20.dp),
+                        painter = painterResource(it.icon()!!),
+                        contentDescription = null
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = it.userText.text,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        }
+    }
+
 }
 
 @Composable
