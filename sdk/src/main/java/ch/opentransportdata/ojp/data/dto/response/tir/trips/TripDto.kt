@@ -111,6 +111,7 @@ data class TripDto(
                     result = 31 * result + legType.legBoard.serviceDeparture.timetabledTime.hashCode()
                     result = 31 * result + legType.legAlight.serviceArrival.timetabledTime.hashCode()
                     result = 31 * result + legType.legAlight.stopPointName.text.hashCode()
+                    legType.service.trainNumber?.let { result = 31 * result + it.hashCode() }
                 }
 
                 is TransferLegDto -> {
