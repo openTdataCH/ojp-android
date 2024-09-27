@@ -6,10 +6,10 @@ This SDK is targeting Android applications seeking to integrate [Open Journey Pl
 ### Features
 Available APIs:
 - [Location Information Request](https://opentransportdata.swiss/en/cookbook/location-information-service/)
+- [Trip Request](https://opentransportdata.swiss/en/cookbook/ojptriprequest/)
 
 Coming soon:
 - [Stop Event Request](https://opentransportdata.swiss/en/cookbook/ojp-stopeventservice/)
-- [Trip Request](https://opentransportdata.swiss/en/cookbook/ojptriprequest/)
 - [TripInfo Request](https://opentransportdata.swiss/en/cookbook/ojptripinforequest/)
 
 ## Requirements
@@ -27,7 +27,7 @@ allprojects {
 - Now you can add the OJP dependency:
 ```
 dependencies {
-    implementation 'com.github.team-odmch:ojp-android:0.0.1'
+    implementation 'com.github.openTdataCH:ojp-android:0.1.9'
 }
 ```
 - Additionally you may need to enable coreLibraryDesugaring to use Java8 features below API 26 (we use LocalDateTime for parsing)
@@ -63,14 +63,56 @@ OjpSdk(
 ```
 import ch.opentransportdata.ojp.OjpSdk
 
-requestLocationsFromSearchTerm(term = "Bern")                
+requestLocationsFromSearchTerm(
+    term = "Bern",
+    restrictions = LocationInformationParams(
+        types = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS),
+        numberOfResults = 10,
+        ptModeIncluded = true
+    )
+)                
 ```
 
-- Get a list of Locations around a place with longitude and latitude
+- Get a list of locations around a place with longitude and latitude
 ```
 import ch.opentransportdata.ojp.OjpSdk
 
-requestLocationsFromCoordinates(longitude = 5.6, latitude = 2.3)      
+requestLocationsFromCoordinates(
+    longitude = 5.6,
+    latitude = 2.3,
+    restrictions = LocationInformationParams(
+        types = listOf(PlaceTypeRestriction.STOP),
+        numberOfResults = 10,
+        ptModeIncluded = true
+    )
+)      
+```
+
+- Get a list of trips including disruption messages
+```
+import ch.opentransportdata.ojp.OjpSdk
+
+requestTrips(
+    origin = PlaceReferenceDto(
+        ref = "8507000",
+        stationName = NameDto(text = "Bern") ,
+        position =  null
+    ),
+    destination = PlaceReferenceDto(
+        ref = "8500010",
+        stationName = NameDto(text = "Basel SBB") ,
+        position =  null
+    ),
+    via = null,
+    time = LocalDateTime.now(),
+    params = TripParams(
+        numberOfResults = 10,
+        includeIntermediateStops = true,
+        includeAllRestrictedLines = true,
+        useRealtimeData = RealtimeData.EXPLANATORY
+    ),
+    languageCode = LanguageCode.EN
+)     
 ```
 
 ## Documentation
