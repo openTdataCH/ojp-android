@@ -157,7 +157,20 @@ object PreviewData {
                 originText = NameDto(text = "Basel SBB"),
                 destinationText = NameDto(text = "Olten"),
                 journeyRef = "ch:1:sjyid:100061:2335-001",
-                attributes = emptyList(),
+                attributes = listOf(
+                    AttributeDto(
+                        userText = NameDto("Family Coach with play area"),
+                        code = "A__FA"
+                    ),
+                    AttributeDto(
+                        userText = NameDto("Quiet zone in 1st class"),
+                        code = "A__RZ"
+                    ),
+                    AttributeDto(
+                        userText = NameDto("Free Internet with the SBB FreeSurf app"),
+                        code = "A__FS"
+                    ),
+                ),
                 vehicleRef = null,
                 situationFullRefWrapper = null,
                 cancelled = false,
@@ -228,7 +241,32 @@ object PreviewData {
                 originText = NameDto(text = "Basel SBB"),
                 destinationText = NameDto(text = "Olten"),
                 journeyRef = "ch:1:sjyid:100061:2335-001",
-                attributes = emptyList(),
+                attributes = listOf(
+                    AttributeDto(
+                        userText = NameDto("Place reservation possible"),
+                        code = "A___R"
+                    ),
+                    AttributeDto(
+                        userText = NameDto("Family Coach with play area"),
+                        code = "A__FA"
+                    ),
+                    AttributeDto(
+                        userText = NameDto("Quiet zone in 1st class"),
+                        code = "A__RZ"
+                    ),
+                    AttributeDto(
+                        userText = NameDto("Free Internet with the SBB FreeSurf app"),
+                        code = "A__FS"
+                    ),
+                    AttributeDto(
+                        userText = NameDto("Business zone in 1st class"),
+                        code = "A__BZ"
+                    ),
+                    AttributeDto(
+                        userText = NameDto("Restaurant"),
+                        code = "A__WR"
+                    ),
+                ),
                 vehicleRef = null,
                 situationFullRefWrapper = null,
                 cancelled = true,
