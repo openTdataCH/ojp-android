@@ -3,6 +3,7 @@ package ch.opentransportdata.ojp
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.ojp.di.context.OjpKoinContext
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
@@ -139,4 +140,14 @@ class OjpSdk(
         return OjpKoinContext.koinApp.koin.get<RequestMockTrips>().invoke(stream)
     }
 
+    suspend fun updateTripData(
+        languageCode: LanguageCode = LanguageCode.DE,
+        origin: PlaceReferenceDto,
+        destination: PlaceReferenceDto,
+        via: PlaceReferenceDto?,
+        params: TripParams?,
+        trip: TripDto,
+    ): Result<TripDeliveryDto> {
+        return OjpKoinContext.koinApp.koin.get<UpdateTrip>().invoke(languageCode, origin, destination, via, params, trip)
+    }
 }

@@ -42,6 +42,7 @@ fun TripDetailScreen(
     trip: TripDto,
     situations: List<PtSituationDto>?,
     showSituation: (PublishingActionDto) -> Unit,
+    requestTripUpdate: (TripDto) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val timedLegs = trip.legs.mapNotNull { it.legType as? TimedLegDto }
@@ -53,6 +54,9 @@ fun TripDetailScreen(
             .verticalScroll(scrollState)
     ) {
         val consideredSituations = situations?.let { trip.getPtSituationsForTrip(it) } ?: emptyList()
+        Button(onClick = {requestTripUpdate(trip)}) {
+            Text("Update Trip")
+        }
         if (trip.hasAnyDisruption) {
             Text(
                 modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
@@ -501,7 +505,8 @@ private fun TripDetailScreenPreview() {
                 infeasible = false
             ),
             situations = emptyList(),
-            showSituation = {}
+            showSituation = {},
+            requestTripUpdate = {}
         )
     }
 }

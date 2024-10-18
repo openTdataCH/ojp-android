@@ -14,4 +14,5 @@ internal val useCaseModule = module {
     factoryOf(::RequestLocationsFromCoordinates)
     singleOf(::RequestTrips)
     factoryOf(::RequestMockTrips)
+    factoryOf(::UpdateTrip)
 }

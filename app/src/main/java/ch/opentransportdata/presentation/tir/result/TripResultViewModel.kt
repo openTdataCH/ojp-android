@@ -9,6 +9,7 @@ import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
+import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.ojp.domain.model.*
 import ch.opentransportdata.presentation.MainActivity
 import ch.opentransportdata.presentation.utils.toOjpLanguageCode
@@ -117,6 +118,53 @@ class TripResultViewModel(
 
                 is Result.Error -> {
                     Log.e("TripResultViewModel", "Error parsing mock file", response.error.exception)
+                    postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
+                }
+            }
+        }
+    }
+
+    fun requestTripUpdate(trip: TripDto) {
+        val originRef = PlaceReferenceDto(
+            ref = (origin!!.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+            stationName = (origin!!.place.placeType as? StopPlaceDto)?.name,
+            position = origin!!.place.position
+        )
+        val destinationRef = PlaceReferenceDto(
+            ref = (destination!!.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+            stationName = (destination!!.place.placeType as? StopPlaceDto)?.name,
+            position = destination!!.place.position
+        )
+        val viaRef = via?.let {
+            PlaceReferenceDto(
+                ref = (it.place.placeType as? StopPlaceDto)?.stopPlaceRef,
+                stationName = (it.place.placeType as? StopPlaceDto)?.name,
+                position = it.place.position
+            )
+        }
+
+        viewModelScope.launch {
+            when (val response = MainActivity.ojpSdk.updateTripData(
+                languageCode = LanguageCode.EN,
+                origin = originRef,
+                destination = destinationRef,
+                via = viaRef,
+                params = TripParams(
+                    numberOfResults = 10,
+                    includeIntermediateStops = true,
+                    includeAllRestrictedLines = true,
+                    modeAndModeOfOperationFilter = null,
+                    useRealtimeData = RealtimeData.EXPLANATORY
+                ),
+                trip = trip,
+            )) {
+                is Result.Success -> {
+                    Log.d("TripResultViewModel", "Trip update successful")
+//                    state.update { it.copy(tripDelivery = response.data.copy(tripResults = response.data.tripResults)) }
+                }
+
+                is Result.Error -> {
+                    Log.e("TripResultViewModel", "Error updating trip", response.error.exception)
                     postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
                 }
             }
