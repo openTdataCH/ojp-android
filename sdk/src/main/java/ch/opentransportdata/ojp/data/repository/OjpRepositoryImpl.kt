@@ -85,7 +85,7 @@ internal class OjpRepositoryImpl(
                 params = params
             )
             val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripDeliveryDto
-            if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null"))) //todo: challenge handling
+            if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null")))
         } catch (exception: Exception) {
             val error = handleError(exception)
             Result.Error(error)
@@ -96,7 +96,7 @@ internal class OjpRepositoryImpl(
         return try {
             val response = localTripDataSource.requestMockTrips(stream)
             val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripDeliveryDto
-            if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null"))) //todo: challenge handling
+            if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null")))
         } catch (exception: Exception) {
             val error = handleError(exception)
             Result.Error(error)
