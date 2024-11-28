@@ -20,6 +20,9 @@ data class PublishingActionsDto(
 @Parcelize
 @Xml(name = "siri:PublishingAction")
 data class PublishingActionDto(
+    // TODO Make this mandatory after updating the mock files
+    @Element(name = "siri:PublishAtScope")
+    val publishAtScope: PublishAtScope?,
     @Element(name = "siri:PassengerInformationAction")
     val passengerInformationAction: PassengerInformationActionDto?
 ) : Parcelable
