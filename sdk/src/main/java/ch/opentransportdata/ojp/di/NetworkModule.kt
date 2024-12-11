@@ -68,6 +68,7 @@ internal fun provideTikXml(initializer: Initializer): TikXml {
         .addTypeConverter(TransferType::class.java, TransferTypeConverter())
         .addTypeConverter(ConventionalModesOfOperation::class.java, ConventionalModesOfOperationConverter())
         .addTypeConverter(RealtimeData::class.java, RealTimeDataConverter())
+        .addTypeConverter(ScopeType::class.java, ScopeTypeConverter())
         .exceptionOnUnreadXml(false)
         .build()
 }

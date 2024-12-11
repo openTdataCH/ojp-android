@@ -20,5 +20,5 @@ enum class PtMode {
     FUNICULAR,
     TAXI,
     SELF_DRIVE,
-    ALL,
+    ALL
 }

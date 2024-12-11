@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.situations
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.domain.model.ScopeType
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
@@ -24,19 +25,15 @@ data class PtSituationDto(
     @Element(name = "siri:Source")
     val source: SourceDto?,
     @Element(name = "siri:ValidityPeriod")
-    val validityPeriod: List<ValidityPeriodDto>, 
+    val validityPeriod: List<ValidityPeriodDto>,
     @PropertyElement(name = "siri:AlertCause")
     val alertCause: String?,
     @PropertyElement(name = "siri:Priority")
     val priority: Int?,
-    @PropertyElement(name = "siri:ScopeType")
-    val scopeType: String?,
+    @PropertyElement(name = "ScopeType")
+    val scopeType: ScopeType?,
     @PropertyElement(name = "siri:Language")
     val language: String?,
-    @Element(name = "siri:Affects")
-    val affects: AffectsDto?,
-    @Element(name = "siri:Consequences")
-    val consequences: ConsequencesDto?,
     @Element(name = "siri:PublishingActions")
     val publishingActions: PublishingActionsDto?
-): Parcelable
+) : Parcelable
