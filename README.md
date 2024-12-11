@@ -46,7 +46,6 @@ dependencies {
 ## Usage
 ### Initializing
 Initialize the SDK with your custom configuration:
-
 ```
 OjpSdk(
     baseUrl = "Your Base URL",
@@ -55,7 +54,8 @@ OjpSdk(
     httpHeaders = hashMapOf(
     	"Authorization" to "Bearer myAccessToken",
     	"Custom-Header" to "CustomValue"
-    )
+    ),
+    defaultTimeZone = ZoneId.of("Europe/Zurich")
 )   
 ```
 ### Basic Usage
@@ -64,6 +64,7 @@ OjpSdk(
 import ch.opentransportdata.ojp.OjpSdk
 
 requestLocationsFromSearchTerm(
+    languageCode = LanguageCode.EN,
     term = "Bern",
     restrictions = LocationInformationParams(
         types = listOf(PlaceTypeRestriction.STOP, PlaceTypeRestriction.ADDRESS),
@@ -78,6 +79,7 @@ requestLocationsFromSearchTerm(
 import ch.opentransportdata.ojp.OjpSdk
 
 requestLocationsFromCoordinates(
+    languageCode = LanguageCode.EN,
     longitude = 5.6,
     latitude = 2.3,
     restrictions = LocationInformationParams(
@@ -93,6 +95,7 @@ requestLocationsFromCoordinates(
 import ch.opentransportdata.ojp.OjpSdk
 
 requestTrips(
+    languageCode = LanguageCode.EN
     origin = PlaceReferenceDto(
         ref = "8507000",
         stationName = NameDto(text = "Bern") ,
@@ -105,14 +108,21 @@ requestTrips(
     ),
     via = null,
     time = LocalDateTime.now(),
+    isSearchForDepartureTime = true,
     params = TripParams(
         numberOfResults = 10,
         includeIntermediateStops = true,
         includeAllRestrictedLines = true,
         useRealtimeData = RealtimeData.EXPLANATORY
     ),
-    languageCode = LanguageCode.EN
 )     
+```
+
+- Get a list of mocked trips for testing purposes 
+```
+import ch.opentransportdata.ojp.OjpSdk
+
+requestMockTrips(stream = source)
 ```
 
 ## Documentation
