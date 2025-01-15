@@ -27,7 +27,7 @@ allprojects {
 - Now you can add the OJP dependency:
 ```
 dependencies {
-    implementation 'com.github.openTdataCH:ojp-android:1.0.2'
+    implementation 'com.github.openTdataCH:ojp-android:1.0.3'
 }
 ```
 - Additionally you may need to enable coreLibraryDesugaring to use Java8 features below API 26 (we use LocalDateTime for parsing)
