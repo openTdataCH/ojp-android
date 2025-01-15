@@ -1,10 +1,13 @@
 package ch.opentransportdata.ojp.domain.model
 
+import android.os.Parcelable
 import androidx.annotation.IntRange
+import kotlinx.parcelize.Parcelize
 
 /**
  * Created by Michael Ruppen on 07.06.2024
  */
+@Parcelize
 data class TripParams(
     @IntRange(from = 0, to = 100)
     val numberOfResults: Int? = null,
@@ -19,4 +22,4 @@ data class TripParams(
     val includeAllRestrictedLines: Boolean = false,
     val useRealtimeData: RealtimeData? = null,
     val modeAndModeOfOperationFilter: List<ModeAndModeOfOperationFilter>?
-)
+) : Parcelable
