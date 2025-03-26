@@ -37,4 +37,10 @@ data class StopPointDto(
     val lighting: Boolean?,
     @PropertyElement(name = "Covered")
     val covered: Boolean?
-) : AbstractPlaceDto()
+) : AbstractPlaceDto() {
+
+    fun List<StopPointDto>?.findParentStation(stopPointRef: String): String {
+        val match = this?.firstOrNull { it.stopPointRef == stopPointRef }
+        return match?.parentRef ?: stopPointRef
+    }
+}
