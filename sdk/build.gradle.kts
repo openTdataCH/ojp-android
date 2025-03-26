@@ -14,11 +14,11 @@ private val versionName = "1.0.3"
 
 android {
     namespace = "ch.opentransportdata.ojp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 23
-        lint.targetSdk = 34
+        lint.targetSdk = 35
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         this.buildConfigField("String", "VERSION_NAME", "\"$versionName\"")

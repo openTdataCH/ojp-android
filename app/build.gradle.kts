@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "ch.opentransportdata"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ch.opentransportdata"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.navigation)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.accompanist.permission)
+    implementation(libs.accompanist.system.ui)
     implementation(libs.play.services)
     implementation(libs.viewModel.compose)
     implementation(libs.compose.icons)
