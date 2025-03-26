@@ -17,24 +17,26 @@ import kotlinx.serialization.Serializable
 @Parcelize
 @Xml(name = "Address")
 data class AddressDto(
+    @Element(name = "PrivateCode")
+    override val privateCodes: List<PrivateCodeDto>? = emptyList(),
     @PropertyElement(name = "PublicCode")
     val publicCode: String,
     @Element(name = "Name")
     val name: NameDto,
+    @Element(name = "NameSuffix")
+    val nameSuffix: NameDto? = null,
     @PropertyElement(name = "CountryName")
-    val countryName: String?,
+    val countryName: String? = null,
     @PropertyElement(name = "PostCode")
-    val postCode: String?,
-    @PropertyElement(name = "TopographicPlaceName")
-    val topographicPlaceName: String?,
+    val postCode: String? = null,
+    @Element(name = "TopographicPlaceName")
+    val topographicPlaceName: NameDto? = null,
     @PropertyElement(name = "TopographicPlaceRef")
-    val topographicPlaceRef: String?,
+    val topographicPlaceRef: String? = null,
     @PropertyElement(name = "Street")
-    val street: String?,
+    val street: String? = null,
     @PropertyElement(name = "HouseNumber")
-    val houseNumber: String?,
+    val houseNumber: String? = null,
     @PropertyElement(name = "CrossRoad")
-    val crossRoad: String?,
-    @Element(name = "PrivateCode")
-    override val privateCodes: List<PrivateCodeDto>? = emptyList()
+    val crossRoad: String? = null
 ) : AbstractPlaceDto()

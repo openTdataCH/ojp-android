@@ -1,5 +1,7 @@
 package ch.opentransportdata.ojp.data.dto.response.tir
 
+import ch.opentransportdata.ojp.data.dto.response.PlaceDto
+import ch.opentransportdata.ojp.data.dto.response.PlacesDto
 import ch.opentransportdata.ojp.data.dto.response.tir.situations.SituationDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.Xml
@@ -10,5 +12,7 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "TripResponseContext")
 data class TripResponseContextDto(
     @Element(name = "Situations")
-    val situation: SituationDto
+    val situation: SituationDto? = null,
+    @Element(name = "Places")
+    val places: PlacesDto? = null
 )

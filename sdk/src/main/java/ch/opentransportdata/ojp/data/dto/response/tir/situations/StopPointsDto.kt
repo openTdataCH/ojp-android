@@ -12,5 +12,5 @@ import kotlinx.parcelize.Parcelize
 @Xml(name = "siri:StopPoints")
 data class StopPointsDto(
     @Element(name = "siri:AffectedStopPoint")
-    val affectedStops: List<AffectedStopPointDto>?
+    val affectedStops: List<AffectedStopPointDto>? = emptyList()
 ) : Parcelable

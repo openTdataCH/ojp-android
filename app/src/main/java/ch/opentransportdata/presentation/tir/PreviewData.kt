@@ -1,9 +1,20 @@
 package ch.opentransportdata.presentation.tir
 
-import ch.opentransportdata.ojp.data.dto.response.*
+import ch.opentransportdata.ojp.data.dto.response.GeoPositionDto
+import ch.opentransportdata.ojp.data.dto.response.ModeDto
+import ch.opentransportdata.ojp.data.dto.response.NameDto
+import ch.opentransportdata.ojp.data.dto.response.PlaceDto
+import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
 import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
-import ch.opentransportdata.ojp.data.dto.response.tir.leg.*
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.AttributeDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.DatedJourneyDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.LegAlightDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.LegBoardDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.LegStartEndDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.ServiceTimeDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
 import ch.opentransportdata.ojp.domain.model.PtMode
 import ch.opentransportdata.ojp.domain.model.TransferType
 import java.time.Duration
@@ -16,11 +27,15 @@ object PreviewData {
 
     val boatLocation = PlaceResultDto(
         place = PlaceDto(
-            placeType = StopPlaceDto(
+            stopPlace = StopPlaceDto(
                 stopPlaceRef = "8507150",
                 name = NameDto("Thun (See)"),
+                nameSuffix = null,
                 privateCodes = emptyList(),
-                topographicPlaceRef = null
+                topographicPlaceRef = null,
+                wheelchairAccessible = null,
+                lighting = null,
+                covered = null
             ),
             name = NameDto("Thun (See) (Thun)"),
             position = GeoPositionDto(longitude = 7.63132, latitude = 46.75411),
@@ -31,11 +46,15 @@ object PreviewData {
     )
     val trainLocation = PlaceResultDto(
         place = PlaceDto(
-            placeType = StopPlaceDto(
-                stopPlaceRef = "8507100",
-                name = NameDto("Thun"),
+            stopPlace = StopPlaceDto(
+                stopPlaceRef = "8571393",
+                name = NameDto("Bern, Eigerplatz"),
+                nameSuffix = null,
                 privateCodes = emptyList(),
-                topographicPlaceRef = null
+                topographicPlaceRef = null,
+                wheelchairAccessible = null,
+                lighting = null,
+                covered = null
             ),
             name = NameDto("Thun (Thun)"),
             position = GeoPositionDto(longitude = 7.62961, latitude = 46.75485),
@@ -47,11 +66,15 @@ object PreviewData {
 
     val tramLocation = PlaceResultDto(
         place = PlaceDto(
-            placeType = StopPlaceDto(
+            stopPlace = StopPlaceDto(
                 stopPlaceRef = "8571393",
                 name = NameDto("Bern, Eigerplatz"),
+                nameSuffix = null,
                 privateCodes = emptyList(),
-                topographicPlaceRef = null
+                topographicPlaceRef = null,
+                wheelchairAccessible = null,
+                lighting = null,
+                covered = null
             ),
             name = NameDto("Bern, Eigerplatz (Bern)"),
             position = GeoPositionDto(longitude = 7.43099, latitude = 46.94114),
@@ -63,11 +86,15 @@ object PreviewData {
 
     val busLocation = PlaceResultDto(
         place = PlaceDto(
-            placeType = StopPlaceDto(
+            stopPlace = StopPlaceDto(
                 stopPlaceRef = "8579896",
                 name = NameDto("Bern, Hirschengraben"),
+                nameSuffix = null,
                 privateCodes = emptyList(),
-                topographicPlaceRef = null
+                topographicPlaceRef = null,
+                wheelchairAccessible = null,
+                lighting = null,
+                covered = null
             ),
             name = NameDto("Bern, Hirschengraben (Bern)"),
             position = GeoPositionDto(longitude = 7.43778, latitude = 46.94607),
@@ -76,7 +103,6 @@ object PreviewData {
         complete = true,
         probability = 0.748
     )
-
 
     val transferLeg = LegDto(
         id = "111",

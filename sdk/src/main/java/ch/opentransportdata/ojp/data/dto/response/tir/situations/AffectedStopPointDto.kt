@@ -12,5 +12,5 @@ import kotlinx.parcelize.Parcelize
 @Xml(name = "siri:AffectedStopPoint")
 data class AffectedStopPointDto(
     @PropertyElement(name = "siri:StopPointRef")
-    val stopPointRef: String?
+    val stopPointRef: String? = null
 ) : Parcelable

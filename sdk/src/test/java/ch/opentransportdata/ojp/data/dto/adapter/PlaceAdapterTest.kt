@@ -9,6 +9,7 @@ import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
 import ch.opentransportdata.ojp.data.dto.response.PlaceDto
 import ch.opentransportdata.ojp.data.dto.response.place.AddressDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
+import ch.opentransportdata.ojp.data.dto.response.place.TopographicPlaceDto
 import ch.opentransportdata.ojp.domain.model.PtMode
 import com.tickaroo.tikxml.TikXml
 import org.junit.Assert.assertThrows
@@ -62,7 +63,7 @@ internal class PlaceAdapterTest {
         val stopPlace = result.placeType as AddressDto
         assertThat(stopPlace.name.text).isEqualTo("Bern, Eichholzstrasse")
         assertThat(stopPlace.postCode).isEqualTo("3032 3027")
-        assertThat(stopPlace.topographicPlaceName).isEqualTo("Bern")
+        assertThat(stopPlace.topographicPlaceName?.text).isEqualTo("Bern")
         assertThat(stopPlace.topographicPlaceRef).isEqualTo("23006351:-1")
         assertThat(stopPlace.street).isEqualTo("Eichholzstrasse")
         assertThat(stopPlace.countryName).isNull()
@@ -107,7 +108,7 @@ internal class PlaceAdapterTest {
     }
 
     @Test
-    fun `Unknown type topographic place, parsing successful`() {
+    fun `TopographicPlace type, parsing successful`() {
         // GIVEN
         val xmlFile = "src/test/resources/adapter/place/topographic_place.xml"
         val bufferedSource = TestUtils().readXmlFile(xmlFile)
@@ -117,7 +118,12 @@ internal class PlaceAdapterTest {
 
         // ASSERTION
         assertThat(result).isNotNull()
-        assertThat(result.placeType).isNull()
+        assertThat(result.placeType?.javaClass).isEqualTo(TopographicPlaceDto::class.java)
+
+        val topographicPlace = result.placeType as TopographicPlaceDto
+        assertThat(topographicPlace.name.text).isEqualTo("Bernlohe (Aalen)")
+        assertThat(topographicPlace.privateCodes).isNull()
+        assertThat(topographicPlace.ref).isNull()
 
         assertThat(result.name.text).isEqualTo("Bernlohe (Aalen)")
         assertThat(result.position.latitude).isEqualTo(10.16666)
