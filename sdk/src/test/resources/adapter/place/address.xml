@@ -7,7 +7,9 @@
             <Text xml:lang="de">Bern, Eichholzstrasse</Text>
         </Name>
         <PostCode>3032 3027</PostCode>
-        <TopographicPlaceName>Bern</TopographicPlaceName>
+        <TopographicPlaceName>
+            <Text xml:lang="de">Bern</Text>
+        </TopographicPlaceName>
         <TopographicPlaceRef>23006351:-1</TopographicPlaceRef>
         <Street>Eichholzstrasse</Street>
     </Address>
