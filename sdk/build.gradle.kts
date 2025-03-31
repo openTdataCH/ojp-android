@@ -59,6 +59,10 @@ android {
         outputDirectory.set(file("$rootDir/docs/html"))
         moduleName.set("OJP Android SDK")
     }
+
+    tasks.withType<AbstractPublishToMaven>().configureEach {
+        dependsOn("assembleRelease")
+    }
 }
 
 dependencies {
