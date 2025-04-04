@@ -81,11 +81,6 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
 }
 
-tasks.register<Jar>("sourcesJar") {
-    archiveClassifier.set("sources")
-    from(android.sourceSets["main"].java.srcDirs)
-}
-
 tasks.register<Jar>("javadocJar") {
     archiveClassifier.set("javadoc")
     from(tasks.dokkaHtml.get().outputDirectory)
@@ -102,15 +97,11 @@ publishing {
                 from(components["release"])
             }
 
-            artifact(tasks.named("sourcesJar")) {
-                builtBy(tasks.named("sourcesJar"))
-            }
             artifact(tasks.named("javadocJar")) {
                 builtBy(tasks.named("javadocJar"))
             }
 
             tasks.named("generateMetadataFileForReleaseOjpSdkPublication").configure {
-                dependsOn(tasks.named("sourcesJar"))
                 dependsOn(tasks.named("javadocJar"))
             }
 
