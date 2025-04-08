@@ -72,7 +72,7 @@ dependencies {
     implementation(libs.tikRetrofit)
     implementation(libs.tikAnnotation)
     implementation(libs.tikConverters)
-    kapt(libs.tikProcessor) //needed for TypeAdapter creation
+    kapt(libs.tikProcessor) // needed for TypeAdapter creation
     implementation(libs.dokka)
     implementation(libs.kotlinx.serialization.json)
 
@@ -126,8 +126,8 @@ publishing {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/openTdataCH/ojp-android.git")
-                    developerConnection.set("scm:git:ssh://git@github.com:openTdataCH/ojp-android.git")
+                    connection.set(project.property("POM_SCM_CONNECTION") as String)
+                    developerConnection.set(project.property("POM_SCM_DEV_CONNECTION") as String)
                     url.set(project.property("POM_URL") as String)
                 }
             }
