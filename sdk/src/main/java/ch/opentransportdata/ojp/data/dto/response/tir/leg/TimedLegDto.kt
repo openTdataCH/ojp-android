@@ -43,3 +43,13 @@ data class TimedLegDto(
         return situations.filter { situation -> situationRefsOfTrip.contains(situation.situationNumber) }
     }
 }
+
+fun TimedLegDto.minimalCopy(): TimedLegDto {
+    return TimedLegDto(
+        legBoard = legBoard.minimalCopy(),
+        legIntermediate = emptyList(),
+        legAlight = legAlight.minimalCopy(),
+        service = service.minimalCopy(),
+        legTrack = null
+    )
+}

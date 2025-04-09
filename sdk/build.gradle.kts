@@ -1,4 +1,6 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidLibrary)
@@ -21,8 +23,12 @@ android {
         lint.targetSdk = 35
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        this.buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").reader())
+        val apiKey = properties.getProperty("apiKey")
 
+        this.buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
+        this.buildConfigField( "String", "API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {

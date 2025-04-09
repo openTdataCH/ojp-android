@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.data.dto.response.tir
 
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.AbstractTripDto
+import ch.opentransportdata.ojp.data.dto.response.tir.trips.minimalCopy
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
@@ -19,3 +20,10 @@ data class TripResultDto(
     @PropertyElement(name = "IsAlternativeOption")
     val isAlternativeOption: Boolean?
 )
+
+val TripResultDto.minimalTripResult: TripResultDto
+    get() = TripResultDto(
+        trip = trip.minimalCopy(),
+        id = id,
+        isAlternativeOption = null
+    )

@@ -103,7 +103,7 @@ internal class OjpSdkTest {
             val ojpSdk = OjpSdk(
                 baseUrl = "https://odpch-api.clients.liip.ch/",
                 endpoint = "ojp20-beta",
-                httpHeaders = hashMapOf("Authorization" to "Bearer eyJvcmciOiI2M2Q4ODhiMDNmZmRmODAwMDEzMDIwODkiLCJpZCI6IjUzYzAyNWI2ZTRhNjQyOTM4NzMxMDRjNTg2ODEzNTYyIiwiaCI6Im11cm11cjEyOCJ9"),
+                httpHeaders = hashMapOf("Authorization" to BuildConfig.API_KEY),
                 requesterReference = "OJP_Demo"
             )
             val term = "Bern"

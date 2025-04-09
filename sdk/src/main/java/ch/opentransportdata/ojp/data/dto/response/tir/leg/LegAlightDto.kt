@@ -47,3 +47,24 @@ data class LegAlightDto(
     val mergedQuay: NameDto?
         get() = estimatedQuay ?: plannedQuay
 }
+
+fun LegAlightDto.minimalCopy(): LegAlightDto {
+    return LegAlightDto(
+        stopPointRef = stopPointRef,
+        stopPointName = stopPointName,
+        serviceArrival = ServiceTimeDto(
+            timetabledTime = serviceArrival.timetabledTime,
+            estimatedTime = serviceArrival.estimatedTime
+        ),
+        plannedQuay = null,
+        estimatedQuay = null,
+        nameSuffix = null,
+        serviceDeparture = null,
+        order = null,
+        requestStop = null,
+        unplannedStop = null,
+        notServicedStop = null,
+        noBoardingAtStop = null,
+        noAlightingAtStop = null,
+    )
+}

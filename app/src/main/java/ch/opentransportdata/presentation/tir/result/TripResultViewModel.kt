@@ -126,20 +126,20 @@ class TripResultViewModel(
 
     fun requestTripUpdate(trip: TripDto) {
         val originRef = PlaceReferenceDto(
-            ref = (origin!!.place.placeType as? StopPlaceDto)?.stopPlaceRef,
-            stationName = (origin!!.place.placeType as? StopPlaceDto)?.name,
-            position = origin!!.place.position
+            ref = (origin!!.place?.placeType as? StopPlaceDto)?.stopPlaceRef,
+            stationName = (origin!!.place?.placeType as? StopPlaceDto)?.name,
+            position = origin!!.place?.position
         )
         val destinationRef = PlaceReferenceDto(
-            ref = (destination!!.place.placeType as? StopPlaceDto)?.stopPlaceRef,
-            stationName = (destination!!.place.placeType as? StopPlaceDto)?.name,
-            position = destination!!.place.position
+            ref = (destination!!.place?.placeType as? StopPlaceDto)?.stopPlaceRef,
+            stationName = (destination!!.place?.placeType as? StopPlaceDto)?.name,
+            position = destination!!.place?.position
         )
         val viaRef = via?.let {
             PlaceReferenceDto(
-                ref = (it.place.placeType as? StopPlaceDto)?.stopPlaceRef,
-                stationName = (it.place.placeType as? StopPlaceDto)?.name,
-                position = it.place.position
+                ref = (it.place?.placeType as? StopPlaceDto)?.stopPlaceRef,
+                stationName = (it.place?.placeType as? StopPlaceDto)?.name,
+                position = it.place?.position
             )
         }
 
@@ -184,25 +184,25 @@ class TripResultViewModel(
         viewModelScope.launch {
             state.update { it.copy(isLoading = true) }
             val originRef = PlaceReferenceDto(
-                ref = (origin!!.place.placeType as? StopPlaceDto)?.stopPlaceRef,
-                stationName = (origin!!.place.placeType as? StopPlaceDto)?.name,
-                position = origin!!.place.position
+                ref = (origin!!.place?.placeType as? StopPlaceDto)?.stopPlaceRef,
+                stationName = (origin!!.place?.placeType as? StopPlaceDto)?.name,
+                position = origin!!.place?.position
             )
             val destinationRef = PlaceReferenceDto(
-                ref = (destination!!.place.placeType as? StopPlaceDto)?.stopPlaceRef,
-                stationName = (destination!!.place.placeType as? StopPlaceDto)?.name,
-                position = destination!!.place.position
+                ref = (destination!!.place?.placeType as? StopPlaceDto)?.stopPlaceRef,
+                stationName = (destination!!.place?.placeType as? StopPlaceDto)?.name,
+                position = destination!!.place?.position
             )
             val viaRef = via?.let {
                 PlaceReferenceDto(
-                    ref = (it.place.placeType as? StopPlaceDto)?.stopPlaceRef,
-                    stationName = (it.place.placeType as? StopPlaceDto)?.name,
-                    position = it.place.position
+                    ref = (it.place?.placeType as? StopPlaceDto)?.stopPlaceRef,
+                    stationName = (it.place?.placeType as? StopPlaceDto)?.name,
+                    position = it.place?.position
                 )
             }
             //example if you want only water trips when both stations are water
             val modeFilter =
-                if (origin!!.place.mode?.any { it.ptMode == PtMode.WATER } == true && destination!!.place.mode?.any { it.ptMode == PtMode.WATER } == true) {
+                if (origin!!.place?.mode?.any { it.ptMode == PtMode.WATER } == true && destination!!.place?.mode?.any { it.ptMode == PtMode.WATER } == true) {
                     listOf(PtMode.WATER)
                 } else emptyList()
 
@@ -248,6 +248,40 @@ class TripResultViewModel(
 
     private fun postEvent(event: Event) {
         state.update { it.copy(events = it.events + event) }
+    }
+
+    fun refineTrip(id: String) {
+        viewModelScope.launch {
+            state.update { it.copy(isLoading = true) }
+
+            val tripResult = state.value.tripDelivery?.tripResults?.find { it.id == id }
+            tripResult?.let {
+                val response = MainActivity.ojpSdk.requestTripRefinement(
+                    languageCode = Locale.getDefault().language.toOjpLanguageCode(),
+                    tripResult = tripResult,
+                    params = TripRefineParam(
+                        includeIntermediateStops = true,
+                        includeAllRestrictedLines = true,
+                        includeTurnDescription = true,
+                        includeLegProjection = true,
+                        includeTrackSections = true,
+                        useRealtimeData = RealtimeData.FULL
+                    )
+                )
+                when (response) {
+                    is Result.Success -> {
+                        println( "Refinement was successful ${response.data}")
+                        postEvent(Event.ScrollToFirstTripItem(0))
+                    }
+
+                    is Result.Error -> {
+                        println( "Error fetching trip results" + response.error.exception)
+                        postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
+                    }
+                }
+            }
+            state.update { it.copy(isLoading = false) }
+        }
     }
 
     sealed class Event(val id: Long = UUID.randomUUID().mostSignificantBits) {

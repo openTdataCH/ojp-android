@@ -63,3 +63,29 @@ data class DatedJourneyDto(
     val isCarTrain: Boolean
         get() = lineRef.startsWith("atv")
 }
+
+fun DatedJourneyDto.minimalCopy(): DatedJourneyDto {
+    return DatedJourneyDto(
+        operatingDayRef = operatingDayRef,
+        journeyRef = journeyRef,
+        lineRef = lineRef,
+        mode = mode,
+        productCategory = productCategory,
+        publishedServiceName = publishedServiceName,
+        attributes = attributes,
+        originText = originText,
+        conventionalModeOfOperation = null,
+        trainNumber = null,
+        operatorRef = null,
+        publicCode = null,
+        directionRef = null,
+        originStopPointRef = null,
+        destinationStopPointRef = null,
+        destinationText = null,
+        vehicleRef = null,
+        situationFullRefWrapper = null,
+        unplanned = null,
+        cancelled = null,
+        deviation = null,
+    )
+}
