@@ -16,18 +16,10 @@ Coming soon:
 Compatible with Android 6+
 
 ## Integration
-- To integrate the SDK you have to add following repository in your root build.gradle:
-```
-allprojects {
-    repositories {
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
-- Now you can add the OJP dependency:
+- To integrate the SDK you have to add following dependency:
 ```
 dependencies {
-    implementation 'com.github.openTdataCH:ojp-android:1.0.5'
+    implementation 'io.github.opentdatach:ojp-android:1.0.6'
 }
 ```
 - Additionally you may need to enable coreLibraryDesugaring to use Java8 features below API 26 (we use LocalDateTime for parsing)
@@ -38,7 +30,7 @@ compileOptions {
 }
 
 dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
     ...
 }
 ```

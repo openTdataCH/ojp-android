@@ -10,9 +10,8 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.kotlin.serialization)
     `maven-publish`
+    id("signing")
 }
-
-private val versionName = "1.0.5"
 
 android {
     namespace = "ch.opentransportdata.ojp"
@@ -27,7 +26,7 @@ android {
         properties.load(project.rootProject.file("local.properties").reader())
         val apiKey = properties.getProperty("apiKey")
 
-        this.buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
+        this.buildConfigField("String", "VERSION_NAME", "\"$version\"")
         this.buildConfigField( "String", "API_KEY", "\"$apiKey\"")
     }
 
@@ -64,6 +63,7 @@ android {
     tasks.dokkaHtml {
         outputDirectory.set(file("$rootDir/docs/html"))
         moduleName.set("OJP Android SDK")
+        dependsOn("kaptReleaseKotlin")
     }
 }
 
@@ -79,36 +79,84 @@ dependencies {
     implementation(libs.tikRetrofit)
     implementation(libs.tikAnnotation)
     implementation(libs.tikConverters)
-    kapt(libs.tikProcessor) //needed for TypeAdapter creation
+    kapt(libs.tikProcessor) // needed for TypeAdapter creation
     implementation(libs.dokka)
     implementation(libs.kotlinx.serialization.json)
-
 
     testImplementation(libs.junit)
     testImplementation(libs.assertk)
     testImplementation(libs.kotlinx.coroutines.test)
 }
 
+tasks.register<Jar>("javadocJar") {
+    archiveClassifier.set("javadoc")
+    from(tasks.dokkaHtml.get().outputDirectory)
+}
+
 publishing {
     publications {
-        val sdkGroupId = "com.github.openTdataCH"
-        val sdkArtifactId = "ojp-android"
-
-        create<MavenPublication>("debugOjpSdk") {
-            groupId = sdkGroupId
-            artifactId = sdkArtifactId
-            version = "$versionName-debug"
-            afterEvaluate {
-                from(components["debug"])
-            }
-        }
         create<MavenPublication>("releaseOjpSdk") {
-            groupId = sdkGroupId
-            artifactId = sdkArtifactId
-            version = versionName
+            groupId = project.property("GROUP_ID") as String
+            artifactId = project.property("ARTIFACT_ID") as String
+            version = project.property("VERSION") as String
+
             afterEvaluate {
                 from(components["release"])
             }
+
+            artifact(tasks.named("javadocJar")) {
+                builtBy(tasks.named("javadocJar"))
+            }
+
+            tasks.named("generateMetadataFileForReleaseOjpSdkPublication").configure {
+                dependsOn(tasks.named("javadocJar"))
+            }
+
+            pom {
+                name.set(project.property("POM_NAME") as String)
+                description.set(project.property("POM_DESCRIPTION") as String)
+                url.set(project.property("POM_URL") as String)
+
+                licenses {
+                    license {
+                        name.set(project.property("POM_LICENSE_NAME") as String)
+                        url.set(project.property("POM_LICENSE_URL") as String)
+                    }
+                }
+
+                developers {
+                    developer {
+                        id.set(project.property("POM_DEVELOPER_ID") as String)
+                        name.set(project.property("POM_DEVELOPER_NAME") as String)
+                        email.set(project.property("POM_DEVELOPER_EMAIL") as String)
+                    }
+                }
+
+                scm {
+                    connection.set(project.property("POM_SCM_CONNECTION") as String)
+                    developerConnection.set(project.property("POM_SCM_DEV_CONNECTION") as String)
+                    url.set(project.property("POM_URL") as String)
+                }
+            }
         }
     }
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = if (version.toString().endsWith("SNAPSHOT")) {
+                uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            } else {
+                uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            }
+            credentials {
+                username = project.findProperty("ossrhUsername") as String? ?: ""
+                password = project.findProperty("ossrhPassword") as String? ?: ""
+            }
+        }
+    }
+}
+
+signing {
+    isRequired = true
+    sign(publishing.publications["releaseOjpSdk"])
 }

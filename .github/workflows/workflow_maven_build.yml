@@ -1,0 +1,35 @@
+name: Publish to Maven Central
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java & GPG for Maven Central
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+          server-id: ossrh
+          server-username: OSSRH_USERNAME
+          server-password: OSSRH_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_SIGNING_PASSPHRASE }}
+
+      - name: Build and Publish to Maven Central
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_PASSWORD: ${{ secrets.GPG_SIGNING_PASSPHRASE }}
+        run: |
+          ./gradlew clean publish \
+            -Psigning.password=$SIGNING_PASSWORD \
+            -PossrhUsername=$OSSRH_USERNAME \
+            -PossrhPassword=$OSSRH_PASSWORD
