@@ -150,6 +150,6 @@ publishing {
 }
 
 signing {
-    isRequired = project.hasProperty("signing.keyId")
+    isRequired = true
     sign(publishing.publications["releaseOjpSdk"])
 }
