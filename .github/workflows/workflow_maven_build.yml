@@ -27,9 +27,9 @@ jobs:
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          SIGNING_PASSWORD: ${{ secrets.GPG_SIGNING_PASSPHRASE }}
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          GPG_SIGNING_PASSPHRASE: ${{ secrets.GPG_SIGNING_PASSPHRASE }}
         run: |
           ./gradlew clean publish \
-            -Psigning.password=$SIGNING_PASSWORD \
             -PossrhUsername=$OSSRH_USERNAME \
             -PossrhPassword=$OSSRH_PASSWORD
