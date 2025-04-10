@@ -23,11 +23,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         val properties = Properties()
-        properties.load(project.rootProject.file("local.properties").reader())
-        val apiKey = properties.getProperty("apiKey")
+        val localPropsFile = project.rootProject.file("local.properties")
+
+        if (localPropsFile.exists()) {
+            properties.load(localPropsFile.reader())
+        }
+
+        val apiKey = properties.getProperty("apiKey") ?: System.getenv("API_KEY")
 
         this.buildConfigField("String", "VERSION_NAME", "\"$version\"")
-        this.buildConfigField( "String", "API_KEY", "\"$apiKey\"")
+        this.buildConfigField("String", "API_KEY", "\"$apiKey\"")
+
     }
 
     buildTypes {
