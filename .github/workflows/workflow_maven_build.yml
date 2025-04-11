@@ -17,11 +17,13 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-          server-id: ossrh
-          server-username: OSSRH_USERNAME
-          server-password: OSSRH_PASSWORD
           gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
           gpg-passphrase: ${{ secrets.GPG_SIGNING_PASSPHRASE }}
+
+      - name: Debug Credentials
+        run: |
+          echo "OSSRH_USERNAME: ${OSSRH_USERNAME:0:4}***"
+          echo "OSSRH_PASSWORD: ${OSSRH_PASSWORD:0:4}***"        
 
       - name: Build and Publish to Maven Central
         env:
@@ -30,6 +32,4 @@ jobs:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
           GPG_SIGNING_PASSPHRASE: ${{ secrets.GPG_SIGNING_PASSPHRASE }}
         run: |
-          ./gradlew clean publish \
-            -PossrhUsername=$OSSRH_USERNAME \
-            -PossrhPassword=$OSSRH_PASSWORD
+          ./gradlew clean publish --info --stacktrace
