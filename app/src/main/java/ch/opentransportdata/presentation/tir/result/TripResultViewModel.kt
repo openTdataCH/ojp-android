@@ -10,7 +10,13 @@ import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
-import ch.opentransportdata.ojp.domain.model.*
+import ch.opentransportdata.ojp.domain.model.LanguageCode
+import ch.opentransportdata.ojp.domain.model.ModeAndModeOfOperationFilter
+import ch.opentransportdata.ojp.domain.model.PtMode
+import ch.opentransportdata.ojp.domain.model.RealtimeData
+import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.TripParams
+import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.presentation.MainActivity
 import ch.opentransportdata.presentation.utils.toOjpLanguageCode
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -270,12 +276,12 @@ class TripResultViewModel(
                 )
                 when (response) {
                     is Result.Success -> {
-                        println( "Refinement was successful ${response.data}")
+                        Log.d("TripResultViewModel", "Refinement was successful ${response.data}")
                         postEvent(Event.ScrollToFirstTripItem(0))
                     }
 
                     is Result.Error -> {
-                        println( "Error fetching trip results" + response.error.exception)
+                        Log.e("TripResultViewModel", "Error fetching trip results" + response.error.exception)
                         postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
                     }
                 }

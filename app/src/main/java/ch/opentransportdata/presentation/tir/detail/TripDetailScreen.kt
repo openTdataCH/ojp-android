@@ -60,7 +60,7 @@ fun TripDetailScreen(
                 Text("Update Trip")
             }
             Button(onClick = {refineTrip(trip.id)}) {
-                Text("Refine Trip!")
+                Text("Refine Trip")
             }
         }
         if (trip.hasAnyDisruption) {

@@ -205,7 +205,7 @@ class TripRefinementTest {
         val xmlString = byteArrayOutputStream.toString("UTF-8")
         println("Re-serialized OjpRequest XML:\n$xmlString")
 
-        //ASSERTION$zrvccdd
+        //ASSERTION
         assertNotNull(request)
         assertThat(xmlString.contains("<RequestorRef>OJP_Demo_ANDROID_SDK_1.0.14</RequestorRef>"))
     }
