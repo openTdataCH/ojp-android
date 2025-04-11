@@ -13,10 +13,10 @@ import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.ojp.domain.usecase.Initializer
-import ch.opentransportdata.ojp.domain.usecase.RequestTripRefinement
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
 import ch.opentransportdata.ojp.domain.usecase.RequestMockTrips
+import ch.opentransportdata.ojp.domain.usecase.RequestTripRefinement
 import ch.opentransportdata.ojp.domain.usecase.RequestTrips
 import ch.opentransportdata.ojp.domain.usecase.UpdateTrip
 import timber.log.Timber
@@ -161,15 +161,15 @@ class OjpSdk(
     }
 
     /**
-     * Request a list of trips
+     * Refines a previously requested trip by retrieving more detailed or updated trip information
      *
      * @param languageCode The [LanguageCode] for the desired results, default is [LanguageCode.DE]
      * @param tripResult The result of a requested trip which should be refined
-     * @param params The params to get further information for trip
+     * @param params Additional refinement parameters
      *
-     * @return [TripDeliveryDto] object with related trip information
+     * @return [TripRefineDeliveryDto] with the refined trip information
+     *
      */
-
     suspend fun requestTripRefinement(
         languageCode: LanguageCode,
         tripResult: TripResultDto,
@@ -178,7 +178,7 @@ class OjpSdk(
         return OjpKoinContext.koinApp.koin.get<RequestTripRefinement>().invoke(
             languageCode = languageCode,
             tripResultDto = tripResult,
-            params = params,
+            params = params
         )
     }
 }
