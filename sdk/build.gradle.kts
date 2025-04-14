@@ -152,8 +152,9 @@ publishing {
 signing {
     isRequired = true
     useInMemoryPgpKeys(
+        System.getenv("SIGNING_KEY_ID"),
         System.getenv("GPG_SIGNING_KEY"),
-        System.getenv("GPG_SIGNING_PASSPHRASE")
+        System.getenv("SIGNING_PASSWORD")
     )
     sign(publishing.publications["releaseOjpSdk"])
 }
