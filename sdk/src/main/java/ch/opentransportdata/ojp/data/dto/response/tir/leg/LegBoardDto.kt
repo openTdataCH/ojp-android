@@ -47,3 +47,21 @@ data class LegBoardDto(
     val mergedQuay: NameDto?
         get() = estimatedQuay ?: plannedQuay
 }
+
+fun LegBoardDto.minimalCopy(): LegBoardDto {
+    return LegBoardDto(
+        stopPointRef = stopPointRef,
+        stopPointName = stopPointName,
+        serviceDeparture = ServiceTimeDto(timetabledTime = serviceDeparture.timetabledTime, estimatedTime = serviceDeparture.estimatedTime),
+        plannedQuay = null,
+        estimatedQuay = null,
+        nameSuffix = null,
+        serviceArrival = null,
+        order = null,
+        requestStop = null,
+        unplannedStop = null,
+        notServicedStop = null,
+        noBoardingAtStop = null,
+        noAlightingAtStop = null,
+    )
+}

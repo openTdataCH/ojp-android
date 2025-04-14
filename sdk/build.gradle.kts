@@ -1,4 +1,6 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidLibrary)
@@ -20,7 +22,18 @@ android {
         lint.targetSdk = 35
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "VERSION_NAME", "\"$version\"")
+        val properties = Properties()
+        val localPropsFile = project.rootProject.file("local.properties")
+
+        if (localPropsFile.exists()) {
+            properties.load(localPropsFile.reader())
+        }
+
+        val apiKey = properties.getProperty("apiKey") ?: System.getenv("API_KEY")
+
+        this.buildConfigField("String", "VERSION_NAME", "\"$version\"")
+        this.buildConfigField("String", "API_KEY", "\"$apiKey\"")
+
     }
 
     buildTypes {

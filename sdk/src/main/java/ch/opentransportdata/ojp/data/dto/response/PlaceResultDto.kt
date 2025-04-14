@@ -18,7 +18,7 @@ import kotlinx.serialization.Serializable
 @Xml(name = "PlaceResult")
 data class PlaceResultDto(
     @Element(name = "Place")
-    val place: PlaceDto,
+    val place: PlaceDto? = null,
     @PropertyElement(name = "Complete")
     val complete: Boolean,
     @PropertyElement(name = "Probability")

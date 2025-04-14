@@ -155,7 +155,7 @@ class TirViewModel : ViewModel() {
             state.value.origin.hasFocus -> state.value.copy(
                 origin = state.value.origin.copy(
                     selectedLocation = location,
-                    textInputValue = location.place.placeType?.name() ?: "undef"
+                    textInputValue = location.place?.placeType?.name() ?: "undef"
                 ),
                 results = emptyList()
             )

@@ -3,13 +3,22 @@ package ch.opentransportdata.ojp
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.ojp.di.context.OjpKoinContext
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
-import ch.opentransportdata.ojp.domain.usecase.*
+import ch.opentransportdata.ojp.domain.model.TripRefineParam
+import ch.opentransportdata.ojp.domain.usecase.Initializer
+import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
+import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
+import ch.opentransportdata.ojp.domain.usecase.RequestMockTrips
+import ch.opentransportdata.ojp.domain.usecase.RequestTripRefinement
+import ch.opentransportdata.ojp.domain.usecase.RequestTrips
+import ch.opentransportdata.ojp.domain.usecase.UpdateTrip
 import timber.log.Timber
 import java.io.InputStream
 import java.time.LocalDateTime
@@ -149,5 +158,27 @@ class OjpSdk(
         trip: TripDto,
     ): Result<TripDeliveryDto> {
         return OjpKoinContext.koinApp.koin.get<UpdateTrip>().invoke(languageCode, origin, destination, via, params, trip)
+    }
+
+    /**
+     * Refines a previously requested trip by retrieving more detailed or updated trip information
+     *
+     * @param languageCode The [LanguageCode] for the desired results, default is [LanguageCode.DE]
+     * @param tripResult The result of a requested trip which should be refined
+     * @param params Additional refinement parameters
+     *
+     * @return [TripRefineDeliveryDto] with the refined trip information
+     *
+     */
+    suspend fun requestTripRefinement(
+        languageCode: LanguageCode,
+        tripResult: TripResultDto,
+        params: TripRefineParam,
+    ): Result<TripRefineDeliveryDto> {
+        return OjpKoinContext.koinApp.koin.get<RequestTripRefinement>().invoke(
+            languageCode = languageCode,
+            tripResultDto = tripResult,
+            params = params
+        )
     }
 }

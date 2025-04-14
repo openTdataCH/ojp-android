@@ -21,3 +21,11 @@ data class LegDto(
     @Element
     val legType: AbstractLegType
 ) : Parcelable
+
+fun LegDto.minimalCopy(): LegDto {
+    return LegDto(
+        id = id,
+        duration = duration,
+        legType = legType
+    )
+}
