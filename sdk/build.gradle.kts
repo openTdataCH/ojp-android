@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -8,6 +10,7 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.kotlin.serialization)
     `maven-publish`
+    id("com.vanniktech.maven.publish") version "0.31.0"
     id("signing")
 }
 
@@ -55,7 +58,7 @@ android {
 
     tasks.dokkaHtml {
         outputDirectory.set(file("$rootDir/docs/html"))
-        moduleName.set("OJP Android SDK")
+        moduleName.set("OJP-Android-SDK")
         dependsOn("kaptReleaseKotlin")
     }
 }
@@ -86,75 +89,45 @@ tasks.register<Jar>("javadocJar") {
     from(tasks.dokkaHtml.get().outputDirectory)
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("releaseOjpSdk") {
-            groupId = project.property("GROUP_ID") as String
-            artifactId = project.property("ARTIFACT_ID") as String
-            version = project.property("VERSION") as String
-
-            afterEvaluate {
-                from(components["release"])
-            }
-
-            artifact(tasks.named("javadocJar")) {
-                builtBy(tasks.named("javadocJar"))
-            }
-
-            tasks.named("generateMetadataFileForReleaseOjpSdkPublication").configure {
-                dependsOn(tasks.named("javadocJar"))
-            }
-
-            pom {
-                name.set(project.property("POM_NAME") as String)
-                description.set(project.property("POM_DESCRIPTION") as String)
-                url.set(project.property("POM_URL") as String)
-
-                licenses {
-                    license {
-                        name.set(project.property("POM_LICENSE_NAME") as String)
-                        url.set(project.property("POM_LICENSE_URL") as String)
-                    }
-                }
-
-                developers {
-                    developer {
-                        id.set(project.property("POM_DEVELOPER_ID") as String)
-                        name.set(project.property("POM_DEVELOPER_NAME") as String)
-                        email.set(project.property("POM_DEVELOPER_EMAIL") as String)
-                    }
-                }
-
-                scm {
-                    connection.set(project.property("POM_SCM_CONNECTION") as String)
-                    developerConnection.set(project.property("POM_SCM_DEV_CONNECTION") as String)
-                    url.set(project.property("POM_URL") as String)
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            name = "OSSRH"
-            url = if (version.toString().endsWith("SNAPSHOT")) {
-                uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            } else {
-                uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            }
-            credentials {
-                username = System.getenv("OSSRH_USERNAME") ?: ""
-                password = System.getenv("OSSRH_PASSWORD") ?: ""
-            }
-        }
-    }
-}
-
-signing {
-    isRequired = true
-    useInMemoryPgpKeys(
-        System.getenv("SIGNING_KEY_ID"),
-        System.getenv("GPG_SIGNING_KEY"),
-        System.getenv("SIGNING_PASSWORD")
+mavenPublishing {
+    configure(
+        AndroidSingleVariantLibrary(
+            variant = "release",
+            sourcesJar = true,
+            publishJavadocJar = true,
+        )
     )
-    sign(publishing.publications["releaseOjpSdk"])
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+    coordinates(
+        project.property("GROUP_ID") as String,
+        project.property("ARTIFACT_ID") as String,
+        project.property("VERSION") as String
+    )
+    pom {
+        name.set(project.property("POM_NAME") as String)
+        description.set(project.property("POM_DESCRIPTION") as String)
+        url.set(project.property("POM_URL") as String)
+
+        licenses {
+            license {
+                name.set(project.property("POM_LICENSE_NAME") as String)
+                url.set(project.property("POM_LICENSE_URL") as String)
+            }
+        }
+
+        developers {
+            developer {
+                id.set(project.property("POM_DEVELOPER_ID") as String)
+                name.set(project.property("POM_DEVELOPER_NAME") as String)
+                email.set(project.property("POM_DEVELOPER_EMAIL") as String)
+            }
+        }
+
+        scm {
+            connection.set(project.property("POM_SCM_CONNECTION") as String)
+            developerConnection.set(project.property("POM_SCM_DEV_CONNECTION") as String)
+            url.set(project.property("POM_URL") as String)
+        }
+    }
 }
