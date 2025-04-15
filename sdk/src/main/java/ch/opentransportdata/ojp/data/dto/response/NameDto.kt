@@ -16,5 +16,5 @@ import kotlinx.serialization.Serializable
 @Xml(name = "Name")
 data class NameDto(
     @PropertyElement(name = "Text")
-    val text: String
+    val text: String?
 ): Parcelable
