@@ -32,7 +32,7 @@ data class PlaceDto(
     @Element(name = "Address")
     val address: AddressDto? = null,
     @Element(name = "Name")
-    val name: NameDto,
+    val name: NameDto?,
     @Element(name = "GeoPosition")
     val position: GeoPositionDto,
     @Element(name = "Mode")
