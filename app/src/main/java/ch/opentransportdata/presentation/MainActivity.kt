@@ -127,10 +127,7 @@ class MainActivity : ComponentActivity() {
             baseUrl = "https://odpch-api.clients.liip.ch/",
             endpoint = "ojp20-beta",
             httpHeaders = hashMapOf(
-                Pair(
-                    "Authorization",
-                    BuildConfig.API_KEY
-                )
+                Pair("Authorization", BuildConfig.API_KEY)
             ),
             requesterReference = "OJP_Demo",
         )

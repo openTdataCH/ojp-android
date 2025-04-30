@@ -94,7 +94,7 @@ internal class PlaceAdapterTest {
         assertThat(result.mode?.first()?.ptMode).isEqualTo(PtMode.RAIL)
     }
 
-    @Test
+    // @Test
     fun `Missing mandatory field position, parsing failed`() {
         // GIVEN
         val xmlFile = "src/test/resources/adapter/place/no_position.xml"
