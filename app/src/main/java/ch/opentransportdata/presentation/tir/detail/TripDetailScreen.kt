@@ -317,7 +317,7 @@ private fun LegBoard(
 
             Text(
                 modifier = Modifier.padding(start = if (legBoard.serviceDeparture.hasDelay) 8.dp else 0.dp),
-                text = legBoard.stopPointName.text,
+                text = legBoard.stopPointName.text ?: "",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -366,7 +366,7 @@ private fun LegAlight(
 
             Text(
                 modifier = Modifier.padding(start = if (legAlight.serviceArrival.hasDelay) 8.dp else 0.dp),
-                text = legAlight.stopPointName.text,
+                text = legAlight.stopPointName.text ?: "",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -468,7 +468,7 @@ private fun Attributes(
                     )
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        text = it.userText.text,
+                        text = it.userText.text ?: "",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )

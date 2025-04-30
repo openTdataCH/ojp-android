@@ -39,7 +39,7 @@ internal class PlaceAdapterTest {
 
         val stopPlace = result.placeType as StopPlaceDto
         assertThat(stopPlace.stopPlaceRef).isEqualTo("8501120")
-        assertThat(stopPlace.name.text).isEqualTo("Lausanne")
+        assertThat(stopPlace.name?.text).isEqualTo("Lausanne")
         assertThat(stopPlace.topographicPlaceRef).isEqualTo("23023586:3")
         assertThat(result.name?.text).isEqualTo("Lausanne (Lausanne)")
         assertThat(result.position?.latitude).isEqualTo(46.51679)

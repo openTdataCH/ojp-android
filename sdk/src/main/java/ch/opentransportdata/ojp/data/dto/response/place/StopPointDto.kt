@@ -20,7 +20,7 @@ data class StopPointDto(
     @PropertyElement(name = "siri:StopPointRef")
     val stopPointRef: String,
     @Element(name = "StopPointName")
-    val stopPointName: NameDto,
+    val stopPointName: NameDto?,
     @Element(name = "NameSuffix")
     val nameSuffix: NameDto?,
     @Element(name = "PlannedQuay")

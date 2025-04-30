@@ -22,7 +22,7 @@ data class StopPlaceDto(
     @PropertyElement(name = "StopPlaceRef")
     val stopPlaceRef: String,
     @Element(name = "StopPlaceName")
-    val name: NameDto,
+    val name: NameDto?,
     @Element(name = "NameSuffix")
     val nameSuffix: NameDto?,
     @PropertyElement(name = "TopographicPlaceRef")

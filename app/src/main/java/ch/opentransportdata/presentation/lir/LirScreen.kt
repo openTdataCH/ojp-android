@@ -86,8 +86,8 @@ fun LirScreenComposable(
 
 fun AbstractPlaceDto.name(): String {
     return when (this) {
-        is StopPlaceDto -> this.name.text
-        is AddressDto -> this.name.text
+        is StopPlaceDto -> this.name?.text ?: ""
+        is AddressDto -> this.name.text ?: ""
         else -> "undef"
     }
 }
