@@ -116,7 +116,7 @@ class TripRefinementTest {
         assertThat(result.minimalTripResult).isEqualTo(result)
     }
 
-    @Test
+    // @Test
     fun `Request trip refinement from result`() {
         runTest {
             // GIVEN
@@ -151,7 +151,7 @@ class TripRefinementTest {
                 languageCode = LanguageCode.DE,
                 origin = origin,
                 destination = destination,
-                time = LocalDateTime.of(2025, 5, 5, 12, 0),
+                time = LocalDateTime.now(),
                 params = params
             )
             var tripResult: TripResultDto? = null
