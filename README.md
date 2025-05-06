@@ -5,7 +5,7 @@ This SDK is targeting Android applications seeking to integrate [Open Journey Pl
 
 ### Features
 Available APIs:
-- [Location Information Request](https://opentransportdata.swiss/en/cookbook/location-information-service/)
+- [Location Information Request](https://opentransportdata.swiss/it/cookbook/ojplocationinformationrequest-ojp-2/)
 - [Trip Request](https://opentransportdata.swiss/en/cookbook/ojptriprequest/)
 
 Coming soon:
@@ -16,13 +16,13 @@ Coming soon:
 Compatible with Android 6+
 
 ## Integration
-- To integrate the SDK you have to add following dependency:
+To integrate the SDK you have to add following dependency:
 ```
 dependencies {
     implementation 'io.github.opentdatach:ojp-android:1.0.8'
 }
 ```
-- Additionally you may need to enable coreLibraryDesugaring to use Java8 features below API 26 (we use LocalDateTime for parsing)
+Additionally you may need to enable coreLibraryDesugaring to use Java8 features below API 26 (we use LocalDateTime for parsing)
 ```
 compileOptions {
     isCoreLibraryDesugaringEnabled = true
@@ -51,7 +51,7 @@ OjpSdk(
 )   
 ```
 ### Basic Usage
-- Get a list of locations from a keyword
+#### Get a list of locations from a keyword
 ```
 import ch.opentransportdata.ojp.OjpSdk
 
@@ -66,7 +66,7 @@ requestLocationsFromSearchTerm(
 )                
 ```
 
-- Get a list of locations around a place with longitude and latitude
+#### Get a list of locations around a place with longitude and latitude
 ```
 import ch.opentransportdata.ojp.OjpSdk
 
@@ -82,7 +82,7 @@ requestLocationsFromCoordinates(
 )      
 ```
 
-- Get a list of trips including disruption messages
+#### Get a list of trips including disruption messages
 ```
 import ch.opentransportdata.ojp.OjpSdk
 
@@ -110,11 +110,29 @@ requestTrips(
 )     
 ```
 
-- Get a list of mocked trips for testing purposes 
+#### Get a list of mocked trips for testing purposes 
 ```
 import ch.opentransportdata.ojp.OjpSdk
 
 requestMockTrips(stream = source)
+```
+
+#### Update an existing trip
+```
+import ch.opentransportdata.ojp.OjpSdk
+
+requestTripRefinement(
+    languageCode = Locale.getDefault().language.toOjpLanguageCode(),
+    tripResult = tripResult,
+    params = TripRefineParam(
+    includeIntermediateStops = true,
+    includeAllRestrictedLines = true,
+    includeTurnDescription = true,
+    includeLegProjection = true,
+    includeTrackSections = true,
+    useRealtimeData = RealtimeData.FULL
+    )
+)
 ```
 
 ## Documentation
