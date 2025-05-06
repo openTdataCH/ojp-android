@@ -151,7 +151,7 @@ class TripRefinementTest {
                 languageCode = LanguageCode.DE,
                 origin = origin,
                 destination = destination,
-                time = LocalDateTime.now(),
+                time = LocalDateTime.of(2025, 5, 5, 12, 0),
                 params = params
             )
             var tripResult: TripResultDto? = null
