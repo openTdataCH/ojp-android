@@ -16,10 +16,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      API_KEY: ${{ secrets.API_KEY }}
     permissions:
       contents: read
+
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
 
     steps:
       - uses: actions/checkout@v4
@@ -47,10 +48,10 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew build -PapiKey=${{ secrets.API_KEY }}
+        run: ./gradlew build
 
       - name: Run Unit Tests
-        run: ./gradlew :sdk:test -PapiKey=${{ secrets.API_KEY }}
+        run: ./gradlew :sdk:test
 
   dependency-submission:
     runs-on: ubuntu-latest
