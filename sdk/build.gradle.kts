@@ -31,7 +31,13 @@ android {
             properties.load(localPropsFile.reader())
         }
 
-        val apiKey = properties.getProperty("apiKey") ?: System.getenv("API_KEY")
+        val apiKey = properties.getProperty("apiKey")
+            ?: System.getProperty("API_KEY")
+            ?: System.getenv("API_KEY")
+
+        if (apiKey.isNullOrBlank()) {
+            throw GradleException("API_KEY is not set. Provide it in local.properties, system property, or as environment variable.")
+        }
 
         this.buildConfigField("String", "VERSION_NAME", "\"$version\"")
         this.buildConfigField("String", "API_KEY", "\"$apiKey\"")
