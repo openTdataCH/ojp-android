@@ -45,10 +45,10 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build with Gradle (with API_KEY)
-        run: ./gradlew build -DAPI_KEY="${{ secrets.API_KEY }}"
+        run: ./gradlew build --no-daemon "-DAPI_KEY=${{ secrets.API_KEY }}"
 
       - name: Run Unit Tests
-        run: ./gradlew :sdk:test -DAPI_KEY="${{ secrets.API_KEY }}"
+        run: ./gradlew :sdk:test --no-daemon "-DAPI_KEY=${{ secrets.API_KEY }}"
 
   dependency-submission:
     runs-on: ubuntu-latest
