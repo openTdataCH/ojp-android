@@ -29,7 +29,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -44,15 +44,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Build with Gradle (API_KEY via GRADLE_OPTS)
-        env:
-          GRADLE_OPTS: -DAPI_KEY="${{ secrets.API_KEY }}"
-        run: ./gradlew build --no-daemon
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build -PapiKey=${{ secrets.API_KEY }}
 
-      - name: Run Unit Tests (API_KEY via GRADLE_OPTS)
-        env:
-          GRADLE_OPTS: -DAPI_KEY="${{ secrets.API_KEY }}"
-        run: ./gradlew :sdk:test --no-daemon
+      - name: Run Unit Tests
+        run: ./gradlew :sdk:test -PapiKey=${{ secrets.API_KEY }}
 
   dependency-submission:
     runs-on: ubuntu-latest
@@ -67,7 +63,5 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
-      # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
       - name: Generate and submit dependency graph
-        uses: gradle/actions/dependency-submission@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+        uses: gradle/actions/dependency-submission@v4
