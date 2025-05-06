@@ -44,11 +44,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Build with Gradle (with API_KEY)
-        run: ./gradlew build --no-daemon "-DAPI_KEY=${{ secrets.API_KEY }}"
+      - name: Build with Gradle (API_KEY via GRADLE_OPTS)
+        env:
+          GRADLE_OPTS: -DAPI_KEY="${{ secrets.API_KEY }}"
+        run: ./gradlew build --no-daemon
 
-      - name: Run Unit Tests
-        run: ./gradlew :sdk:test --no-daemon "-DAPI_KEY=${{ secrets.API_KEY }}"
+      - name: Run Unit Tests (API_KEY via GRADLE_OPTS)
+        env:
+          GRADLE_OPTS: -DAPI_KEY="${{ secrets.API_KEY }}"
+        run: ./gradlew :sdk:test --no-daemon
 
   dependency-submission:
     runs-on: ubuntu-latest
