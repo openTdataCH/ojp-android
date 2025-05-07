@@ -64,7 +64,8 @@ fun TripResultScreen(
                 trip = selectedTrip!!,
                 situations = state.value.tripDelivery?.responseContext?.situation?.ptSituation?.filter { it.publishingActions != null },
                 showSituation = { selectedAction = it },
-                requestTripUpdate = { viewModel.requestTripUpdate(it) }
+                requestTripUpdate = { viewModel.requestTripUpdate(it) },
+                refineTrip = { id -> viewModel.refineTrip(id) }
             )
         }
     }

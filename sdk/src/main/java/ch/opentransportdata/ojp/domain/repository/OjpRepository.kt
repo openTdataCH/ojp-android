@@ -3,10 +3,13 @@ package ch.opentransportdata.ojp.domain.repository
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
+import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import java.io.InputStream
 import java.time.LocalDateTime
 
@@ -37,4 +40,10 @@ internal interface OjpRepository {
     suspend fun requestMockTrips(
         stream: InputStream
     ): Result<TripDeliveryDto>
+
+    suspend fun requestTripRefinement(
+        languageCode: LanguageCode,
+        tripResultDto: TripResultDto,
+        params: TripRefineParam
+    ): Result<TripRefineDeliveryDto>
 }

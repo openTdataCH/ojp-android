@@ -31,7 +31,7 @@ fun LocationResultList(
     LazyColumn(modifier = modifier) {
         items(
             items = sortedItems,
-            key = { item -> item.place.name?.text + item.place.position.longitude + item.place.position.latitude + item.distance }
+            key = { item -> item.place?.name?.text + item.place?.position?.longitude + item.place?.position?.latitude + item.distance }
         ) { item ->
             val listItemModifier = if (onLocationSelected != null) Modifier.clickable { onLocationSelected(item) } else Modifier
 
@@ -42,7 +42,7 @@ fun LocationResultList(
                 },
                 headlineContent = {
                     Text(
-                        text = item.place.placeType?.name() ?: "undef",
+                        text = item.place?.placeType?.name() ?: "undef",
                         style = MaterialTheme.typography.titleSmall
                     )
                 },
@@ -59,7 +59,7 @@ fun LocationResultList(
 
 @Composable
 private fun PlaceResultDto.transportIcon(): ImageVector {
-    val modes = this.place.mode
+    val modes = this.place?.mode
     return when {
         modes.isNullOrEmpty() -> Icons.Default.PinDrop
         modes.any { it.ptMode == PtMode.RAIL } -> Icons.Default.Train

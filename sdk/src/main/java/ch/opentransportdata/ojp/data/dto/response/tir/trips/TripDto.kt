@@ -123,5 +123,18 @@ data class TripDto(
 
         return result
     }
+}
 
+fun TripDto.minimalCopy(): TripDto {
+    return TripDto(
+        id = id,
+        duration = duration,
+        startTime = startTime,
+        endTime = endTime,
+        transfers = transfers,
+        legs = legs,
+        unplanned = null,
+        delayed = null,
+        infeasible = null,
+    )
 }

@@ -32,9 +32,9 @@ data class PlaceDto(
     @Element(name = "Address")
     val address: AddressDto? = null,
     @Element(name = "Name")
-    val name: NameDto?,
+    val name: NameDto? = null,
     @Element(name = "GeoPosition")
-    val position: GeoPositionDto,
+    val position: GeoPositionDto? = null,
     @Element(name = "Mode")
     val mode: List<ModeDto>? = emptyList(),
 ) : Parcelable {

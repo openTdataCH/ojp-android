@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import ch.opentransportdata.ojp.BuildConfig
 import ch.opentransportdata.ojp.OjpSdk
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.presentation.lir.LirScreenComposable
@@ -126,10 +127,7 @@ class MainActivity : ComponentActivity() {
             baseUrl = "https://odpch-api.clients.liip.ch/",
             endpoint = "ojp20-beta",
             httpHeaders = hashMapOf(
-                Pair(
-                    "Authorization",
-                    "Bearer eyJvcmciOiI2M2Q4ODhiMDNmZmRmODAwMDEzMDIwODkiLCJpZCI6IjUzYzAyNWI2ZTRhNjQyOTM4NzMxMDRjNTg2ODEzNTYyIiwiaCI6Im11cm11cjEyOCJ9"
-                )
+                Pair("Authorization", BuildConfig.API_KEY)
             ),
             requesterReference = "OJP_Demo",
         )

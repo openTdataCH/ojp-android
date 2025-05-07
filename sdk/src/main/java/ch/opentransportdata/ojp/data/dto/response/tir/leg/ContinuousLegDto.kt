@@ -22,3 +22,11 @@ data class ContinuousLegDto(
     @PropertyElement(name = "Duration")
     val duration: Duration
 ) : AbstractLegType(), Parcelable
+
+fun ContinuousLegDto.minimalCopy(): ContinuousLegDto {
+    return ContinuousLegDto(
+        legStart = legStart,
+        legEnd = legEnd,
+        duration = duration,
+    )
+}

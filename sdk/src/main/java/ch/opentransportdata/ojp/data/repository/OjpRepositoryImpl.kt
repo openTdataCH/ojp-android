@@ -4,6 +4,8 @@ import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.data.local.trip.LocalTripDataSource
 import ch.opentransportdata.ojp.data.remote.location.RemoteLocationInformationDataSource
 import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource
@@ -11,6 +13,7 @@ import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
+import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
 import com.tickaroo.tikxml.TypeAdapterNotFoundException
@@ -96,6 +99,25 @@ internal class OjpRepositoryImpl(
         return try {
             val response = localTripDataSource.requestMockTrips(stream)
             val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripDeliveryDto
+            if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null")))
+        } catch (exception: Exception) {
+            val error = handleError(exception)
+            Result.Error(error)
+        }
+    }
+
+    override suspend fun requestTripRefinement(
+        languageCode: LanguageCode,
+        tripResultDto: TripResultDto,
+        params: TripRefineParam
+    ): Result<TripRefineDeliveryDto> {
+        return try {
+            val response = tripDataSource.requestTripRefinement(
+                languageCode = languageCode,
+                tripResultDto = tripResultDto,
+                params = params
+            )
+            val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripRefineDeliveryDto
             if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null")))
         } catch (exception: Exception) {
             val error = handleError(exception)
