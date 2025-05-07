@@ -19,7 +19,7 @@ Compatible with Android 6+
 To integrate the SDK you have to add following dependency:
 ```
 dependencies {
-    implementation 'io.github.opentdatach:ojp-android:1.0.8'
+    implementation 'io.github.opentdatach:ojp-android:1.1.0'
 }
 ```
 Additionally you may need to enable coreLibraryDesugaring to use Java8 features below API 26 (we use LocalDateTime for parsing)
