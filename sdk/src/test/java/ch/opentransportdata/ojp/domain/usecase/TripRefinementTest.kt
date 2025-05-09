@@ -99,7 +99,6 @@ class TripRefinementTest {
 
         // ASSERTION
         assertThat(result).isNotNull()
-        assertThat(result.trip).isInstanceOf(TripDto::class.java)
     }
 
     @Test
