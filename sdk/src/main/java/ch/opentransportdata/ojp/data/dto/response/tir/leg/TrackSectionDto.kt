@@ -15,5 +15,5 @@ data class TrackSectionDto(
 //    val trackSectionStart: TrackSectionStopPlaceRef?,
 //    val trackSectionEnd: TrackSectionStopPlaceRef?,
     @Element(name = "LinkProjection")
-    val linkProjection: LinearShapeDto,
+    val linkProjection: LinearShapeDto?
 ) : Parcelable
