@@ -75,7 +75,7 @@ fun DatedJourneyDto.minimalCopy(): DatedJourneyDto {
         attributes = attributes,
         originText = originText,
         conventionalModeOfOperation = null,
-        trainNumber = null,
+        trainNumber = trainNumber,
         operatorRef = null,
         publicCode = null,
         directionRef = null,
