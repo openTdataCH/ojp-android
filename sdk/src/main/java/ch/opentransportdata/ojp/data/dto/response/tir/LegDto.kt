@@ -2,6 +2,9 @@ package ch.opentransportdata.ojp.data.dto.response.tir
 
 import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.AbstractLegType
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.ContinuousLegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
@@ -18,14 +21,25 @@ data class LegDto(
     val id: String,
     @PropertyElement(name = "Duration")
     val duration: Duration?,
-    @Element
-    val legType: AbstractLegType
-) : Parcelable
+    @Element(name = "TimedLeg")
+    val timedLeg: TimedLegDto? = null,
+    @Element(name = "TransferLeg")
+    val transferLeg: TransferLegDto? = null,
+    @Element(name = "ContinuousLeg")
+    val continuousLeg: ContinuousLegDto? = null
+
+) : Parcelable {
+
+    val legType: AbstractLegType?
+        get() = timedLeg ?: transferLeg ?: continuousLeg
+}
 
 fun LegDto.minimalCopy(): LegDto {
     return LegDto(
         id = id,
         duration = duration,
-        legType = legType
+        timedLeg = timedLeg,
+        transferLeg = transferLeg,
+        continuousLeg = continuousLeg
     )
 }
