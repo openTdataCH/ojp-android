@@ -47,7 +47,7 @@ data class TimedLegDto(
 fun TimedLegDto.minimalCopy(): TimedLegDto {
     return TimedLegDto(
         legBoard = legBoard.minimalCopy(),
-        legIntermediate = emptyList(),
+        legIntermediate = legIntermediate?.map { it.minimalCopy() },
         legAlight = legAlight.minimalCopy(),
         service = service.minimalCopy(),
         legTrack = null
