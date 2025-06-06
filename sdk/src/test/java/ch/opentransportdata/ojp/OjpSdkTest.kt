@@ -5,8 +5,10 @@ import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.data.dto.OjpDto
+import ch.opentransportdata.ojp.data.dto.converter.DurationTypeConverter
 import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeTypeConverter
 import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
+import ch.opentransportdata.ojp.data.dto.converter.TransferTypeConverter
 import ch.opentransportdata.ojp.domain.model.*
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.usecase.Initializer
@@ -16,6 +18,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
+import java.time.Duration
 import java.time.ZoneId
 
 
@@ -87,6 +90,25 @@ internal class OjpSdkTest {
         val bufferedSource = TestUtils().readXmlFile(xmlFile)
         val tikXml = TikXml.Builder()
             .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter(initializer))
+            .build()
+
+        // ACTION
+        val result = tikXml.read<OjpDto>(bufferedSource, OjpDto::class.java)
+
+        // ASSERTION
+        assertThat(result).isNotNull()
+    }
+
+    @Test
+    fun `Another valid XML data should allow successful parsing to an OjpDto`() {
+        // GIVEN
+        val xmlFile = "src/test/resources/response_valid_2.xml"
+        val bufferedSource = TestUtils().readXmlFile(xmlFile)
+        val tikXml = TikXml.Builder()
+            .addTypeConverter(java.time.LocalDateTime::class.java, LocalDateTimeTypeConverter(initializer))
+            .addTypeConverter(Duration::class.java, DurationTypeConverter())
+            .addTypeConverter(PtMode::class.java, PtModeTypeConverter())
+            .addTypeConverter(TransferType::class.java, TransferTypeConverter())
             .build()
 
         // ACTION
