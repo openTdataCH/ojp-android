@@ -48,3 +48,27 @@ data class LegIntermediateDto(
         get() = estimatedQuay ?: plannedQuay
 
 }
+
+fun LegIntermediateDto.minimalCopy(): LegIntermediateDto {
+    return LegIntermediateDto(
+        stopPointRef = stopPointRef,
+        stopPointName = stopPointName,
+        serviceArrival = ServiceTimeDto(
+            timetabledTime = serviceArrival.timetabledTime,
+            estimatedTime = serviceArrival.estimatedTime
+        ),
+        serviceDeparture = ServiceTimeDto(
+            timetabledTime = serviceDeparture.timetabledTime,
+            estimatedTime = serviceDeparture.estimatedTime
+        ),
+        plannedQuay = null,
+        estimatedQuay = null,
+        nameSuffix = null,
+        order = null,
+        requestStop = null,
+        unplannedStop = null,
+        notServicedStop = null,
+        noBoardingAtStop = null,
+        noAlightingAtStop = null
+    )
+}

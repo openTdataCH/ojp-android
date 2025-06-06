@@ -67,29 +67,28 @@ data class TripDto(
         get() = if (lastTimedLeg.legAlight.serviceArrival.hasDelay) lastTimedLeg.legAlight.serviceArrival.delay.toMinutes() else 0
 
     val isCarTrainTrip: Boolean
-        get() = legs.any { it.legType is TimedLegDto && it.legType.service.isCarTrain }
-
+        get() = legs.any { (it.legType as? TimedLegDto)?.service?.isCarTrain == true }
     /**
      * If the trip has [TimedLegDto.isCancelled], [isInfeasible] or [TimedLegDto.hasAnyPlatformChanges]
      * set to true, it is marked to have disruptions
      */
     val hasAnyDisruption: Boolean
-        get() = this.legs.any { it.legType is TimedLegDto && it.legType.isCancelled }
+        get() = legs.any { (it.legType as? TimedLegDto)?.isCancelled == true }
                 || isInfeasible
-//                || this.deviation == true
-                || this.legs.any { it.legType is TimedLegDto && it.legType.hasAnyPlatformChanges }
+//              || deviation == true
+                || legs.any { (it.legType as? TimedLegDto)?.hasAnyPlatformChanges == true }
 
     /**
      * [infeasible] flag is also set when trip is cancelled. [isInfeasible] shows if the trip is infeasible but not cancelled
      */
     val isInfeasible: Boolean
-        get() = this.legs.none { it.legType is TimedLegDto && it.legType.isCancelled } && this.infeasible == true
+        get() = !isCancelled  && infeasible == true
 
     val isCancelled: Boolean
-        get() = this.legs.any { it.legType is TimedLegDto && it.legType.isCancelled }
+        get() = legs.any { (it.legType as? TimedLegDto)?.isCancelled == true }
 
     fun getPtSituationsForTrip(situations: List<PtSituationDto>): List<PtSituationDto> {
-        return this.legs.mapNotNull { it.legType as? TimedLegDto }.flatMap { it.getPtSituationsForLeg(situations) }.distinct()
+        return legs.mapNotNull { it.legType as? TimedLegDto }.flatMap { it.getPtSituationsForLeg(situations) }.distinct()
     }
 
     override fun equals(other: Any?): Boolean {

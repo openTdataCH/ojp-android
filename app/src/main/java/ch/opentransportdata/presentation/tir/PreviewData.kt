@@ -107,7 +107,7 @@ object PreviewData {
     val transferLeg = LegDto(
         id = "111",
         duration = Duration.parse("PT5M"),
-        legType = TransferLegDto(
+        transferLeg = TransferLegDto(
             transferType = TransferType.WALK,
             legStart = LegStartEndDto(
                 stopPointRef = "8500218",
@@ -126,7 +126,7 @@ object PreviewData {
     val timedLeg = LegDto(
         id = "222",
         duration = Duration.parse("PT1H10M"),
-        legType = TimedLegDto(
+        timedLeg = TimedLegDto(
             legBoard = LegBoardDto(
                 stopPointRef = "ch:1:sloid:10:3:6",
                 stopPointName = NameDto(text = "Basel SBB"),
@@ -210,7 +210,7 @@ object PreviewData {
     val cancelledTimedLeg = LegDto(
         id = "345",
         duration = Duration.parse("PT1H10M"),
-        legType = TimedLegDto(
+        timedLeg = TimedLegDto(
             legBoard = LegBoardDto(
                 stopPointRef = "ch:1:sloid:10:3:6",
                 stopPointName = NameDto(text = "Basel SBB"),
