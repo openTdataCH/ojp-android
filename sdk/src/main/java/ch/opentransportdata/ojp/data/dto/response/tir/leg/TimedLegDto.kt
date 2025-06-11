@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.response.PlacesDto
 import ch.opentransportdata.ojp.data.dto.response.tir.situations.PtSituationDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.Xml
@@ -51,5 +52,13 @@ fun TimedLegDto.minimalCopy(): TimedLegDto {
         legAlight = legAlight.minimalCopy(),
         service = service.minimalCopy(),
         legTrack = null
+    )
+}
+
+fun TimedLegDto.replaceWithParentRef(places: PlacesDto): TimedLegDto {
+    return this.copy(
+        legBoard = legBoard.replaceWithParentRef(places),
+        legIntermediate = legIntermediate?.map { it.replaceWithParentRef(places) },
+        legAlight = legAlight.replaceWithParentRef(places)
     )
 }
