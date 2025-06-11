@@ -7,6 +7,7 @@ This SDK is targeting Android applications seeking to integrate [Open Journey Pl
 Available APIs:
 - [Location Information Request](https://opentransportdata.swiss/it/cookbook/ojplocationinformationrequest-ojp-2/)
 - [Trip Request](https://opentransportdata.swiss/en/cookbook/ojptriprequest/)
+- Trip Refinement Request
 
 Coming soon:
 - [Stop Event Request](https://opentransportdata.swiss/en/cookbook/ojp-stopeventservice/)
@@ -19,7 +20,7 @@ Compatible with Android 6+
 To integrate the SDK you have to add following dependency:
 ```
 dependencies {
-    implementation 'io.github.opentdatach:ojp-android:1.1.2'
+    implementation 'io.github.opentdatach:ojp-android:1.1.3'
 }
 ```
 Additionally you may need to enable coreLibraryDesugaring to use Java8 features below API 26 (we use LocalDateTime for parsing)
