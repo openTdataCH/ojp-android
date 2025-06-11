@@ -1,10 +1,13 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.trips
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.response.PlacesDto
 import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.ContinuousLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.minimalCopy
+import ch.opentransportdata.ojp.data.dto.response.tir.replaceWithParentRef
 import ch.opentransportdata.ojp.data.dto.response.tir.situations.PtSituationDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
@@ -68,6 +71,7 @@ data class TripDto(
 
     val isCarTrainTrip: Boolean
         get() = legs.any { (it.legType as? TimedLegDto)?.service?.isCarTrain == true }
+
     /**
      * If the trip has [TimedLegDto.isCancelled], [isInfeasible] or [TimedLegDto.hasAnyPlatformChanges]
      * set to true, it is marked to have disruptions
@@ -82,7 +86,7 @@ data class TripDto(
      * [infeasible] flag is also set when trip is cancelled. [isInfeasible] shows if the trip is infeasible but not cancelled
      */
     val isInfeasible: Boolean
-        get() = !isCancelled  && infeasible == true
+        get() = !isCancelled && infeasible == true
 
     val isCancelled: Boolean
         get() = legs.any { (it.legType as? TimedLegDto)?.isCancelled == true }
@@ -124,14 +128,14 @@ data class TripDto(
     }
 }
 
-fun TripDto.minimalCopy(): TripDto {
+fun TripDto.minimalCopy(places: PlacesDto?): TripDto {
     return TripDto(
         id = id,
         duration = duration,
         startTime = startTime,
         endTime = endTime,
         transfers = transfers,
-        legs = legs,
+        legs = places?.let { p -> legs.map { it.minimalCopy().replaceWithParentRef(p) } } ?: legs.map { it.minimalCopy() },
         unplanned = null,
         delayed = null,
         infeasible = null,

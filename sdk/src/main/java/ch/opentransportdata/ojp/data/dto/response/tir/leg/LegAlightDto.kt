@@ -2,6 +2,7 @@ package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.response.NameDto
+import ch.opentransportdata.ojp.data.dto.response.PlacesDto
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
@@ -67,4 +68,8 @@ fun LegAlightDto.minimalCopy(): LegAlightDto {
         noBoardingAtStop = null,
         noAlightingAtStop = null,
     )
+}
+
+fun LegAlightDto.replaceWithParentRef(places: PlacesDto): LegAlightDto {
+    return this.copy(stopPointRef = places.findParentStation(stopPointRef))
 }

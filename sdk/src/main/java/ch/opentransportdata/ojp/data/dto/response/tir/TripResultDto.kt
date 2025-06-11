@@ -24,7 +24,7 @@ data class TripResultDto(
 
 val TripResultDto.minimalTripResult: TripResultDto
     get() = TripResultDto(
-        trip = trip?.minimalCopy(),
+        trip = trip?.minimalCopy(places = null),
         id = id,
         isAlternativeOption = null
     )
