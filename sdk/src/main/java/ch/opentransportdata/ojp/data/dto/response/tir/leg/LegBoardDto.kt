@@ -40,6 +40,8 @@ data class LegBoardDto(
     val noBoardingAtStop: Boolean?,
     @PropertyElement(name = "NoAlightingAtStop")
     val noAlightingAtStop: Boolean?,
+    @Element(name = "siri:ExpectedDepartureOccupancy")
+    val expectedDepartureOccupancy: List<ExpectedDepartureOccupancyDto>?
 ) : Parcelable {
 
     val isPlatformChanged: Boolean
@@ -64,6 +66,7 @@ fun LegBoardDto.minimalCopy(): LegBoardDto {
         notServicedStop = null,
         noBoardingAtStop = null,
         noAlightingAtStop = null,
+        expectedDepartureOccupancy = null
     )
 }
 
