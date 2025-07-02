@@ -12,7 +12,7 @@ import kotlinx.parcelize.Parcelize
  * Created by Michael Ruppen on 28.06.2024
  */
 @Parcelize
-@Xml(name = "LegBoard")
+@Xml(name = "LegAlight")
 data class LegAlightDto(
     @PropertyElement(name = "siri:StopPointRef")
     val stopPointRef: String,

@@ -144,7 +144,7 @@ object PreviewData {
                 notServicedStop = null,
                 noBoardingAtStop = null,
                 noAlightingAtStop = null,
-                expectedDepartureOccupancy = null
+                expectedDepartureOccupancy = emptyList()
             ),
             legIntermediate = null,
             legAlight = LegAlightDto(
@@ -229,7 +229,7 @@ object PreviewData {
                 notServicedStop = true,
                 noBoardingAtStop = null,
                 noAlightingAtStop = null,
-                expectedDepartureOccupancy = null
+                expectedDepartureOccupancy = emptyList()
             ),
             legIntermediate = null,
             legAlight = LegAlightDto(
