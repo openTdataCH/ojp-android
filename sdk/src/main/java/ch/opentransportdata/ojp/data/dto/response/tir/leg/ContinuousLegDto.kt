@@ -17,8 +17,8 @@ data class ContinuousLegDto(
     val legStart: LegStartEndDto,
     @Element(name = "LegEnd")
     val legEnd: LegStartEndDto,
-//    @Element(name = "Service")
-//    val service: ServiceDto,//Todo: create separate ContinuousService
+    @Element(name = "Service")
+    val service: ContinuousServiceTypeChoiceDto,//Todo: create separate ContinuousService
     @PropertyElement(name = "Duration")
     val duration: Duration
 ) : AbstractLegType(), Parcelable
@@ -28,5 +28,6 @@ fun ContinuousLegDto.minimalCopy(): ContinuousLegDto {
         legStart = legStart,
         legEnd = legEnd,
         duration = duration,
+        service = service
     )
 }
