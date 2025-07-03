@@ -18,7 +18,7 @@ data class ContinuousLegDto(
     @Element(name = "LegEnd")
     val legEnd: LegStartEndDto,
     @Element(name = "Service")
-    val service: ContinuousServiceTypeChoiceDto,//Todo: create separate ContinuousService
+    val service: ContinuousServiceTypeChoiceDto,
     @PropertyElement(name = "Duration")
     val duration: Duration
 ) : AbstractLegType(), Parcelable
