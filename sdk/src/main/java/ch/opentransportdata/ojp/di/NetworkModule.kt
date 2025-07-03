@@ -1,10 +1,26 @@
 package ch.opentransportdata.ojp.di
 
 import ch.opentransportdata.ojp.BuildConfig
-import ch.opentransportdata.ojp.data.dto.converter.*
+import ch.opentransportdata.ojp.data.dto.converter.ConventionalModesOfOperationConverter
+import ch.opentransportdata.ojp.data.dto.converter.DurationTypeConverter
+import ch.opentransportdata.ojp.data.dto.converter.FareClassConverter
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeTypeConverter
+import ch.opentransportdata.ojp.data.dto.converter.OccupancyLevelConverter
+import ch.opentransportdata.ojp.data.dto.converter.PlaceTypeRestrictionConverter
+import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
+import ch.opentransportdata.ojp.data.dto.converter.RealTimeDataConverter
+import ch.opentransportdata.ojp.data.dto.converter.ScopeTypeConverter
+import ch.opentransportdata.ojp.data.dto.converter.TransferTypeConverter
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.di.interceptor.TokenInterceptor
-import ch.opentransportdata.ojp.domain.model.*
+import ch.opentransportdata.ojp.domain.model.ConventionalModesOfOperation
+import ch.opentransportdata.ojp.domain.model.FareClass
+import ch.opentransportdata.ojp.domain.model.OccupancyLevel
+import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
+import ch.opentransportdata.ojp.domain.model.PtMode
+import ch.opentransportdata.ojp.domain.model.RealtimeData
+import ch.opentransportdata.ojp.domain.model.ScopeType
+import ch.opentransportdata.ojp.domain.model.TransferType
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter
@@ -69,6 +85,8 @@ internal fun provideTikXml(initializer: Initializer): TikXml {
         .addTypeConverter(ConventionalModesOfOperation::class.java, ConventionalModesOfOperationConverter())
         .addTypeConverter(RealtimeData::class.java, RealTimeDataConverter())
         .addTypeConverter(ScopeType::class.java, ScopeTypeConverter())
+        .addTypeConverter(FareClass::class.java, FareClassConverter())
+        .addTypeConverter(OccupancyLevel::class.java, OccupancyLevelConverter())
         .exceptionOnUnreadXml(false)
         .build()
 }

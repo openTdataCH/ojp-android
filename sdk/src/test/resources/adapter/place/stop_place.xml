@@ -1,9 +1,9 @@
 <Place>
     <StopPlace>
         <StopPlaceRef>8501120</StopPlaceRef>
-        <StopPlaceName>
+        <Name>
             <Text xml:lang="de">Lausanne</Text>
-        </StopPlaceName>
+        </Name>
         <PrivateCode>
             <System>EFA</System>
             <Value>107099</Value>

@@ -12,7 +12,7 @@ import kotlinx.parcelize.Parcelize
  * Created by Michael Ruppen on 28.06.2024
  */
 @Parcelize
-@Xml(name = "LegBoard")
+@Xml(name = "LegIntermediate")
 data class LegIntermediateDto(
     @PropertyElement(name = "siri:StopPointRef")
     val stopPointRef: String,
@@ -40,6 +40,8 @@ data class LegIntermediateDto(
     val noBoardingAtStop: Boolean?,
     @PropertyElement(name = "NoAlightingAtStop")
     val noAlightingAtStop: Boolean?,
+    @Element(name = "siri:ExpectedDepartureOccupancy")
+    val expectedDepartureOccupancy: List<ExpectedDepartureOccupancyDto>? = null
 ) : Parcelable {
 
     val isPlatformChanged: Boolean
@@ -70,7 +72,8 @@ fun LegIntermediateDto.minimalCopy(): LegIntermediateDto {
         unplannedStop = null,
         notServicedStop = null,
         noBoardingAtStop = null,
-        noAlightingAtStop = null
+        noAlightingAtStop = null,
+        expectedDepartureOccupancy = emptyList()
     )
 }
 

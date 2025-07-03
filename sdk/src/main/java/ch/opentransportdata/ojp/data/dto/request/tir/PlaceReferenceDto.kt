@@ -20,7 +20,7 @@ data class PlaceReferenceDto(
     //If more types needed, create custom typeAdapter and parse only necessary
     @PropertyElement(name = "StopPlaceRef")
     val ref: String? = null,
-    @Element(name = "StopPlaceName")
+    @Element(name = "Name")
     val stationName: NameDto?,
     @Element(name = "GeoPosition") //todo: check if schema is correct (when working on backend), think of solution where only send this if is Address
     val position: GeoPositionDto? = null
