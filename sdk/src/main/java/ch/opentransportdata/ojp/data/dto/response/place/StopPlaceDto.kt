@@ -21,7 +21,7 @@ data class StopPlaceDto(
     override val privateCodes: List<PrivateCodeDto>? = emptyList(),
     @PropertyElement(name = "StopPlaceRef")
     val stopPlaceRef: String,
-    @Element(name = "Name")
+    @Element(name = "StopPlaceName")
     val name: NameDto?,
     @Element(name = "NameSuffix")
     val nameSuffix: NameDto?,
