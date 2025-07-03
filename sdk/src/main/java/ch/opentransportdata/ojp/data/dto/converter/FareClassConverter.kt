@@ -5,7 +5,7 @@ import com.tickaroo.tikxml.TypeConverter
 
 
 /**
- * Created by Deniz Kalem on 13.08.2024
+ * Created by Deniz Kalem on 02.07.2025
  */
 internal class FareClassConverter : TypeConverter<FareClass> {
 
