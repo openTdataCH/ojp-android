@@ -6,6 +6,7 @@ import ch.opentransportdata.ojp.data.dto.response.tir.leg.AbstractLegType
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.ContinuousLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.minimalCopy
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.replaceWithParentRef
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
@@ -39,9 +40,9 @@ fun LegDto.minimalCopy(): LegDto {
     return LegDto(
         id = id,
         duration = duration,
-        timedLeg = timedLeg,
+        timedLeg = timedLeg?.minimalCopy(),
         transferLeg = transferLeg,
-        continuousLeg = continuousLeg
+        continuousLeg = continuousLeg?.minimalCopy()
     )
 }
 

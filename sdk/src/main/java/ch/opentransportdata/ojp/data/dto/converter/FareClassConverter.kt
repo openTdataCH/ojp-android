@@ -10,10 +10,10 @@ import com.tickaroo.tikxml.TypeConverter
 internal class FareClassConverter : TypeConverter<FareClass> {
 
     override fun read(ojpValue: String): FareClass {
-        return when (ojpValue.trim()) {
+        return when (ojpValue) {
             "unknown" -> FareClass.UNKNOWN
             "firstClass" -> FareClass.FIRST_CLASS
-            "secondClass" -> FareClass.SECOND_CLASS
+            "secondClass " -> FareClass.SECOND_CLASS
             else -> FareClass.UNKNOWN
         }
     }
@@ -22,7 +22,7 @@ internal class FareClassConverter : TypeConverter<FareClass> {
         return when (type) {
             FareClass.UNKNOWN -> "unknown"
             FareClass.FIRST_CLASS -> "firstClass"
-            FareClass.SECOND_CLASS -> "secondClass"
+            FareClass.SECOND_CLASS -> "secondClass "
         }
     }
 }
