@@ -1,4 +1,4 @@
-<OJPTripDelivery>
+<OJPTripDelivery xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri">>
     <siri:ResponseTimestamp>2024-07-31T16:57:47.184695+02:00</siri:ResponseTimestamp>
     <siri:RequestMessageRef>713834e2-8b48-4dd3-9e70-8a1694c05d11</siri:RequestMessageRef>
     <siri:DefaultLanguage>de</siri:DefaultLanguage>

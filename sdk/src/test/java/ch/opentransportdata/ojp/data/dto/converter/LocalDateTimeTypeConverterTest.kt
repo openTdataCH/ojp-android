@@ -1,107 +1,71 @@
 package ch.opentransportdata.ojp.data.dto.converter
 
 import assertk.assertThat
+import assertk.assertions.contains
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNotEqualTo
-import assertk.assertions.isNotNull
-import ch.opentransportdata.ojp.TestUtils
-import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
-import ch.opentransportdata.ojp.domain.usecase.Initializer
-import org.junit.Before
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import nl.adaptivity.xmlutil.serialization.XML
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.time.LocalDateTime
-import java.time.ZoneId
 
-/**
- * Created by Michael Ruppen on 05.09.2024
- */
-class LocalDateTimeTypeConverterTest {
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [35])
+class LocalDateTimeSerializerXmlUtilTest {
 
-    private lateinit var dateTimeConverter: LocalDateTimeTypeConverter
-    private val initializer = Initializer()
+    private val xml = XML {}
 
-    @Before
-    fun setUp() {
-        initializer.defaultTimeZone = ZoneId.of("Europe/Zurich")
-        dateTimeConverter = LocalDateTimeTypeConverter(initializer)
+    @Serializable
+    @XmlSerialName("Root", "", "")
+    private data class Root(
+        @XmlElement(true)
+        @XmlSerialName("When", "", "")
+        @Serializable(with = LocalDateTimeSerializer::class)
+        val whenLocal: LocalDateTime
+    )
+
+    @Test
+    fun `parses ISO local datetime without offset`() {
+        val s = "2024-09-04T13:29:24.1819927"
+        val result = xml.decodeFromString<Root>("<Root><When>$s</When></Root>")
+        assertThat(result.whenLocal).isEqualTo(LocalDateTime.parse(s))
     }
 
     @Test
-    fun `Date time string has format +2,00 is parsed correctly to given timeZone EuropeZurich`() {
-        // GIVEN
-        val timeString = "2024-09-04T13:29:24.1819927+02:00"
-
-        // ACTION
-        val result = dateTimeConverter.read(timeString)
-
-        // ASSERTION
-        assertThat(result).isNotEqualTo(LocalDateTime.now())
-        assertThat(result.hour).isEqualTo(13)
+    fun `parses value with offset and ignores the offset`() {
+        val s = "2024-09-04T13:29:24.1819927+02:00"
+        val result = xml.decodeFromString<Root>("<Root><When>$s</When></Root>")
+        assertThat(result.whenLocal).isEqualTo(
+            LocalDateTime.parse("2024-09-04T13:29:24.1819927")
+        )
     }
 
     @Test
-    fun `Date time string has format +1,00 is parsed correctly to given timeZone EuropeZurich`() {
-        // GIVEN
-        val timeString = "2024-09-04T13:29:24.1819927+01:00"
-
-        // ACTION
-        val result = dateTimeConverter.read(timeString)
-
-        // ASSERTION
-        assertThat(result).isNotEqualTo(LocalDateTime.now())
-        assertThat(result.hour).isEqualTo(14)
+    fun `parses Zulu time and ignores the Z`() {
+        val s = "2024-09-04T07:40:00Z"
+        val result = xml.decodeFromString<Root>("<Root><When>$s</When></Root>")
+        assertThat(result.whenLocal).isEqualTo(
+            LocalDateTime.parse("2024-09-04T07:40:00")
+        )
     }
 
     @Test
-    fun `Date time string has format +0,00 is parsed correctly to given timeZone EuropeZurich`() {
-        // GIVEN
-        val timeString = "2024-09-04T13:29:24.1819927+00:00"
-
-        // ACTION
-        val result = dateTimeConverter.read(timeString)
-
-        // ASSERTION
-        assertThat(result).isNotEqualTo(LocalDateTime.now())
-        assertThat(result.hour).isEqualTo(15)
+    fun `serializes to ISO local datetime without zone`() {
+        val value = LocalDateTime.parse("2024-09-05T15:02:49.258568")
+        val xmlOut = xml.encodeToString(Root.serializer(), Root(value))
+        assertThat(xmlOut).contains("<When>2024-09-05T15:02:49.258568</When>")
     }
 
     @Test
-    fun `Date time string in wrong format falls back to LocalDateTimeNow()`() {
-        // GIVEN
-        val timeString = "2024-09-04T13:29:24.1819927"
-        val currentTime = LocalDateTime.now()
-
-        // ACTION
-        val result = dateTimeConverter.read(timeString)
-
-        // ASSERTION
-        assertThat(result.hour).isEqualTo(currentTime.hour)
-        assertThat(result.minute).isEqualTo(currentTime.minute)
-    }
-
-    @Test
-    fun `Date time string as zulu time is parsed correctly to given timeZone EuropeZurich`() {
-        // GIVEN
-        val timeString = "2024-09-04T07:40:00Z"
-
-        // ACTION
-        val result = dateTimeConverter.read(timeString)
-
-        // ASSERTION
-        assertThat(result).isNotEqualTo(LocalDateTime.now())
-        assertThat(result.hour).isEqualTo(9)
-    }
-
-    @Test
-    fun `LocalDateTime to string parsed correctly to zulu time`() {
-        // GIVEN
-        val timeString = "2024-09-05T15:02:49.258568Z"
-        val time = dateTimeConverter.read(timeString)
-
-        // ACTION
-        val result = dateTimeConverter.write(time)
-
-        // ASSERTION
-        assertThat(result).isEqualTo("2024-09-05T15:02:49.258568Z")
+    fun `round-trip local datetime`() {
+        val original = LocalDateTime.parse("2024-12-01T08:09:10.123456789")
+        val encoded = xml.encodeToString(Root.serializer(), Root(original))
+        val decoded = xml.decodeFromString<Root>(encoded)
+        assertThat(decoded.whenLocal).isEqualTo(original)
     }
 }

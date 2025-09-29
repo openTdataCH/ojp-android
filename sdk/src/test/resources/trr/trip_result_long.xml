@@ -1,4 +1,4 @@
-<TripResult>
+<TripResult xmlns:siri="http://www.siri.org.uk/siri" xmlns="http://www.vdv.de/ojp">>
     <Id>ID-5A2207C1-3218-4C65-B580-20E9B4694F5C</Id>
     <Trip>
         <Id>ID-5A2207C1-3218-4C65-B580-20E9B4694F5C</Id>
@@ -1376,7 +1376,9 @@
                     </Attribute>
                     <Attribute>
                         <UserText>
-                            <Text>Für einsteigende Fahrgäste in Surava und Alvaneu ist eine Voranmeldung bis 10 Min vor Abfahrt erforderlich Tel. +41 81 288 26 26</Text>
+                            <Text>Für einsteigende Fahrgäste in Surava und Alvaneu ist eine Voranmeldung bis 10 Min vor Abfahrt
+                                erforderlich Tel. +41 81 288 26 26
+                            </Text>
                         </UserText>
                         <Code>I_1OO</Code>
                     </Attribute>

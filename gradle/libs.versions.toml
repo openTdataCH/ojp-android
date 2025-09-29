@@ -7,6 +7,7 @@ coreKtx = "1.15.0"
 junit = "4.13.2"
 extJunit = "1.2.1"
 kotlinxCoroutinesTest = "1.8.0"
+robolectric = "4.16"
 xmlUtil = "0.91.2"
 timber = "5.0.1"
 koin = "3.5.3"
@@ -30,6 +31,7 @@ desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "extJunit" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 xmlUtilCore = { module = "io.github.pdvrieze.xmlutil:core-android", version.ref = "xmlUtil" }
 xmlUtilSerialization = { module = "io.github.pdvrieze.xmlutil:serialization-jvm", version.ref = "xmlUtil" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
