@@ -1,14 +1,12 @@
 package ch.opentransportdata.ojp.data.remote.trip
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
-import ch.opentransportdata.ojp.data.dto.converter.PtModeTypeConverter
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tir.ModeAndModeOfOperationFilterDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceContextDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PtModeType
 import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripVia
@@ -130,7 +128,7 @@ internal class RemoteTripDataSourceImpl(
             useRealtimeData = this.useRealtimeData,
             modeAndModeOfOperationFilter = this.modeAndModeOfOperationFilter?.map { filter ->
                 ModeAndModeOfOperationFilterDto(
-                    ptMode = filter.ptMode.map { PtModeType(PtModeTypeConverter().write(it)) },
+                    ptMode = filter.ptMode,
                     exclude = filter.exclude
                 )
             },
