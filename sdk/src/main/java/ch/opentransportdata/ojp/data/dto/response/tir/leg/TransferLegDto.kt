@@ -1,25 +1,36 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
+import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.converter.DurationSerializer
 import ch.opentransportdata.ojp.domain.model.TransferType
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.Duration
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
 @Parcelize
-@Xml(name = "TransferLeg")
+@Serializable
+@XmlSerialName("TransferLeg", OJP_NAME_SPACE, "")
 data class TransferLegDto(
-    //normally a list, but is only a single return type implemented on backend. tikXml can't parse a list of ENUM! if want to make it run, try custom type adapter with a List
-    @PropertyElement(name = "TransferType")
+    @XmlElement(true)
+    @XmlSerialName("TransferType", OJP_NAME_SPACE, "")
     val transferType: TransferType,
-    @Element(name = "LegStart")
+
+    @XmlElement(true)
+    @XmlSerialName("LegStart", OJP_NAME_SPACE, "")
     val legStart: LegStartEndDto,
-    @Element(name = "LegEnd")
+
+    @XmlElement(true)
+    @XmlSerialName("LegEnd", OJP_NAME_SPACE, "")
     val legEnd: LegStartEndDto,
-    @PropertyElement(name = "Duration")
+
+    @XmlElement(true)
+    @XmlSerialName("Duration", OJP_NAME_SPACE, "")
+    @Serializable(with = DurationSerializer::class)
     val duration: Duration
-) : AbstractLegType()
+) : AbstractLegType(), Parcelable

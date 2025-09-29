@@ -1,6 +1,9 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.trips
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.converter.DurationSerializer
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.response.PlacesDto
 import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.ContinuousLegDto
@@ -9,37 +12,59 @@ import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.minimalCopy
 import ch.opentransportdata.ojp.data.dto.response.tir.replaceWithParentRef
 import ch.opentransportdata.ojp.data.dto.response.tir.situations.PtSituationDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.Duration
 import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
+
 @Parcelize
-@Xml(name = "Trip")
+@Serializable
+@XmlSerialName("Trip", OJP_NAME_SPACE, "")
 data class TripDto(
-    @PropertyElement(name = "Id")
+    @XmlElement(true)
+    @XmlSerialName("Id", OJP_NAME_SPACE, "")
     override val id: String,
-    @PropertyElement(name = "Duration")
+
+    @XmlElement(true)
+    @XmlSerialName("Duration", OJP_NAME_SPACE, "")
+    @Serializable(with = DurationSerializer::class)
     val duration: Duration,
-    @PropertyElement(name = "StartTime")
+
+    @XmlElement(true)
+    @XmlSerialName("StartTime", OJP_NAME_SPACE, "")
+    @Serializable(with = LocalDateTimeSerializer::class)
     val startTime: LocalDateTime,
-    @PropertyElement(name = "EndTime")
+
+    @XmlElement(true)
+    @XmlSerialName("EndTime", OJP_NAME_SPACE, "")
+    @Serializable(with = LocalDateTimeSerializer::class)
     val endTime: LocalDateTime,
-    @PropertyElement(name = "Transfers")
+
+    @XmlElement(true)
+    @XmlSerialName("Transfers", OJP_NAME_SPACE, "")
     val transfers: Int,
-    @Element(name = "Leg")
+
+    @XmlElement(true)
+    @XmlSerialName("Leg", OJP_NAME_SPACE, "")
     val legs: List<LegDto>,
-    @PropertyElement(name = "Unplanned")
-    val unplanned: Boolean?, //not yet delivered from backend
-    @PropertyElement(name = "Delayed")
-    val delayed: Boolean?, //not yet delivered from backend
-    @PropertyElement(name = "Infeasible")
-    val infeasible: Boolean?
+
+    @XmlElement(true)
+    @XmlSerialName("Unplanned", OJP_NAME_SPACE, "")
+    val unplanned: Boolean? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("Delayed", OJP_NAME_SPACE, "")
+    val delayed: Boolean? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("Infeasible", OJP_NAME_SPACE, "")
+    val infeasible: Boolean? = null
 ) : AbstractTripDto(), Parcelable {
 
     val startWithTransferLeg: Boolean

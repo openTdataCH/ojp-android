@@ -1,16 +1,21 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.situations
 
 import android.os.Parcelable
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
+import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
 @Parcelize
-@Xml(name = "siri:Blocking")
+@Serializable
+@XmlSerialName("Blocking", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class BlockingDto(
-    @PropertyElement(name = "siri:JourneyPlanner")
+    @XmlElement(true)
+    @XmlSerialName("JourneyPlanner", SIRI_NAME_SPACE, SIRI_PREFIX)
     val journeyPlanner: Boolean
 ) : Parcelable

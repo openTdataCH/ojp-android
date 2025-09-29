@@ -1,24 +1,39 @@
 package ch.opentransportdata.ojp.data.dto.response.delivery
 
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-@Xml(name = "OJPLocationInformationDelivery")
+@Serializable
+@XmlSerialName("OJPLocationInformationDelivery", OJP_NAME_SPACE, "")
 internal data class LocationInformationDeliveryDto(
-    @PropertyElement(name = "siri:ResponseTimestamp")
+    @XmlElement(true)
+    @XmlSerialName("ResponseTimestamp", SIRI_NAME_SPACE, SIRI_PREFIX)
+    @Serializable(with = LocalDateTimeSerializer::class)
     override val responseTimestamp: LocalDateTime,
-    @PropertyElement(name = "siri:RequestMessageRef")
-    override val requestMessageRef: String?,
-    @PropertyElement(name = "siri:DefaultLanguage")
-    override val defaultLanguage: String?,
-    @PropertyElement(name = "CalcTime")
-    val calcTime: Int?,
-    @Element(name = "PlaceResult")
+
+    @XmlElement(true)
+    @XmlSerialName("RequestMessageRef", SIRI_NAME_SPACE, SIRI_PREFIX)
+    override val requestMessageRef: String? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("DefaultLanguage", SIRI_NAME_SPACE, SIRI_PREFIX)
+    override val defaultLanguage: String? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("CalcTime", OJP_NAME_SPACE, "")
+    val calcTime: Int? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("PlaceResult", OJP_NAME_SPACE, "")
     val placeResults: List<PlaceResultDto>? = emptyList(),
 ) : AbstractDeliveryDto()

@@ -1,22 +1,26 @@
 package ch.opentransportdata.ojp.data.dto.response
 
 import android.os.Parcelable
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 26.04.2024
  *
  * Serializable and Parcelize annotation is both needed for compose navigation with custom types
  */
-@Serializable
 @Parcelize
-@Xml(name = "PrivateCode")
+@Serializable
+@XmlSerialName("PrivateCode", OJP_NAME_SPACE, "")
 data class PrivateCodeDto(
-    @PropertyElement(name = "System")
+    @XmlElement(true)
+    @XmlSerialName("System", OJP_NAME_SPACE, "")
     val system: String,
-    @PropertyElement(name = "Value")
-    val value: String,
+
+    @XmlElement(true)
+    @XmlSerialName("Value", OJP_NAME_SPACE, "")
+    val value: String
 ) : Parcelable

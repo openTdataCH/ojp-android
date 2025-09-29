@@ -1,20 +1,25 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.response.NameDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
 @Parcelize
-@Xml(name = "Attribute")
+@Serializable
+@XmlSerialName("Attribute", OJP_NAME_SPACE, "")
 data class AttributeDto(
-    @Element(name = "UserText")
+    @XmlElement(true)
+    @XmlSerialName("UserText", OJP_NAME_SPACE, "")
     val userText: NameDto,
-    @PropertyElement(name = "Code")
+
+    @XmlElement(true)
+    @XmlSerialName("Code", OJP_NAME_SPACE, "")
     val code: String
 ) : Parcelable

@@ -1,28 +1,40 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.response.PlacesDto
 import ch.opentransportdata.ojp.data.dto.response.tir.situations.PtSituationDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
 @Parcelize
-@Xml(name = "TimedLeg")
+@Serializable
+@XmlSerialName("TimedLeg", OJP_NAME_SPACE, "")
 data class TimedLegDto(
-    @Element(name = "LegBoard")
+    @XmlElement(true)
+    @XmlSerialName("LegBoard", OJP_NAME_SPACE, "")
     val legBoard: LegBoardDto,
-    @Element(name = "LegIntermediate")
-    val legIntermediate: List<LegIntermediateDto>?,
-    @Element(name = "LegAlight")
+
+    @XmlElement(true)
+    @XmlSerialName("LegIntermediate", OJP_NAME_SPACE, "")
+    val legIntermediate: List<LegIntermediateDto>? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("LegAlight", OJP_NAME_SPACE, "")
     val legAlight: LegAlightDto,
-    @Element(name = "Service")
+
+    @XmlElement(true)
+    @XmlSerialName("Service", OJP_NAME_SPACE, "")
     val service: DatedJourneyDto,
-    @Element(name = "LegTrack")
-    val legTrack: LegTrackDto?
+
+    @XmlElement(true)
+    @XmlSerialName("LegTrack", OJP_NAME_SPACE, "")
+    val legTrack: LegTrackDto? = null
 ) : AbstractLegType(), Parcelable {
 
     val hasAnyPlatformChanges: Boolean

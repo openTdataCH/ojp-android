@@ -1,20 +1,29 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
+import ch.opentransportdata.ojp.data.dto.converter.FareClassSerializer
 import ch.opentransportdata.ojp.domain.model.FareClass
 import ch.opentransportdata.ojp.domain.model.OccupancyLevel
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Deniz Kalem on 25.06.2025
  */
 @Parcelize
-@Xml(name = "siri:ExpectedDepartureOccupancy")
+@Serializable
+@XmlSerialName("ExpectedDepartureOccupancy", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class ExpectedDepartureOccupancyDto(
-    @PropertyElement(name = "siri:FareClass")
+    @XmlElement(true)
+    @XmlSerialName("FareClass", SIRI_NAME_SPACE, SIRI_PREFIX)
+    @Serializable(with = FareClassSerializer::class)
     val fareClass: FareClass,
-    @PropertyElement(name = "siri:OccupancyLevel")
+
+    @XmlElement(true)
+    @XmlSerialName("OccupancyLevel", SIRI_NAME_SPACE, SIRI_PREFIX)
     val occupancyLevel: OccupancyLevel
 ) : Parcelable

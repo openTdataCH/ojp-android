@@ -1,17 +1,21 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.response.GeoPositionDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
 @Parcelize
-@Xml(name = "LinkProjection")
+@Serializable
+@XmlSerialName("LinkProjection", OJP_NAME_SPACE, "")
 data class LinearShapeDto(
-    @Element(name = "Position")
+    @XmlElement(true)
+    @XmlSerialName("Position", OJP_NAME_SPACE, "")
     val positions: List<GeoPositionDto>
 ) : Parcelable

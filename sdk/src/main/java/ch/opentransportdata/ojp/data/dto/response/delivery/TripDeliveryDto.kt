@@ -1,28 +1,45 @@
 package ch.opentransportdata.ojp.data.dto.response.delivery
 
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResponseContextDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 14.05.2024
  */
 
-@Xml(name = "OJPTripDelivery")
+@Serializable
+@XmlSerialName("OJPTripDelivery", OJP_NAME_SPACE, "")
 data class TripDeliveryDto(
-    @PropertyElement(name = "siri:ResponseTimestamp")
+    @XmlElement(true)
+    @XmlSerialName("ResponseTimestamp", SIRI_NAME_SPACE, SIRI_PREFIX)
+    @Serializable(with = LocalDateTimeSerializer::class)
     override val responseTimestamp: LocalDateTime,
-    @PropertyElement(name = "siri:RequestMessageRef")
-    override val requestMessageRef: String?,
-    @PropertyElement(name = "siri:DefaultLanguage")
-    override val defaultLanguage: String?,
-    @PropertyElement(name = "CalcTime")
-    val calcTime: Int?,
-    @Element(name = "TripResult")
-    val tripResults: List<TripResultDto>?,
-    @Element(name = "TripResponseContext")
-    val responseContext: TripResponseContextDto?
+
+    @XmlElement(true)
+    @XmlSerialName("RequestMessageRef", SIRI_NAME_SPACE, SIRI_PREFIX)
+    override val requestMessageRef: String? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("DefaultLanguage", SIRI_NAME_SPACE, SIRI_PREFIX)
+    override val defaultLanguage: String? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("CalcTime", OJP_NAME_SPACE, "")
+    val calcTime: Int? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("TripResult", OJP_NAME_SPACE, "")
+    val tripResults: List<TripResultDto>? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("TripResponseContext", OJP_NAME_SPACE, "")
+    val responseContext: TripResponseContextDto? = null
 ) : AbstractDeliveryDto()

@@ -1,22 +1,29 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.response.NameDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
 @Parcelize
-@Xml(name = "ProductCategory")
+@Serializable
+@XmlSerialName("ProductCategory", OJP_NAME_SPACE, "")
 data class ProductCategoryDto(
-    @Element(name = "Name")
-    val name: NameDto?,
-    @Element(name = "ShortName")
-    val shortName: NameDto?,
-    @PropertyElement(name = "ProductCategoryRef")
-    val productCategoryRef: String?
+    @XmlElement(true)
+    @XmlSerialName("Name", OJP_NAME_SPACE, "")
+    val name: NameDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("ShortName", OJP_NAME_SPACE, "")
+    val shortName: NameDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("ProductCategoryRef", OJP_NAME_SPACE, "")
+    val productCategoryRef: String? = null
 ) : Parcelable

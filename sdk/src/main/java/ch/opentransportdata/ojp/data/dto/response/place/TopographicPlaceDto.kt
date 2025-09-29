@@ -1,24 +1,29 @@
 package ch.opentransportdata.ojp.data.dto.response.place
 
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.response.NameDto
 import ch.opentransportdata.ojp.data.dto.response.PrivateCodeDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Deniz Kalem on 25.03.2025
  */
-@Serializable
 @Parcelize
-@Xml(name = "TopographicPlace")
+@Serializable
+@XmlSerialName("TopographicPlace", OJP_NAME_SPACE, "")
 data class TopographicPlaceDto(
-    @Element(name = "PrivateCode")
+    @XmlElement(true)
+    @XmlSerialName("PrivateCode", OJP_NAME_SPACE, "")
     override val privateCodes: List<PrivateCodeDto>? = emptyList(),
-    @PropertyElement(name = "TopographicPlaceRef")
+
+    @XmlElement(true)
+    @XmlSerialName("TopographicPlaceRef", OJP_NAME_SPACE, "")
     val ref: String? = null,
-    @Element(name = "TopographicPlaceName")
+
+    @XmlElement(true)
+    @XmlSerialName("TopographicPlaceName", OJP_NAME_SPACE, "")
     val name: NameDto
 ) : AbstractPlaceDto()

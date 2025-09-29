@@ -1,89 +1,125 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.situations
 
 import android.os.Parcelable
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
+import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
 @Parcelize
-@Xml(name = "siri:TextualContent")
+@Serializable
+@XmlSerialName("TextualContent", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class TextualContentDto(
-    @Element(name = "siri:SummaryContent")
+    @XmlElement(true)
+    @XmlSerialName("SummaryContent", SIRI_NAME_SPACE, SIRI_PREFIX)
     val summaryContent: SummaryContentDto,
-    @Element(name = "siri:ReasonContent")
-    val reasonContent: ReasonContentDto?,
-    @Element(name = "siri:DescriptionContent")
-    val descriptionContent: List<DescriptionContent>?,
-    @Element(name = "siri:ConsequenceContent")
-    val consequenceContent: List<ConsequenceContentDto>?,
-    @Element(name = "siri:RecommendationContent")
-    val recommendationContent: List<RecommendationContentDto>?,
-    @Element(name = "siri:DurationContent")
-    val durationContent: DurationContentDto?,
-    @Element(name = "siri:RemarkContent")
-    val remarkContent: List<RemarkContent>?,
-    @Element(name = "siri:InfoLink")
-    val infoLink: List<InfoLink>?
+
+    @XmlElement(true)
+    @XmlSerialName("ReasonContent", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val reasonContent: ReasonContentDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("DescriptionContent", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val descriptionContent: List<DescriptionContent>? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("ConsequenceContent", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val consequenceContent: List<ConsequenceContentDto>? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("RecommendationContent", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val recommendationContent: List<RecommendationContentDto>? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("DurationContent", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val durationContent: DurationContentDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("RemarkContent", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val remarkContent: List<RemarkContent>? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("InfoLink", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val infoLink: List<InfoLink>? = null
 ) : Parcelable
 
 @Parcelize
-@Xml(name = "siri:SummaryContent")
+@Serializable
+@XmlSerialName("SummaryContent", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class SummaryContentDto(
-    @PropertyElement(name = "siri:SummaryText")
-    val summaryText: String?
+    @XmlElement(true)
+    @XmlSerialName("SummaryText", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val summaryText: String? = null
 ) : Parcelable
 
 @Parcelize
-@Xml(name = "siri:ReasonContent")
+@Serializable
+@XmlSerialName("ReasonContent", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class ReasonContentDto(
-    @PropertyElement(name = "siri:ReasonText")
-    val reasonText: String?
+    @XmlElement(true)
+    @XmlSerialName("ReasonText", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val reasonText: String? = null
 ) : Parcelable
 
 @Parcelize
-@Xml(name = "siri:ConsequenceContent")
+@Serializable
+@XmlSerialName("ConsequenceContent", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class ConsequenceContentDto(
-    @PropertyElement(name = "siri:ConsequenceText")
-    val consequenceText: String?
+    @XmlElement(true)
+    @XmlSerialName("ConsequenceText", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val consequenceText: String? = null
 ) : Parcelable
 
 @Parcelize
-@Xml(name = "siri:RecommendationContent")
+@Serializable
+@XmlSerialName("RecommendationContent", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class RecommendationContentDto(
-    @PropertyElement(name = "siri:RecommendationText")
-    val recommendationText: String?
+    @XmlElement(true)
+    @XmlSerialName("RecommendationText", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val recommendationText: String? = null
 ) : Parcelable
 
 @Parcelize
-@Xml(name = "siri:DurationContent")
+@Serializable
+@XmlSerialName("DurationContent", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class DurationContentDto(
-    @PropertyElement(name = "siri:DurationText")
-    val durationText: String?
+    @XmlElement(true)
+    @XmlSerialName("DurationText", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val durationText: String? = null
 ) : Parcelable
 
 @Parcelize
-@Xml(name = "siri:DescriptionContent")
+@Serializable
+@XmlSerialName("DescriptionContent", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class DescriptionContent(
-    @PropertyElement(name = "siri:DescriptionText")
-    val descriptionText: String?
+    @XmlElement(true)
+    @XmlSerialName("DescriptionText", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val descriptionText: String? = null
 ) : Parcelable
 
 @Parcelize
-@Xml(name = "siri:RemarkContent")
+@Serializable
+@XmlSerialName("RemarkContent", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class RemarkContent(
-    @PropertyElement(name = "siri:Remark")
-    val remark: String?
+    @XmlElement(true)
+    @XmlSerialName("Remark", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val remark: String? = null
 ) : Parcelable
 
 @Parcelize
-@Xml(name = "siri:InfoLink")
+@Serializable
+@XmlSerialName("InfoLink", SIRI_NAME_SPACE, SIRI_PREFIX)
 data class InfoLink(
-    @PropertyElement(name = "siri:Uri")
+    @XmlElement(true)
+    @XmlSerialName("Uri", SIRI_NAME_SPACE, SIRI_PREFIX)
     val uri: String,
-    @PropertyElement(name = "siri:Label")
-    val label: String?
+
+    @XmlElement(true)
+    @XmlSerialName("Label", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val label: String? = null
 ) : Parcelable

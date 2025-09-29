@@ -1,28 +1,37 @@
 package ch.opentransportdata.ojp.data.dto.response.place
 
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.response.NameDto
 import ch.opentransportdata.ojp.data.dto.response.PrivateCodeDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Deniz Kalem on 25.03.2025
  */
-@Serializable
 @Parcelize
-@Xml(name = "PointOfInterest")
+@Serializable
+@XmlSerialName("PointOfInterest", OJP_NAME_SPACE, "")
 data class PointOfInterestDto(
-    @Element(name = "PrivateCode")
+    @XmlElement(true)
+    @XmlSerialName("PrivateCode", OJP_NAME_SPACE, "")
     override val privateCodes: List<PrivateCodeDto>? = emptyList(),
-    @PropertyElement(name = "PublicCode")
+
+    @XmlElement(true)
+    @XmlSerialName("PublicCode", OJP_NAME_SPACE, "")
     val publicCode: String,
-    @Element(name = "Name")
+
+    @XmlElement(true)
+    @XmlSerialName("Name", OJP_NAME_SPACE, "")
     val name: NameDto,
-    @Element(name = "NameSuffix")
-    val nameSuffix: NameDto?,
-    @PropertyElement(name = "TopographicPlaceRef")
-    val topographicPlaceRef: String?
+
+    @XmlElement(true)
+    @XmlSerialName("NameSuffix", OJP_NAME_SPACE, "")
+    val nameSuffix: NameDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("TopographicPlaceRef", OJP_NAME_SPACE, "")
+    val topographicPlaceRef: String? = null
 ) : AbstractPlaceDto()

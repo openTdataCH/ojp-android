@@ -1,41 +1,57 @@
 package ch.opentransportdata.ojp.data.dto.response
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.response.place.AbstractPlaceDto
 import ch.opentransportdata.ojp.data.dto.response.place.AddressDto
 import ch.opentransportdata.ojp.data.dto.response.place.PointOfInterestDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPointDto
 import ch.opentransportdata.ojp.data.dto.response.place.TopographicPlaceDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 08.04.2024
  *
  * Serializable and Parcelize annotation is both needed for compose navigation with custom types
  */
-@Serializable
 @Parcelize
-@Xml(name = "Place")
+@Serializable
+@XmlSerialName("Place", OJP_NAME_SPACE, "")
 data class PlaceDto(
-    @Element(name = "StopPoint")
+    @XmlElement(true)
+    @XmlSerialName("StopPoint", OJP_NAME_SPACE, "")
     val stopPoint: StopPointDto? = null,
-    @Element(name = "StopPlace")
+
+    @XmlElement(true)
+    @XmlSerialName("StopPlace", OJP_NAME_SPACE, "")
     val stopPlace: StopPlaceDto? = null,
-    @Element(name = "TopographicPlace")
+
+    @XmlElement(true)
+    @XmlSerialName("TopographicPlace", OJP_NAME_SPACE, "")
     val topographicPlace: TopographicPlaceDto? = null,
-    @Element(name = "PointOfInterest")
+
+    @XmlElement(true)
+    @XmlSerialName("PointOfInterest", OJP_NAME_SPACE, "")
     val pointOfInterest: PointOfInterestDto? = null,
-    @Element(name = "Address")
+
+    @XmlElement(true)
+    @XmlSerialName("Address", OJP_NAME_SPACE, "")
     val address: AddressDto? = null,
-    @Element(name = "Name")
+
+    @XmlElement(true)
+    @XmlSerialName("Name", OJP_NAME_SPACE, "")
     val name: NameDto? = null,
-    @Element(name = "GeoPosition")
+
+    @XmlElement(true)
+    @XmlSerialName("GeoPosition", OJP_NAME_SPACE, "")
     val position: GeoPositionDto? = null,
-    @Element(name = "Mode")
+
+    @XmlElement(true)
+    @XmlSerialName("Mode", OJP_NAME_SPACE, "")
     val mode: List<ModeDto>? = emptyList(),
 ) : Parcelable {
 
