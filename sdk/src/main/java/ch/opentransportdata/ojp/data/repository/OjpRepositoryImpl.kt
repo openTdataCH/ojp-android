@@ -16,10 +16,8 @@ import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
-import com.tickaroo.tikxml.TypeAdapterNotFoundException
-import com.tickaroo.tikxml.TypeConverterNotFoundException
-import com.tickaroo.tikxml.XmlDataException
 import kotlinx.coroutines.CancellationException
+import nl.adaptivity.xmlutil.serialization.XmlParsingException
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.InputStream
@@ -132,17 +130,7 @@ internal class OjpRepositoryImpl(
                 OjpError.UnexpectedHttpStatus(exception)
             }
 
-            is TypeConverterNotFoundException -> {
-                Timber.e(exception, "Missing TypeConverter")
-                OjpError.EncodingFailed(exception)
-            }
-
-            is TypeAdapterNotFoundException -> {
-                Timber.e(exception, "Missing TypeAdapter")
-                OjpError.EncodingFailed(exception)
-            }
-
-            is XmlDataException -> {
+            is XmlParsingException -> {
                 Timber.e(exception, "Error in XML Data")
                 OjpError.DecodingFailed(exception)
             }
