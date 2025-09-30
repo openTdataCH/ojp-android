@@ -31,6 +31,7 @@
 -keep class ch.opentransportdata.ojp.data.dto.converter.** { *; }
 -keep class ch.opentransportdata.ojp.data.dto.response.** { *; }
 -keep class ch.opentransportdata.ojp.data.dto.request.tir.** { *; }
+-keep class ch.opentransportdata.ojp.data.dto.** { *; }
 
 ## Joda Time 2.3
 -dontwarn org.joda.convert.**

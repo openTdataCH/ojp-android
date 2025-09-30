@@ -23,14 +23,10 @@ import nl.adaptivity.xmlutil.serialization.XmlConfig
 import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import java.io.File
 import java.time.ZoneId
 
-@RunWith(org.robolectric.RobolectricTestRunner::class)
-@Config(sdk = [35])
-internal class OjpSdkXmlUtilTest {
+class OjpSdkXmlUtilTest {
 
     private val initializer = Initializer()
 

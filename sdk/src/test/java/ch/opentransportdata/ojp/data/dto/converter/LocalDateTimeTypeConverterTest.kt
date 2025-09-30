@@ -9,13 +9,8 @@ import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.time.LocalDateTime
 
-@RunWith(RobolectricTestRunner::class)
-@Config(sdk = [35])
 class LocalDateTimeSerializerXmlUtilTest {
 
     private val xml = XML {}

@@ -31,9 +31,6 @@ import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.serialization.XmlConfig
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.io.File
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -41,8 +38,6 @@ import java.time.ZoneId
 /**
  * Created by Nico Brandenberger on 09.04.2025
  */
-@RunWith(RobolectricTestRunner::class)
-@Config(sdk = [35])
 class TripRefinementXmlUtilTest {
 
     private val initializer = Initializer()

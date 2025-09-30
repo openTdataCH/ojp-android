@@ -20,14 +20,9 @@ import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.serialization.XmlConfig
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.io.File
 import java.time.Duration
 
-@RunWith(RobolectricTestRunner::class)
-@Config(sdk = [35])
 class DurationSerializationXmlUtilTest {
 
     object DurationIsoSerializer : KSerializer<Duration> {
