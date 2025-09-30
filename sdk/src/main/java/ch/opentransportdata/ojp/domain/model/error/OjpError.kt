@@ -1,7 +1,7 @@
 package ch.opentransportdata.ojp.domain.model.error
 
-import com.tickaroo.tikxml.XmlDataException
 import kotlinx.coroutines.CancellationException
+import nl.adaptivity.xmlutil.serialization.XmlParsingException
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -20,7 +20,7 @@ sealed class OjpError(open val exception: Exception) {
     data class EncodingFailed(override val exception: IOException) : OjpError(exception)
 
     // Can't correctly decode a XML response
-    data class DecodingFailed(override val exception: XmlDataException) : OjpError(exception)
+    data class DecodingFailed(override val exception: XmlParsingException) : OjpError(exception)
 
     // Job of the coroutine is cancelled while it is suspending
     data class RequestCancelled(override val exception: CancellationException) : OjpError(exception)

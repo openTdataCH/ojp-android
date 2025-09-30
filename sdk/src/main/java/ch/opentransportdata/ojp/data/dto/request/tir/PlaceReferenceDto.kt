@@ -1,12 +1,13 @@
 package ch.opentransportdata.ojp.data.dto.request.tir
 
 import android.os.Parcelable
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.response.GeoPositionDto
 import ch.opentransportdata.ojp.data.dto.response.NameDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 07.06.2024
@@ -15,13 +16,16 @@ import kotlinx.parcelize.Parcelize
  */
 //todo: normally should create all the reference objects
 @Parcelize
-@Xml(name = "PlaceRef")
+@Serializable
+@XmlSerialName("PlaceRef", OJP_NAME_SPACE, "")
 data class PlaceReferenceDto(
-    //If more types needed, create custom typeAdapter and parse only necessary
-    @PropertyElement(name = "StopPlaceRef")
+    @XmlElement(true)
+    @XmlSerialName("StopPlaceRef", OJP_NAME_SPACE, "")
     val ref: String? = null,
-    @Element(name = "Name")
-    val stationName: NameDto?,
-    @Element(name = "GeoPosition") //todo: check if schema is correct (when working on backend), think of solution where only send this if is Address
+    @XmlElement(true)
+    @XmlSerialName("Name", OJP_NAME_SPACE, "")
+    val stationName: NameDto? = null,
+    @XmlElement(true)
+    @XmlSerialName("GeoPosition", OJP_NAME_SPACE, "")
     val position: GeoPositionDto? = null
 ) : Parcelable

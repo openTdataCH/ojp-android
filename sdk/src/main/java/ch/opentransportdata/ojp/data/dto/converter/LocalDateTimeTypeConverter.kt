@@ -1,31 +1,28 @@
 package ch.opentransportdata.ojp.data.dto.converter
 
-import ch.opentransportdata.ojp.domain.usecase.Initializer
-import com.tickaroo.tikxml.TypeConverter
-import timber.log.Timber
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 
 /**
  * Created by Michael Ruppen on 05.07.2024
  */
-internal class LocalDateTimeTypeConverter(private val initializer: Initializer) : TypeConverter<LocalDateTime> {
+object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
+    private val formatter = DateTimeFormatter.ISO_DATE_TIME
 
-    override fun read(value: String): LocalDateTime {
-        return try {
-            val zonedDateTime = ZonedDateTime.parse(value, DateTimeFormatter.ISO_ZONED_DATE_TIME)
-            zonedDateTime.withZoneSameInstant(initializer.defaultTimeZone).toLocalDateTime()
-        } catch (e: DateTimeParseException) {
-            Timber.e(e, "$value is not a valid datetime")
-            LocalDateTime.now()
-        }
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: LocalDateTime) {
+        encoder.encodeString(value.format(formatter))
     }
 
-    override fun write(value: LocalDateTime): String {
-        val instant = value.atZone(initializer.defaultTimeZone).toInstant()
-        return DateTimeFormatter.ISO_INSTANT.format(instant)
+    override fun deserialize(decoder: Decoder): LocalDateTime {
+        return LocalDateTime.parse(decoder.decodeString(), formatter)
     }
 }

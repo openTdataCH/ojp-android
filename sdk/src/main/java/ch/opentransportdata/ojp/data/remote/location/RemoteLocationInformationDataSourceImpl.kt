@@ -1,7 +1,6 @@
 package ch.opentransportdata.ojp.data.remote.location
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
-import ch.opentransportdata.ojp.data.dto.converter.PlaceTypeRestrictionConverter
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
@@ -24,7 +23,6 @@ internal class RemoteLocationInformationDataSourceImpl(
     private val initializer: Initializer
 ) : RemoteLocationInformationDataSource {
 
-    private val placeTypeRestrictionConverter = PlaceTypeRestrictionConverter()
     private val url: String
         get() = initializer.baseUrl + initializer.endpoint
 
@@ -94,7 +92,7 @@ internal class RemoteLocationInformationDataSourceImpl(
 
     private fun createRestrictions(restrictions: LocationInformationParams): RestrictionsDto {
         return RestrictionsDto(
-            types = restrictions.types.map { RestrictionType(placeTypeRestrictionConverter.write(it)) },
+            types = restrictions.types,
             numberOfResults = restrictions.numberOfResults,
             ptModeIncluded = restrictions.ptModeIncluded
         )

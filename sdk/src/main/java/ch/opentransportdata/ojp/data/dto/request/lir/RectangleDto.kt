@@ -1,16 +1,21 @@
 package ch.opentransportdata.ojp.data.dto.request.lir
 
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.Xml
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
-@Xml(name = "Rectangle")
+@Serializable
+@XmlSerialName("Rectangle", OJP_NAME_SPACE, "")
 internal data class RectangleDto(
-    @Element(name = "UpperLeft")
+    @XmlElement(true)
+    @XmlSerialName("UpperLeft", OJP_NAME_SPACE, "")
     val upperLeft: PointDto,
 
-    @Element(name = "LowerRight")
+    @XmlElement(true)
+    @XmlSerialName("LowerRight", OJP_NAME_SPACE, "")
     val lowerRight: PointDto
 )

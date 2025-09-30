@@ -1,42 +1,55 @@
 package ch.opentransportdata.ojp.data.dto.request.tir
 
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.domain.model.RealtimeData
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 07.06.2024
  */
-@Xml(name = "Params")
+@Serializable
+@XmlSerialName("Params", OJP_NAME_SPACE, "")
 internal data class TripParamsDto(
-    @PropertyElement(name = "NumberOfResults")
+
+    @XmlElement(true)
+    @XmlSerialName("NumberOfResults", OJP_NAME_SPACE, "")
     val numberOfResults: Int? = null,
 
-    @PropertyElement(name = "NumberOfResultsBefore")
+    @XmlElement(true)
+    @XmlSerialName("NumberOfResultsBefore", OJP_NAME_SPACE, "")
     val numberOfResultsBefore: Int? = null,
 
-    @PropertyElement(name = "NumberOfResultsAfter")
+    @XmlElement(true)
+    @XmlSerialName("NumberOfResultsAfter", OJP_NAME_SPACE, "")
     val numberOfResultsAfter: Int? = null,
 
-    @PropertyElement(name = "IncludeTrackSections")
+    @XmlElement(true)
+    @XmlSerialName("IncludeTrackSections", OJP_NAME_SPACE, "")
     val includeTrackSections: Boolean? = null,
 
-    @PropertyElement(name = "IncludeLegProjection")
+    @XmlElement(true)
+    @XmlSerialName("IncludeLegProjection", OJP_NAME_SPACE, "")
     val includeLegProjection: Boolean? = null,
 
-    @PropertyElement(name = "IncludeTurnDescription")
+    @XmlElement(true)
+    @XmlSerialName("IncludeTurnDescription", OJP_NAME_SPACE, "")
     val includeTurnDescription: Boolean? = null,
 
-    @PropertyElement(name = "IncludeIntermediateStops")
+    @XmlElement(true)
+    @XmlSerialName("IncludeIntermediateStops", OJP_NAME_SPACE, "")
     val includeIntermediateStops: Boolean? = null,
 
-    @PropertyElement(name = "IncludeAllRestrictedLines")
+    @XmlElement(true)
+    @XmlSerialName("IncludeAllRestrictedLines", OJP_NAME_SPACE, "")
     val includeAllRestrictedLines: Boolean? = null,
 
-    @PropertyElement(name = "UseRealtimeData")
+    @XmlElement(true)
+    @XmlSerialName("UseRealtimeData", OJP_NAME_SPACE, "")
     val useRealtimeData: RealtimeData? = null,
 
-    @Element(name = "ModeAndModeOfOperationFilter")
-    val modeAndModeOfOperationFilter: List<ModeAndModeOfOperationFilterDto>?
+    @XmlElement(true)
+    @XmlSerialName("ModeAndModeOfOperationFilter", OJP_NAME_SPACE, "")
+    val modeAndModeOfOperationFilter: List<ModeAndModeOfOperationFilterDto>? = null
 )

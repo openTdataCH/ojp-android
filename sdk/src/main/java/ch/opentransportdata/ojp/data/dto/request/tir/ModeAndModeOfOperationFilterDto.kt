@@ -1,25 +1,22 @@
 package ch.opentransportdata.ojp.data.dto.request.tir
 
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.TextContent
-import com.tickaroo.tikxml.annotation.Xml
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
+import ch.opentransportdata.ojp.domain.model.PtMode
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 31.07.2024
  */
-@Xml(name = "ModeAndModeOfOperationFilter")
+@Serializable
+@XmlSerialName("ModeAndModeOfOperationFilter", OJP_NAME_SPACE, "")
 internal data class ModeAndModeOfOperationFilterDto(
-    @Element(name = "PtMode")
-    val ptMode: List<PtModeType>?,
-    @PropertyElement(name = "Exclude")
-    val exclude: Boolean?
-)
+    @XmlElement(true)
+    @XmlSerialName("PtMode", OJP_NAME_SPACE, "")
+    val ptMode: List<PtMode>?,
 
-
-//workaround for tikXml: https://github.com/Tickaroo/tikxml/issues/46
-@Xml
-internal data class PtModeType(
-    @TextContent
-    val type: String
+    @XmlElement(true)
+    @XmlSerialName("Exclude", OJP_NAME_SPACE, "")
+    val exclude: Boolean? = null
 )

@@ -1,4 +1,4 @@
-<Leg>
+<Leg xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri">
     <Id>2</Id>
     <TransferLeg>
         <TransferType>walk</TransferType>

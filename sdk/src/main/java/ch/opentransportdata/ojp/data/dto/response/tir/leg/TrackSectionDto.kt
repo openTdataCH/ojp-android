@@ -1,19 +1,23 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import android.os.Parcelable
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.Xml
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 28.06.2024
  */
 @Parcelize
-@Xml(name = "TrackSection")
+@Serializable
+@XmlSerialName("TrackSection", OJP_NAME_SPACE, "")
 data class TrackSectionDto(
     //todo: check if needed or can be summarized
 //    val trackSectionStart: TrackSectionStopPlaceRef?,
 //    val trackSectionEnd: TrackSectionStopPlaceRef?,
-    @Element(name = "LinkProjection")
-    val linkProjection: LinearShapeDto?
+    @XmlElement(true)
+    @XmlSerialName("LinkProjection", OJP_NAME_SPACE, "")
+    val linkProjection: LinearShapeDto? = null
 ) : Parcelable

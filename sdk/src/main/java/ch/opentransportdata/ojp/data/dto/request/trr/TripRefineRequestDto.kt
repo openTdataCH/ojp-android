@@ -1,24 +1,34 @@
 package ch.opentransportdata.ojp.data.dto.request.trr
 
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.LocalDateTime
 
 /**
  * Created by Nico Brandenberger on 07.04.2025
  */
 
-@Xml(name = "OJPTripRefineRequest")
+@Serializable
+@XmlSerialName("OJPTripRefineRequest", OJP_NAME_SPACE, "")
 internal data class TripRefineRequestDto(
-    @PropertyElement(name = "siri:RequestTimestamp")
+
+    @XmlElement(true)
+    @XmlSerialName("RequestTimestamp", SIRI_NAME_SPACE, SIRI_PREFIX)
+    @Serializable(with = LocalDateTimeSerializer::class)
     val requestTimestamp: LocalDateTime,
 
-    @Element(name = "RefineParams")
-    val params: TripRefineParamDto?,
+    @XmlElement(true)
+    @XmlSerialName("RefineParams", OJP_NAME_SPACE, "")
+    val params: TripRefineParamDto? = null,
 
-    @Element(name = "TripResult")
+    @XmlElement(true)
+    @XmlSerialName("TripResult", OJP_NAME_SPACE, "")
     val result: TripResultDto,
 )
 

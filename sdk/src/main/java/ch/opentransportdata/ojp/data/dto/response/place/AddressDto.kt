@@ -1,42 +1,64 @@
 package ch.opentransportdata.ojp.data.dto.response.place
 
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.response.NameDto
 import ch.opentransportdata.ojp.data.dto.response.PrivateCodeDto
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Michael Ruppen on 08.04.2024
  *
  * Serializable and Parcelize annotation is both needed for compose navigation with custom types
  */
-@Serializable
+
 @Parcelize
-@Xml(name = "Address")
+@Serializable
+@XmlSerialName("Address", OJP_NAME_SPACE, "")
 data class AddressDto(
-    @Element(name = "PrivateCode")
+    @XmlElement(true)
+    @XmlSerialName("PrivateCode", OJP_NAME_SPACE, "")
     override val privateCodes: List<PrivateCodeDto>? = emptyList(),
-    @PropertyElement(name = "PublicCode")
+
+    @XmlElement(true)
+    @XmlSerialName("PublicCode", OJP_NAME_SPACE, "")
     val publicCode: String,
-    @Element(name = "Name")
+
+    @XmlElement(true)
+    @XmlSerialName("Name", OJP_NAME_SPACE, "")
     val name: NameDto,
-    @Element(name = "NameSuffix")
+
+    @XmlElement(true)
+    @XmlSerialName("NameSuffix", OJP_NAME_SPACE, "")
     val nameSuffix: NameDto? = null,
-    @PropertyElement(name = "CountryName")
+
+    @XmlElement(true)
+    @XmlSerialName("CountryName", OJP_NAME_SPACE, "")
     val countryName: String? = null,
-    @PropertyElement(name = "PostCode")
+
+    @XmlElement(true)
+    @XmlSerialName("PostCode", OJP_NAME_SPACE, "")
     val postCode: String? = null,
-    @Element(name = "TopographicPlaceName")
+
+    @XmlElement(true)
+    @XmlSerialName("TopographicPlaceName", OJP_NAME_SPACE, "")
     val topographicPlaceName: NameDto? = null,
-    @PropertyElement(name = "TopographicPlaceRef")
+
+    @XmlElement(true)
+    @XmlSerialName("TopographicPlaceRef", OJP_NAME_SPACE, "")
     val topographicPlaceRef: String? = null,
-    @PropertyElement(name = "Street")
+
+    @XmlElement(true)
+    @XmlSerialName("Street", OJP_NAME_SPACE, "")
     val street: String? = null,
-    @PropertyElement(name = "HouseNumber")
+
+    @XmlElement(true)
+    @XmlSerialName("HouseNumber", OJP_NAME_SPACE, "")
     val houseNumber: String? = null,
-    @PropertyElement(name = "CrossRoad")
+
+    @XmlElement(true)
+    @XmlSerialName("CrossRoad", OJP_NAME_SPACE, "")
     val crossRoad: String? = null
 ) : AbstractPlaceDto()

@@ -1,26 +1,34 @@
 package ch.opentransportdata.ojp.data.dto.response.tir.leg
 
 import android.os.Parcelable
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.Xml
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Created by Nico Brandenberger on 02.07.2025
  */
 
 @Parcelize
-@Xml(name = "ContinuousServiceTypeChoice")
+@Serializable
+@XmlSerialName("ContinuousServiceTypeChoice", OJP_NAME_SPACE, "")
 data class ContinuousServiceTypeChoiceDto(
-    @Element(name = "PersonalService")
-    val personalService: PersonalServiceDto?,
-    @Element(name = "DatedJourney")
-    val datedJourneyDto: DatedJourneyDto?
+    @XmlElement(true)
+    @XmlSerialName("PersonalService", OJP_NAME_SPACE, "")
+    val personalService: PersonalServiceDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("DatedJourney", OJP_NAME_SPACE, "")
+    val datedJourneyDto: DatedJourneyDto? = null
 ) : Parcelable
 
 @Parcelize
-@Xml(name = "PersonalService")
+@Serializable
+@XmlSerialName("PersonalService", OJP_NAME_SPACE, "")
 data class PersonalServiceDto(
-    @Element(name = "PersonalMode")
-    val personalMode: String,
+    @XmlElement(true)
+    @XmlSerialName("PersonalMode", OJP_NAME_SPACE, "")
+    val personalMode: String
 ) : Parcelable

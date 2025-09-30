@@ -89,16 +89,16 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.okHttp)
     implementation(libs.okHttpLogger)
-    implementation(libs.tikRetrofit)
-    implementation(libs.tikAnnotation)
-    implementation(libs.tikConverters)
-    kapt(libs.tikProcessor) // needed for TypeAdapter creation
+    implementation(libs.converter.kotlinx.serialization)
     implementation(libs.dokka)
     implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     testImplementation(libs.assertk)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.xml.test)
+    implementation(libs.xmlUtilCore)
+    implementation(libs.xmlUtilSerialization)
 }
 
 tasks.register<Jar>("javadocJar") {

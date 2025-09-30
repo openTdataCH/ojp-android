@@ -31,19 +31,7 @@
 -keep class ch.opentransportdata.ojp.data.dto.converter.** { *; }
 -keep class ch.opentransportdata.ojp.data.dto.response.** { *; }
 -keep class ch.opentransportdata.ojp.data.dto.request.tir.** { *; }
-
-# TikXML
--keep class com.tickaroo.tikxml.** { *; }
--keep @com.tickaroo.tikxml.annotation.Xml public class *
--keep class **$$TypeAdapter { *; }
-
--keepclasseswithmembernames class * {
-    @com.tickaroo.tikxml.* <fields>;
-}
-
--keepclasseswithmembernames class * {
-    @com.tickaroo.tikxml.* <methods>;
-}
+-keep class ch.opentransportdata.ojp.data.dto.** { *; }
 
 ## Joda Time 2.3
 -dontwarn org.joda.convert.**

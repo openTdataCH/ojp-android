@@ -1,17 +1,23 @@
 package ch.opentransportdata.ojp.data.dto.request.tir
 
-import com.tickaroo.tikxml.annotation.Element
-import com.tickaroo.tikxml.annotation.PropertyElement
-import com.tickaroo.tikxml.annotation.Xml
+import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
 /**
  * Created by Michael Ruppen on 07.06.2024
  */
-@Xml
+@Serializable
 internal data class PlaceContextDto(
-    @Element(name = "PlaceRef")
+    @XmlElement(true)
+    @XmlSerialName("PlaceRef", OJP_NAME_SPACE, "")
     val placeReference: PlaceReferenceDto,
-    @PropertyElement(name = "DepArrTime")
-    val departureArrivalTime: LocalDateTime?
+
+    @XmlElement(true)
+    @XmlSerialName("DepArrTime", OJP_NAME_SPACE, "")
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val departureArrivalTime: LocalDateTime? = null
 )
