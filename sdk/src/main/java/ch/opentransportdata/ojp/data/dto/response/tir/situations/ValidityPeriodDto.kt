@@ -3,8 +3,8 @@ package ch.opentransportdata.ojp.data.dto.response.tir.situations
 import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
-import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
@@ -19,11 +19,11 @@ import java.time.LocalDateTime
 data class ValidityPeriodDto(
     @XmlElement(true)
     @XmlSerialName("StartTime", SIRI_NAME_SPACE, SIRI_PREFIX)
-    @Serializable(with = LocalDateTimeSerializer::class)
+    @Contextual
     val startTime: LocalDateTime,
 
     @XmlElement(true)
     @XmlSerialName("EndTime", SIRI_NAME_SPACE, SIRI_PREFIX)
-    @Serializable(with = LocalDateTimeSerializer::class)
+    @Contextual
     val endTime: LocalDateTime
 ) : Parcelable

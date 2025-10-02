@@ -3,8 +3,8 @@ package ch.opentransportdata.ojp.data.dto.response.delivery
 import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
-import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 internal data class LocationInformationDeliveryDto(
     @XmlElement(true)
     @XmlSerialName("ResponseTimestamp", SIRI_NAME_SPACE, SIRI_PREFIX)
-    @Serializable(with = LocalDateTimeSerializer::class)
+    @Contextual
     override val responseTimestamp: LocalDateTime,
 
     @XmlElement(true)

@@ -3,8 +3,8 @@ package ch.opentransportdata.ojp.data.dto.response.tir.situations
 import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
-import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
@@ -43,7 +43,7 @@ data class PublishingActionDto(
 data class PassengerInformationActionDto(
     @XmlElement(true)
     @XmlSerialName("RecordedAtTime", SIRI_NAME_SPACE, SIRI_PREFIX)
-    @Serializable(with = LocalDateTimeSerializer::class)
+    @Contextual
     val recordedAtTime: LocalDateTime? = null,
 
     @XmlElement(true)

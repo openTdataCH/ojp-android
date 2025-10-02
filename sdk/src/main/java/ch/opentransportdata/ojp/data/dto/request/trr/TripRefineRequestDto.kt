@@ -3,8 +3,8 @@ package ch.opentransportdata.ojp.data.dto.request.trr
 import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
-import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
@@ -20,7 +20,7 @@ internal data class TripRefineRequestDto(
 
     @XmlElement(true)
     @XmlSerialName("RequestTimestamp", SIRI_NAME_SPACE, SIRI_PREFIX)
-    @Serializable(with = LocalDateTimeSerializer::class)
+    @Contextual
     val requestTimestamp: LocalDateTime,
 
     @XmlElement(true)

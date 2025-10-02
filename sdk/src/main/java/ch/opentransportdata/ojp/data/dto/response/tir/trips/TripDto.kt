@@ -3,7 +3,6 @@ package ch.opentransportdata.ojp.data.dto.response.tir.trips
 import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.converter.DurationSerializer
-import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.response.PlacesDto
 import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.ContinuousLegDto
@@ -13,6 +12,7 @@ import ch.opentransportdata.ojp.data.dto.response.tir.minimalCopy
 import ch.opentransportdata.ojp.data.dto.response.tir.replaceWithParentRef
 import ch.opentransportdata.ojp.data.dto.response.tir.situations.PtSituationDto
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
@@ -38,12 +38,12 @@ data class TripDto(
 
     @XmlElement(true)
     @XmlSerialName("StartTime", OJP_NAME_SPACE, "")
-    @Serializable(with = LocalDateTimeSerializer::class)
+    @Contextual
     val startTime: LocalDateTime,
 
     @XmlElement(true)
     @XmlSerialName("EndTime", OJP_NAME_SPACE, "")
-    @Serializable(with = LocalDateTimeSerializer::class)
+    @Contextual
     val endTime: LocalDateTime,
 
     @XmlElement(true)

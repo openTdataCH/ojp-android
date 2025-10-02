@@ -4,9 +4,9 @@ import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
-import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.domain.model.ScopeType
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.LocalDateTime
@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 data class PtSituationDto(
     @XmlElement(true)
     @XmlSerialName("CreationTime", SIRI_NAME_SPACE, SIRI_PREFIX)
-    @kotlinx.serialization.Serializable(with = LocalDateTimeSerializer::class)
+    @Contextual
     val creationTime: LocalDateTime? = null,
 
     @XmlElement(true)

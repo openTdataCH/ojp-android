@@ -2,6 +2,7 @@ package ch.opentransportdata.ojp.di
 
 import ch.opentransportdata.ojp.BuildConfig
 import ch.opentransportdata.ojp.data.dto.converter.FareClassSerializer
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.converter.XmlUtilConverterFactory
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.di.interceptor.TokenInterceptor
@@ -16,13 +17,14 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 /**
  * Created by Michael Ruppen on 08.04.2024
  */
 internal val networkModule = module {
-    single { provideXml() }
+    single { provideXml(get()) }
     single { provideLoggingInterceptor() }
     single(named("ojpHttpClient")) { provideOkHttpClient(get(), get()) }
     single(named("ojpRetrofit")) { provideRetrofit(get(named("ojpHttpClient")), get(), get()) }
@@ -62,8 +64,9 @@ internal fun provideRetrofit(
 }
 
 @OptIn(ExperimentalXmlUtilApi::class)
-internal fun provideXml(): XML = XML(
+internal fun provideXml(initializer: Initializer): XML = XML(
     serializersModule = SerializersModule {
+        contextual(LocalDateTime::class, LocalDateTimeSerializer(initializer.defaultTimeZone))
         contextual(FareClass::class, FareClassSerializer)
     }
 ) {
