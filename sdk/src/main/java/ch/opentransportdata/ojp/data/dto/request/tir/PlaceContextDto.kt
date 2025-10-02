@@ -1,10 +1,10 @@
 package ch.opentransportdata.ojp.data.dto.request.tir
 
 import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
-import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
 /**
@@ -18,6 +18,6 @@ internal data class PlaceContextDto(
 
     @XmlElement(true)
     @XmlSerialName("DepArrTime", OJP_NAME_SPACE, "")
-    @Serializable(with = LocalDateTimeSerializer::class)
+    @Contextual
     val departureArrivalTime: LocalDateTime? = null
 )

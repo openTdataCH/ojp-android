@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.data.dto.converter.FareClassSerializer
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
@@ -16,6 +17,7 @@ import nl.adaptivity.xmlutil.serialization.XmlConfig
 import org.junit.Before
 import org.junit.Test
 import java.io.File
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 /**
@@ -34,6 +36,7 @@ internal class TripDeliveryHashCalculationTest {
     @OptIn(ExperimentalXmlUtilApi::class)
     private fun xml(): XML = XML(
         serializersModule = SerializersModule {
+            contextual(LocalDateTime::class, LocalDateTimeSerializer(initializer.defaultTimeZone))
             contextual(FareClass::class, FareClassSerializer)
         }
     ) {
@@ -91,7 +94,7 @@ internal class TripDeliveryHashCalculationTest {
         // ASSERTION
         assertThat(result).isNotNull()
         assertThat(result.tripResults?.size).isEqualTo(13)
-        assertThat(filteredList?.size).isEqualTo(10)
+        assertThat(filteredList?.size).isEqualTo(9)
 
     }
 

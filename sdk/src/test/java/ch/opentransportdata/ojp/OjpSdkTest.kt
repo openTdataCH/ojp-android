@@ -6,6 +6,7 @@ import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.converter.FareClassSerializer
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.domain.model.FareClass
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
@@ -24,6 +25,7 @@ import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 import java.io.File
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 class OjpSdkXmlUtilTest {
@@ -38,6 +40,7 @@ class OjpSdkXmlUtilTest {
     @OptIn(ExperimentalXmlUtilApi::class)
     private fun xmlWithPtMode(): XML = XML(
         serializersModule = SerializersModule {
+            contextual(LocalDateTime::class, LocalDateTimeSerializer(initializer.defaultTimeZone))
             contextual(FareClass::class, FareClassSerializer)
         }
     ) {
