@@ -10,6 +10,7 @@ import ch.opentransportdata.ojp.BuildConfig
 import ch.opentransportdata.ojp.OjpSdk
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.converter.FareClassSerializer
+import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.GeoPositionDto
 import ch.opentransportdata.ojp.data.dto.response.NameDto
@@ -52,6 +53,7 @@ class TripRefinementXmlUtilTest {
     @OptIn(ExperimentalXmlUtilApi::class)
     private fun xml(): XML = XML(
         serializersModule = SerializersModule {
+            contextual(LocalDateTime::class, LocalDateTimeSerializer(initializer.defaultTimeZone))
             contextual(FareClass::class, FareClassSerializer)
         }
     ) {

@@ -5,6 +5,7 @@ import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
+import ch.opentransportdata.ojp.domain.usecase.Initializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -19,9 +20,12 @@ import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.serialization.XmlConfig
 import nl.adaptivity.xmlutil.serialization.XmlElement
+import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.time.Duration
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 class DurationSerializationXmlUtilTest {
 
@@ -35,11 +39,17 @@ class DurationSerializationXmlUtilTest {
         override fun serialize(encoder: Encoder, value: Duration) =
             encoder.encodeString(value.toString())
     }
+    private val initializer = Initializer()
+
+    @Before
+    fun setUp() {
+        initializer.defaultTimeZone = ZoneId.of("Europe/Zurich")
+    }
 
     @OptIn(ExperimentalXmlUtilApi::class)
     private fun xml(): XML = XML(
         serializersModule = SerializersModule {
-            // Only needed if your LegDto does NOT annotate the field with a serializer.
+            contextual(LocalDateTime::class, LocalDateTimeSerializer(initializer.defaultTimeZone))
             contextual(Duration::class, DurationIsoSerializer)
         }
     ) {
