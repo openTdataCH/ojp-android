@@ -119,7 +119,8 @@ object PreviewData {
                 name = NameDto(text = "Olten"),
                 geoPosition = null
             ),
-            duration = Duration.parse("PT5M")
+            duration = Duration.parse("PT5M"),
+            pathGuidance = null
         )
     )
 

@@ -32,5 +32,9 @@ data class TransferLegDto(
     @XmlElement(true)
     @XmlSerialName("Duration", OJP_NAME_SPACE, "")
     @Serializable(with = DurationSerializer::class)
-    val duration: Duration
+    val duration: Duration,
+
+    @XmlElement(true)
+    @XmlSerialName("PathGuidance", OJP_NAME_SPACE, "")
+    val pathGuidance: PathGuidanceDto?
 ) : AbstractLegType(), Parcelable

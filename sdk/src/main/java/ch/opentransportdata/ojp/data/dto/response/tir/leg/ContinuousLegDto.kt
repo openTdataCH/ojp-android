@@ -32,7 +32,11 @@ data class ContinuousLegDto(
     @XmlElement(true)
     @XmlSerialName("Duration", OJP_NAME_SPACE, "")
     @Serializable(with = DurationSerializer::class)
-    val duration: Duration
+    val duration: Duration,
+
+    @XmlElement(true)
+    @XmlSerialName("LegTrack", OJP_NAME_SPACE, "")
+    val legTrack: LegTrackDto? = null
 ) : AbstractLegType(), Parcelable
 
 fun ContinuousLegDto.minimalCopy(): ContinuousLegDto {
