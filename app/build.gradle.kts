@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "ch.opentransportdata"
-        minSdk = 23
+        minSdk = 25
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -77,4 +77,6 @@ dependencies {
 
     testImplementation(libs.junit)
     debugImplementation(libs.ui.tooling)
+    //for displaying the map we use Ramani-Maps without modifying the SKD (Source: https://github.com/ramani-maps/ramani-maps)
+    implementation("org.ramani-maps:ramani-maplibre:0.9.2")
 }
