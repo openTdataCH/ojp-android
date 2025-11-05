@@ -14,7 +14,7 @@ Coming soon:
 - [TripInfo Request](https://opentransportdata.swiss/en/cookbook/ojptripinforequest/)
 
 ## Requirements
-Compatible with Android 6+
+Compatible with Android 7+
 
 ## Integration
 To integrate the SDK you have to add following dependency:
