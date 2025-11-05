@@ -25,6 +25,7 @@ import ch.opentransportdata.ojp.data.dto.response.tir.situations.PublishingActio
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.presentation.components.TripResultHeader
 import ch.opentransportdata.presentation.lir.name
+import ch.opentransportdata.presentation.navigation.TripMap
 import ch.opentransportdata.presentation.tir.detail.TripDetailScreen
 import ch.opentransportdata.presentation.utils.FileReader
 import kotlinx.coroutines.delay
@@ -49,12 +50,14 @@ fun TripResultScreen(
     val detailBottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedTrip by remember { mutableStateOf<TripDto?>(null) }
     var selectedAction by remember { mutableStateOf<PublishingActionDto?>(null) }
+    val showMapText = if (viewModel.state.collectAsState().value.mapData.isEmpty()) "Refine Trip first" else "Show way on map"
 
     if (selectedTrip != null) {
         ModalBottomSheet(
             onDismissRequest = {
                 coroutineScope.launch {
                     selectedTrip = null
+                    viewModel.resetMapData()
                 }
             },
             sheetState = detailBottomSheet,
@@ -65,7 +68,19 @@ fun TripResultScreen(
                 situations = state.value.tripDelivery?.responseContext?.situation?.ptSituation?.filter { it.publishingActions != null },
                 showSituation = { selectedAction = it },
                 requestTripUpdate = { viewModel.requestTripUpdate(it) },
-                refineTrip = { id -> viewModel.refineTrip(id) }
+                refineTrip = { id -> viewModel.refineTrip(id) },
+                showMapText = showMapText,
+                showMap = { id, isZoomed ->
+                    val coordinates = viewModel.state.value.mapData.find { it.id == id }
+                    if (coordinates != null) {
+                        navHostController.navigate(
+                            TripMap(
+                                coordinates = coordinates.positions,
+                                zoom = if (isZoomed) 17.0 else 7.5
+                            )
+                        )
+                    }
+                }
             )
         }
     }

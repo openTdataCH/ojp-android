@@ -9,8 +9,12 @@ import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.ContinuousLegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
+import ch.opentransportdata.domain.MapLibreData
 import ch.opentransportdata.ojp.domain.model.ModeAndModeOfOperationFilter
 import ch.opentransportdata.ojp.domain.model.PtMode
 import ch.opentransportdata.ojp.domain.model.RealtimeData
@@ -277,6 +281,41 @@ class TripResultViewModel(
                 when (response) {
                     is Result.Success -> {
                         Log.d("TripResultViewModel", "Refinement was successful ${response.data}")
+                        val mapData = mutableListOf<MapLibreData>()
+                        response.data.tripResults?.forEach { result ->
+                            result.trip?.legs?.forEach { leg ->
+                                when(leg.legType) {
+                                    is ContinuousLegDto -> {
+                                        val positions = leg.continuousLeg?.legTrack?.trackSection?.first()?.linkProjection?.positions
+                                        if (!positions.isNullOrEmpty()) {
+                                            mapData.add(MapLibreData(
+                                                id = leg.id,
+                                                positions = positions
+                                            ))
+                                        }
+                                    }
+                                    is TransferLegDto -> {
+                                        val positions = leg.transferLeg?.pathGuidance?.pathGuidanceSection?.first()?.trackSection?.first()?.linkProjection?.positions
+                                        if (!positions.isNullOrEmpty()) {
+                                            mapData.add(MapLibreData(
+                                                id = leg.id,
+                                                positions = positions
+                                            ))
+                                        }
+                                    }
+                                    is TimedLegDto -> {
+                                        val positions = leg.timedLeg?.legTrack?.trackSection?.first()?.linkProjection?.positions
+                                        if (!positions.isNullOrEmpty()) {
+                                            mapData.add(MapLibreData(
+                                                id = leg.id,
+                                                positions = positions
+                                            ))
+                                        }
+                                    }
+                                }
+                            }
+                            state.update { it.copy(mapData = mapData) }
+                        }
                         postEvent(Event.ScrollToFirstTripItem(0))
                     }
 
@@ -290,6 +329,10 @@ class TripResultViewModel(
         }
     }
 
+    fun resetMapData() {
+        state.update { it.copy(mapData = emptyList()) }
+    }
+
     sealed class Event(val id: Long = UUID.randomUUID().mostSignificantBits) {
         data class ShowSnackBar(val message: String) : Event()
         data class ScrollToFirstTripItem(val offset: Int) : Event()
@@ -301,6 +344,7 @@ class TripResultViewModel(
         val events: List<Event> = emptyList(),
         val isLoadingPrevious: Boolean = false,
         val isLoading: Boolean = false,
-        val isLoadingNext: Boolean = false
+        val isLoadingNext: Boolean = false,
+        val mapData: List<MapLibreData> = emptyList()
     )
 }

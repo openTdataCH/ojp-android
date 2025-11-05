@@ -1,16 +1,41 @@
 package ch.opentransportdata.presentation.tir.detail
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsWalk
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.FlashOn
+import androidx.compose.material.icons.outlined.HideSource
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Shuffle
+import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material.icons.rounded.WarningAmber
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +44,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import ch.opentransportdata.ojp.data.dto.response.tir.leg.*
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.AttributeDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.ContinuousLegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.LegAlightDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.LegBoardDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
+import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.situations.PtSituationDto
 import ch.opentransportdata.ojp.data.dto.response.tir.situations.PublishingActionDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
@@ -44,6 +74,8 @@ fun TripDetailScreen(
     showSituation: (PublishingActionDto) -> Unit,
     requestTripUpdate: (TripDto) -> Unit,
     refineTrip: (String) -> Unit,
+    showMapText: String,
+    showMap: (String, Boolean) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val timedLegs = trip.legs.mapNotNull { it.legType as? TimedLegDto }
@@ -56,10 +88,10 @@ fun TripDetailScreen(
     ) {
         val consideredSituations = situations?.let { trip.getPtSituationsForTrip(it) } ?: emptyList()
         Row {
-            Button(onClick = {requestTripUpdate(trip)}) {
+            Button(onClick = { requestTripUpdate(trip) }) {
                 Text("Update Trip")
             }
-            Button(onClick = {refineTrip(trip.id)}) {
+            Button(onClick = { refineTrip(trip.id) }) {
                 Text("Refine Trip")
             }
         }
@@ -109,21 +141,41 @@ fun TripDetailScreen(
             HorizontalDivider(modifier = Modifier.padding(bottom = 8.dp))
         }
         trip.legs.forEach { leg ->
-            when (val legType = leg.legType) {
-                is TransferLegDto -> TransferLeg(modifier = Modifier.padding(all = 16.dp), leg = legType)
-                is ContinuousLegDto -> ContinuousLeg(
-                    modifier = Modifier.padding(all = 16.dp),
-                    leg = legType,
-                    isStartLeg = leg == trip.legs.first(),
-                    isLastLeg = leg == trip.legs.last(),
-                )
+            var isZoomed = false
+            Column (
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                when (val legType = leg.legType) {
+                    is TransferLegDto -> {
+                        isZoomed = true
+                        TransferLeg(modifier = Modifier.padding(all = 16.dp), leg = legType)
+                    }
+                    is ContinuousLegDto -> {
+                        isZoomed = true
+                        ContinuousLeg(
+                            modifier = Modifier.padding(all = 16.dp),
+                            leg = legType,
+                            isStartLeg = leg == trip.legs.first(),
+                            isLastLeg = leg == trip.legs.last(),
+                        )
+                    }
 
-                is TimedLegDto -> TimedLeg(
-                    leg = legType,
-                    duration = leg.duration,
-                    situations = legType.getPtSituationsForLeg(consideredSituations),
-                    showSituation = showSituation
-                )
+                    is TimedLegDto -> {
+                        isZoomed = false
+                        TimedLeg(
+                            leg = legType,
+                            duration = leg.duration,
+                            situations = legType.getPtSituationsForLeg(consideredSituations),
+                            showSituation = showSituation,
+                        )
+                    }
+                }
+                Button(
+                    modifier = Modifier.padding(vertical = 4.dp).align(alignment = Alignment.CenterHorizontally),
+                    enabled = showMapText == "Show way on map",
+                    onClick = { showMap(leg.id, isZoomed) }) {
+                    Text(text = showMapText)
+                }
             }
         }
 
@@ -513,7 +565,9 @@ private fun TripDetailScreenPreview() {
             situations = emptyList(),
             showSituation = {},
             requestTripUpdate = {},
-            refineTrip = {}
+            refineTrip = {},
+            showMapText = "Show way on map",
+            showMap = {_ , _ ->}
         )
     }
 }

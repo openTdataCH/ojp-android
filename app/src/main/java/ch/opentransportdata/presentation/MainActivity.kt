@@ -23,15 +23,19 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import ch.opentransportdata.ojp.BuildConfig
 import ch.opentransportdata.ojp.OjpSdk
+import ch.opentransportdata.ojp.data.dto.response.GeoPositionDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.presentation.lir.LirScreenComposable
 import ch.opentransportdata.presentation.navigation.BottomNavItem
 import ch.opentransportdata.presentation.navigation.LocationSearchMask
+import ch.opentransportdata.presentation.navigation.TripMap
 import ch.opentransportdata.presentation.navigation.TripResults
 import ch.opentransportdata.presentation.navigation.TripSearchMask
 import ch.opentransportdata.presentation.navigation.navtypes.PlaceResultType
+import ch.opentransportdata.presentation.navigation.navtypes.jsonNavType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 import ch.opentransportdata.presentation.tir.TirScreenComposable
+import ch.opentransportdata.presentation.tir.map.MapScreen
 import ch.opentransportdata.presentation.tir.result.TripResultScreen
 import kotlin.reflect.typeOf
 
@@ -48,8 +52,6 @@ class MainActivity : ComponentActivity() {
         val bottomNavigationItems = listOf(BottomNavItem.Lir, BottomNavItem.Tir)
         OJPAndroidSDKTheme {
             val navController = rememberNavController()
-//            val navBackStackEntry by navController.currentBackStackEntryAsState()
-//            val currentDestination = navBackStackEntry?.destination
             var selectedBottomNavItem by remember { mutableIntStateOf(0) }
 
             Scaffold(
@@ -111,12 +113,19 @@ class MainActivity : ComponentActivity() {
                     typeOf<PlaceResultDto>() to PlaceResultType,
                 )
             ) { navBackstackEntry ->
-                val parameters = navBackstackEntry.toRoute<TripResults>()
                 TripResultScreen(
                     navHostController = navController,
-//                    originName = parameters.origin.place.placeType?.name() ?: "-",
-//                    viaName = parameters.via?.place?.placeType?.name(),
-//                    destinationName = parameters.destination.place.placeType?.name() ?: "-"
+                )
+            }
+            composable<TripMap>(
+                typeMap = mapOf(
+                    typeOf<List<GeoPositionDto>>() to jsonNavType<List<GeoPositionDto>>()
+                )
+            ) { navBackstackEntry ->
+                val parameters = navBackstackEntry.toRoute<TripMap>()
+                MapScreen(
+                    coordinates = parameters.coordinates.toList(),
+                    zoom = parameters.zoom
                 )
             }
         }
