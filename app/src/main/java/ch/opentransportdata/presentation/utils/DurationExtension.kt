@@ -6,8 +6,11 @@ import java.time.Duration
  * Created by Deniz Kalem on 12.09.2024
  */
 fun Duration.toFormattedString(): String {
+    val totalMinutes = this.toMinutes()
+    val hours = (totalMinutes / 60)
+    val minutes = (totalMinutes % 60)
     return when {
-        toHoursPart() == 0 -> "${this.toMinutesPart()}min"
-        else -> "${this.toHoursPart()}h ${this.toMinutesPart()}min"
+        hours <= 0 -> "${minutes}min"
+        else -> "${hours}h ${minutes}min"
     }
 }

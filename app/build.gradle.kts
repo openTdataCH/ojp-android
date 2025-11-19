@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "ch.opentransportdata"
-        minSdk = 25
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -34,7 +34,6 @@ android {
         }
     }
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -55,9 +54,6 @@ android {
 }
 
 dependencies {
-
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
-
     implementation(project(":sdk"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

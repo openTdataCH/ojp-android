@@ -14,25 +14,13 @@ Coming soon:
 - [TripInfo Request](https://opentransportdata.swiss/en/cookbook/ojptripinforequest/)
 
 ## Requirements
-Compatible with Android 7+
+Compatible with Android 8+
 
 ## Integration
 To integrate the SDK you have to add following dependency:
 ```
 dependencies {
     implementation 'io.github.opentdatach:ojp-android:1.3.4'
-}
-```
-Additionally you may need to enable coreLibraryDesugaring to use Java8 features below API 26 (we use LocalDateTime for parsing)
-```
-compileOptions {
-    isCoreLibraryDesugaringEnabled = true
-    ...
-}
-
-dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-    ...
 }
 ```
 

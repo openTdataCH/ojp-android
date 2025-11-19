@@ -1,7 +1,6 @@
 [versions]
 agp = "8.13.0"
 assertk = "0.28.1"
-desugar_jdk_libs = "2.1.5"
 kotlin = "2.2.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -26,7 +25,6 @@ playServices = "21.3.0"
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
 converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit2" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "extJunit" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
