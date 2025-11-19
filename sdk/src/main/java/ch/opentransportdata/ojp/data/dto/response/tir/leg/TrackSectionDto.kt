@@ -14,10 +14,10 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 @Serializable
 @XmlSerialName("TrackSection", OJP_NAME_SPACE, "")
 data class TrackSectionDto(
-    //todo: check if needed or can be summarized
-//    val trackSectionStart: TrackSectionStopPlaceRef?,
-//    val trackSectionEnd: TrackSectionStopPlaceRef?,
     @XmlElement(true)
     @XmlSerialName("LinkProjection", OJP_NAME_SPACE, "")
-    val linkProjection: LinearShapeDto? = null
+    val linkProjection: LinearShapeDto? = null,
+    @XmlElement(true)
+    @XmlSerialName("Length", OJP_NAME_SPACE, "")
+    val length: Int? = null
 ) : Parcelable
