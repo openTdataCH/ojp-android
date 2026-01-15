@@ -86,7 +86,7 @@ fun LegAlightDto.minimalCopy(): LegAlightDto {
             timetabledTime = serviceArrival.timetabledTime,
             estimatedTime = serviceArrival.estimatedTime
         ),
-        plannedQuay = null,
+        plannedQuay = plannedQuay,
         estimatedQuay = null,
         nameSuffix = null,
         serviceDeparture = null,

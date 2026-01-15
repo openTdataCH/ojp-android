@@ -91,7 +91,7 @@ fun LegBoardDto.minimalCopy(): LegBoardDto {
             timetabledTime = serviceDeparture.timetabledTime,
             estimatedTime = serviceDeparture.estimatedTime
         ),
-        plannedQuay = null,
+        plannedQuay = plannedQuay,
         estimatedQuay = null,
         nameSuffix = null,
         serviceArrival = null,

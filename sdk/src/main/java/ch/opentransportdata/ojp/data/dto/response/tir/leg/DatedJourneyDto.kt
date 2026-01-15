@@ -126,7 +126,7 @@ fun DatedJourneyDto.minimalCopy(): DatedJourneyDto {
         directionRef = directionRef,
         originStopPointRef = null,
         destinationStopPointRef = null,
-        destinationText = null,
+        destinationText = destinationText,
         vehicleRef = null,
         situationFullRefWrapper = null,
         unplanned = null,
