@@ -129,7 +129,19 @@ internal class RemoteTripDataSourceImpl(
             modeAndModeOfOperationFilter = this.modeAndModeOfOperationFilter?.map { filter ->
                 ModeAndModeOfOperationFilterDto(
                     ptMode = filter.ptMode,
-                    exclude = filter.exclude
+                    exclude = filter.exclude,
+                    railSubmode = filter.railSubmode,
+                    busSubmode = filter.busSubmode,
+                    coachSubmode = filter.coachSubmode,
+                    metroSubmode = filter.metroSubmode,
+                    tramSubmode = filter.tramSubmode,
+                    trolleyBusSubmode = filter.trolleyBusSubmode,
+                    telecabinSubmode = filter.trolleyBusSubmode,
+                    funicularSubmode = filter.funicularSubmode,
+                    waterSubmode = filter.waterSubmode,
+                    airSubmode = filter.airSubmode,
+                    taxiSubmode = filter.taxiSubmode,
+                    selfDriveSubmode = filter.selfDriveSubmode
                 )
             },
         )

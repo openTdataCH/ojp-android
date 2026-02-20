@@ -9,5 +9,17 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ModeAndModeOfOperationFilter(
     val ptMode: List<PtMode>,
-    val exclude: Boolean
+    val exclude: Boolean,
+    val railSubmode: String? = null,
+    val busSubmode: String? = null,
+    val coachSubmode: String? = null,
+    val metroSubmode: String? = null,
+    val tramSubmode: String? = null,
+    val trolleyBusSubmode: String? = null,
+    val telecabinSubmode: String? = null,
+    val funicularSubmode: String? = null,
+    val waterSubmode: String? = null,
+    val airSubmode: String? = null,
+    val taxiSubmode: String? = null,
+    val selfDriveSubmode: String? = null
 ) : Parcelable
