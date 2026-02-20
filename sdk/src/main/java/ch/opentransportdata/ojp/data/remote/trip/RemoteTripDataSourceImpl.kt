@@ -144,6 +144,10 @@ internal class RemoteTripDataSourceImpl(
                     selfDriveSubmode = filter.selfDriveSubmode
                 )
             },
+            walkSpeed = this.walkSpeed,
+            transferLimit = this.transferLimit,
+            optimisationMethod = this.optimisationMethod,
+            bikeTransport = this.bikeTransport,
         )
     }
 

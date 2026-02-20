@@ -21,5 +21,9 @@ data class TripParams(
     val includeIntermediateStops: Boolean = false,
     val includeAllRestrictedLines: Boolean = false,
     val useRealtimeData: RealtimeData? = null,
-    val modeAndModeOfOperationFilter: List<ModeAndModeOfOperationFilter>?
+    val modeAndModeOfOperationFilter: List<ModeAndModeOfOperationFilter>?,
+    val walkSpeed: Int?,
+    val transferLimit: Int?,
+    val optimisationMethod: String?,
+    val bikeTransport: Boolean?,
 ) : Parcelable
