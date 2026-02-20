@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp.domain.usecase
 
+import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
@@ -24,6 +25,7 @@ internal class UpdateTrip(
         via: PlaceReferenceDto?,
         params: TripParams?,
         trip: TripDto,
+        individualTransportOption: IndividualTransportOptionDto?
     ): Result<TripDeliveryDto> {
 
         return when (val response = ojpRepository.requestTrips(
@@ -34,6 +36,7 @@ internal class UpdateTrip(
             time = trip.startTime.minusMinutes(5),
             isSearchForDepartureTime = true,
             params = params,
+            individualTransportOption = individualTransportOption
         )) {
             is Result.Success -> {
                 var updatedTrip: TripDto?

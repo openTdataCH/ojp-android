@@ -4,6 +4,7 @@ import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
+import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tir.ModeAndModeOfOperationFilterDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceContextDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
@@ -43,7 +44,8 @@ internal class RemoteTripDataSourceImpl(
         via: PlaceReferenceDto?,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
-        params: TripParams?
+        params: TripParams?,
+        individualTransportOption: IndividualTransportOptionDto?
     ): OjpDto = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
         val originPlace = PlaceContextDto(
@@ -68,7 +70,8 @@ internal class RemoteTripDataSourceImpl(
                 origin = originPlace,
                 destination = destinationPlace,
                 via = vias ?: emptyList(),
-                params = params?.mapToBackendParams()
+                params = params?.mapToBackendParams(),
+                individualTransportOption = individualTransportOption
             )
         )
 

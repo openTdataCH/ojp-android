@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.data.remote.trip
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
+import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
@@ -19,7 +20,8 @@ internal interface RemoteTripDataSource {
         via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
-        params: TripParams?
+        params: TripParams?,
+        individualTransportOption: IndividualTransportOptionDto?
     ): OjpDto
 
     suspend fun requestTripRefinement(

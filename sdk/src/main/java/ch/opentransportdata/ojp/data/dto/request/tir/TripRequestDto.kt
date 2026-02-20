@@ -34,5 +34,9 @@ internal data class TripRequestDto(
 
     @XmlElement(true)
     @XmlSerialName("Params", OJP_NAME_SPACE, "")
-    val params: TripParamsDto? = null
+    val params: TripParamsDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("IndividualTransportOption", OJP_NAME_SPACE, "")
+    val individualTransportOption: IndividualTransportOptionDto?,
 )

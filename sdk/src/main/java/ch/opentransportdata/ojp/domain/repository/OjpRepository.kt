@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp.domain.repository
 
+import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
@@ -34,7 +35,8 @@ internal interface OjpRepository {
         via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
-        params: TripParams?
+        params: TripParams?,
+        individualTransportOption: IndividualTransportOptionDto?,
     ): Result<TripDeliveryDto>
 
     suspend fun requestMockTrips(
