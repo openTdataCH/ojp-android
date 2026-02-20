@@ -2,16 +2,24 @@ package ch.opentransportdata.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SwapCalls
-import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import ch.opentransportdata.R
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
 
 /**
@@ -22,7 +30,8 @@ fun TripResultHeader(
     modifier: Modifier = Modifier,
     originName: String,
     destinationName: String,
-    swapSearch: () -> Unit
+    swapSearch: () -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
 
     Surface(
@@ -44,13 +53,25 @@ fun TripResultHeader(
                     style = MaterialTheme.typography.titleLarge
                 )
             }
-            OutlinedIconButton(
+            Row(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .padding(end = 8.dp),
-                onClick = swapSearch
             ) {
-                Icon(imageVector = Icons.Default.SwapCalls, contentDescription = null)
+                OutlinedIconButton(
+                    modifier = Modifier,
+                    onClick = onSettingsClick,
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings),
+                        contentDescription = "Filter Option",
+                    )
+                }
+                OutlinedIconButton(
+                    onClick = swapSearch
+                ) {
+                    Icon(imageVector = Icons.Default.SwapCalls, contentDescription = null)
+                }
             }
         }
     }
@@ -63,7 +84,8 @@ private fun TripResultHeaderPreview() {
         TripResultHeader(
             originName = "Bern, Eigerplatz",
             destinationName = "Basel SBB",
-            swapSearch = {}
+            swapSearch = {},
+            onSettingsClick = {}
         )
     }
 }
