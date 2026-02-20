@@ -19,5 +19,9 @@ internal data class PlaceContextDto(
     @XmlElement(true)
     @XmlSerialName("DepArrTime", OJP_NAME_SPACE, "")
     @Contextual
-    val departureArrivalTime: LocalDateTime? = null
+    val departureArrivalTime: LocalDateTime? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("IndividualTransportOption", OJP_NAME_SPACE, "")
+    val individualTransportOption: IndividualTransportOptionDto?,
 )

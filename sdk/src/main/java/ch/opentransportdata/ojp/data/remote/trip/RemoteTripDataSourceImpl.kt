@@ -50,11 +50,13 @@ internal class RemoteTripDataSourceImpl(
         val requestTime = LocalDateTime.now()
         val originPlace = PlaceContextDto(
             placeReference = origin,
+            individualTransportOption = individualTransportOption,
             departureArrivalTime = if (isSearchForDepartureTime) time else null
         )
 
         val destinationPlace = PlaceContextDto(
             placeReference = destination,
+            individualTransportOption = individualTransportOption,
             departureArrivalTime = if (isSearchForDepartureTime) null else time
         )
 
@@ -71,7 +73,6 @@ internal class RemoteTripDataSourceImpl(
                 destination = destinationPlace,
                 via = vias ?: emptyList(),
                 params = params?.mapToBackendParams(),
-                individualTransportOption = individualTransportOption
             )
         )
 
