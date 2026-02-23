@@ -11,8 +11,32 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +51,7 @@ import ch.opentransportdata.presentation.components.TripResultHeader
 import ch.opentransportdata.presentation.lir.name
 import ch.opentransportdata.presentation.navigation.TripMap
 import ch.opentransportdata.presentation.tir.detail.TripDetailScreen
+import ch.opentransportdata.presentation.tir.filter.FilterScreen
 import ch.opentransportdata.presentation.utils.FileReader
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,6 +76,10 @@ fun TripResultScreen(
     var selectedTrip by remember { mutableStateOf<TripDto?>(null) }
     var selectedAction by remember { mutableStateOf<PublishingActionDto?>(null) }
     val showMapText = if (viewModel.state.collectAsState().value.mapData.isEmpty()) "Refine Trip first" else "Show way on map"
+    var selectFilters = remember { mutableStateOf(false) }
+    val filterBottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+
 
     if (selectedTrip != null) {
         ModalBottomSheet(
@@ -80,7 +109,45 @@ fun TripResultScreen(
                             )
                         )
                     }
+                },
+                walkingSpeed = viewModel.state.collectAsState().value.walkingSpeed
+            )
+        }
+    }
+    if (selectFilters.value) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                coroutineScope.launch {
+                    selectFilters.value = false
+                    viewModel.requestTrips()
                 }
+            },
+            sheetState = filterBottomSheet,
+            dragHandle = { BottomSheetDefaults.DragHandle() },
+        ) {
+            FilterScreen(
+                viewModel.state.collectAsState().value.walkingSpeed,
+                onSelectWalkingSpeed = {
+                    viewModel.updateWalkingSpeed(it)
+                },
+                isDirectConnection = state.value.isDirectConnection,
+                onCheckDirectConnection = { viewModel.setDirectConnection() },
+                isFewerTransfers = state.value.isFewerTransfers,
+                onCheckFewerTransfers = { viewModel.setFewerTransfers() },
+                vehicleOptions = viewModel.state.collectAsState().value.vehicleOptions,
+                onToggleVehicle = { viewModel.toggleVehicle(it) },
+                vehicleSubOptions = viewModel.state.collectAsState().value.vehicleSubOptions,
+                onToggleSubVehicle = { viewModel.toggleSubVehicle(it) },
+                minDuration = viewModel.state.collectAsState().value.minDuration?.toString() ?: "",
+                maxDuration = viewModel.state.collectAsState().value.maxDuration?.toString() ?: "",
+                minDistance = viewModel.state.collectAsState().value.minDistance?.toString() ?: "",
+                maxDistance = viewModel.state.collectAsState().value.maxDistance?.toString() ?: "",
+                onMinDistanceChange = { viewModel.setMinDistance(it.toIntOrNull()) },
+                onMaxDistanceChange = { viewModel.setMaxDistance(it.toIntOrNull()) },
+                onMaxDurationChange = { viewModel.setMaxDuration(it.toLongOrNull()) },
+                onMinDurationChange = { viewModel.setMinDuration(it.toLongOrNull()) },
+                isBikeTransport = viewModel.state.collectAsState().value.isBikeTransport,
+                onCheckBikeTransport = { viewModel.setBikeTransport() }
             )
         }
     }
@@ -137,7 +204,8 @@ fun TripResultScreen(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 originName = viewModel.origin?.place?.placeType?.name() ?: "-",
                 destinationName = viewModel.destination?.place?.placeType?.name() ?: "-",
-                swapSearch = { viewModel.swapSearch() }
+                swapSearch = { viewModel.swapSearch() },
+                onSettingsClick = { selectFilters.value = true }
             )
             HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
 

@@ -4,6 +4,7 @@ import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
+import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tir.ModeAndModeOfOperationFilterDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceContextDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
@@ -43,16 +44,19 @@ internal class RemoteTripDataSourceImpl(
         via: PlaceReferenceDto?,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
-        params: TripParams?
+        params: TripParams?,
+        individualTransportOption: IndividualTransportOptionDto?
     ): OjpDto = withContext(Dispatchers.IO) {
         val requestTime = LocalDateTime.now()
         val originPlace = PlaceContextDto(
             placeReference = origin,
+            individualTransportOption = individualTransportOption,
             departureArrivalTime = if (isSearchForDepartureTime) time else null
         )
 
         val destinationPlace = PlaceContextDto(
             placeReference = destination,
+            individualTransportOption = individualTransportOption,
             departureArrivalTime = if (isSearchForDepartureTime) null else time
         )
 
@@ -68,7 +72,7 @@ internal class RemoteTripDataSourceImpl(
                 origin = originPlace,
                 destination = destinationPlace,
                 via = vias ?: emptyList(),
-                params = params?.mapToBackendParams()
+                params = params?.mapToBackendParams(),
             )
         )
 
@@ -129,9 +133,25 @@ internal class RemoteTripDataSourceImpl(
             modeAndModeOfOperationFilter = this.modeAndModeOfOperationFilter?.map { filter ->
                 ModeAndModeOfOperationFilterDto(
                     ptMode = filter.ptMode,
-                    exclude = filter.exclude
+                    exclude = filter.exclude,
+                    railSubmode = filter.railSubmode,
+                    busSubmode = filter.busSubmode,
+                    coachSubmode = filter.coachSubmode,
+                    metroSubmode = filter.metroSubmode,
+                    tramSubmode = filter.tramSubmode,
+                    trolleyBusSubmode = filter.trolleyBusSubmode,
+                    telecabinSubmode = filter.trolleyBusSubmode,
+                    funicularSubmode = filter.funicularSubmode,
+                    waterSubmode = filter.waterSubmode,
+                    airSubmode = filter.airSubmode,
+                    taxiSubmode = filter.taxiSubmode,
+                    selfDriveSubmode = filter.selfDriveSubmode
                 )
             },
+            walkSpeed = this.walkSpeed,
+            transferLimit = this.transferLimit,
+            optimisationMethod = this.optimisationMethod,
+            bikeTransport = this.bikeTransport,
         )
     }
 

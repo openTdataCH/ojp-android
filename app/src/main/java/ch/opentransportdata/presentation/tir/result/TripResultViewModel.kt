@@ -5,6 +5,10 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ch.opentransportdata.domain.MapLibreData
+import ch.opentransportdata.domain.VehicleOption
+import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
+import ch.opentransportdata.ojp.data.dto.request.tir.ItModeAndModeOfOperationDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
@@ -14,19 +18,22 @@ import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
 import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
-import ch.opentransportdata.domain.MapLibreData
 import ch.opentransportdata.ojp.domain.model.ModeAndModeOfOperationFilter
+import ch.opentransportdata.ojp.domain.model.OptimisationMethod
 import ch.opentransportdata.ojp.domain.model.PtMode
+import ch.opentransportdata.ojp.domain.model.RailSubmode
 import ch.opentransportdata.ojp.domain.model.RealtimeData
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
+import ch.opentransportdata.ojp.domain.model.serializedName
 import ch.opentransportdata.presentation.MainActivity
 import ch.opentransportdata.presentation.utils.toOjpLanguageCode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.InputStream
+import java.time.Duration
 import java.time.LocalDateTime
 import java.util.Locale
 import java.util.UUID
@@ -38,7 +45,29 @@ class TripResultViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val state = MutableStateFlow(UiState())
+    private val initialVehicleOptions = listOf(
+        "Train", "Bus", "Tram", "Metro", "Boat", "Telecabin"
+    ).map { vehicleType ->
+        VehicleOption(vehicleType = vehicleType, isSelected = true)
+    }
+
+    private val initialVehicleSubOptions = listOf(
+        RailSubmode.INTERNATIONAL.serializedName(),
+        RailSubmode.HIGH_SPEED_RAIL.serializedName(),
+        RailSubmode.INTERREGIONAL_RAIL.serializedName(),
+        RailSubmode.RAIL_SHUTTLE.serializedName(),
+        RailSubmode.LOCAL.serializedName()
+    ).map { vehicleType ->
+        VehicleOption(vehicleType = vehicleType, isSelected = false)
+    }
+
+
+    val state = MutableStateFlow(
+        UiState(
+            vehicleOptions = initialVehicleOptions,
+            vehicleSubOptions = initialVehicleSubOptions
+        )
+    )
 
     val origin: PlaceResultDto?
         get() = savedStateHandle["origin"]
@@ -164,13 +193,22 @@ class TripResultViewModel(
                     includeIntermediateStops = true,
                     includeAllRestrictedLines = true,
                     modeAndModeOfOperationFilter = null,
-                    useRealtimeData = RealtimeData.EXPLANATORY
+                    useRealtimeData = RealtimeData.EXPLANATORY,
+                    walkSpeed = state.value.walkingSpeed,
+                    transferLimit = if (state.value.isDirectConnection) 0 else null,
+                    optimisationMethod = if (state.value.isFewerTransfers) OptimisationMethod.MIN_CHANGES.serializedName() else null,
+                    bikeTransport = state.value.isBikeTransport,
                 ),
                 trip = trip,
+                individualTransportOption = IndividualTransportOptionDto(
+                    minDistance = state.value.minDistance,
+                    maxDistance = state.value.maxDistance,
+                    minDuration = state.value.minDuration?.let { Duration.ofMinutes(it) },
+                    maxDuration = state.value.maxDuration?.let { Duration.ofMinutes(it) },
+                )
             )) {
                 is Result.Success -> {
                     Log.d("TripResultViewModel", "Trip update successful")
-//                    state.update { it.copy(tripDelivery = response.data.copy(tripResults = response.data.tripResults)) }
                 }
 
                 is Result.Error -> {
@@ -185,7 +223,7 @@ class TripResultViewModel(
         state.update { it.copy(events = it.events.filterNot { event -> event.id == id }) }
     }
 
-    private fun requestTrips() {
+    fun requestTrips() {
         if (origin == null || destination == null) {
             Log.e("TripResultViewModel", "Origin or destination are null")
             return
@@ -210,20 +248,48 @@ class TripResultViewModel(
                     position = it.place?.position
                 )
             }
-            //example if you want only water trips when both stations are water
-            val modeFilter =
-                if (origin!!.place?.mode?.any { it.ptMode == PtMode.WATER } == true && destination!!.place?.mode?.any { it.ptMode == PtMode.WATER } == true) {
-                    listOf(PtMode.WATER)
-                } else emptyList()
 
-            val modeAndModeOfOperationFilter = if (modeFilter.isNotEmpty()) {
-                listOf(
-                    ModeAndModeOfOperationFilter(
-                        ptMode = modeFilter,
-                        exclude = false
-                    )
-                )
-            } else emptyList()
+            val selectedPtModes: List<PtMode> = buildList {
+                if (state.value.vehicleOptions.first().isSelected) {
+                    add(PtMode.RAIL)
+                    add(PtMode.SUBURBAN_RAIL)
+                    add(PtMode.URBAN_RAIL)
+                }
+                if (state.value.vehicleOptions[1].isSelected) add(PtMode.BUS)
+                if (state.value.vehicleOptions[2].isSelected) add(PtMode.TRAM)
+                if (state.value.vehicleOptions[3].isSelected) add(PtMode.METRO)
+                if (state.value.vehicleOptions[4].isSelected) add(PtMode.WATER)
+                if (state.value.vehicleOptions.last().isSelected) add(PtMode.TELECABIN)
+
+                if (isEmpty()) add(PtMode.ALL)
+            }
+
+            val selectedPtSubModes: MutableList<ModeAndModeOfOperationFilter> =
+                if (PtMode.RAIL in selectedPtModes) {
+                    state.value.vehicleSubOptions
+                        .filter { it.isSelected }
+                        .map { vehicleOption ->
+                            ModeAndModeOfOperationFilter(
+                                exclude = false,
+                                ptMode = emptyList(),
+                                railSubmode = vehicleOption.vehicleType
+                            )
+                        }
+                        .toMutableList()
+                } else {
+                    mutableListOf()
+                }
+
+            val railModes = setOf(PtMode.RAIL, PtMode.SUBURBAN_RAIL, PtMode.URBAN_RAIL)
+
+            val ptModesForMainFilter =
+                if (selectedPtSubModes.isNotEmpty()) selectedPtModes.filterNot { it in railModes }
+                else selectedPtModes
+
+            val modeAndModeOfOperationFilter: List<ModeAndModeOfOperationFilter> = buildList {
+                add(ModeAndModeOfOperationFilter(ptMode = ptModesForMainFilter, exclude = false))
+                addAll(selectedPtSubModes)
+            }
 
             val response = MainActivity.ojpSdk.requestTrips(
                 languageCode = Locale.getDefault().language.toOjpLanguageCode(),
@@ -236,7 +302,21 @@ class TripResultViewModel(
                     includeIntermediateStops = true,
                     includeAllRestrictedLines = true,
                     modeAndModeOfOperationFilter = modeAndModeOfOperationFilter,
-                    useRealtimeData = RealtimeData.EXPLANATORY
+                    useRealtimeData = RealtimeData.EXPLANATORY,
+                    walkSpeed = state.value.walkingSpeed,
+                    transferLimit = if (state.value.isDirectConnection) 0 else null,
+                    optimisationMethod = if (state.value.isFewerTransfers) OptimisationMethod.MIN_CHANGES.serializedName() else null,
+                    bikeTransport = state.value.isBikeTransport,
+                ),
+                individualTransportOption = IndividualTransportOptionDto(
+                    itModeAndModeOfOperation = ItModeAndModeOfOperationDto(
+                        personalMode = "foot",
+                        personalModeOfOperation = "own"
+                    ),
+                    minDistance = state.value.minDistance,
+                    maxDistance = state.value.maxDistance,
+                    minDuration = state.value.minDuration?.let { Duration.ofMinutes(it) },
+                    maxDuration = state.value.maxDuration?.let { Duration.ofMinutes(it) },
                 )
             )
             when (response) {
@@ -284,32 +364,42 @@ class TripResultViewModel(
                         val mapData = mutableListOf<MapLibreData>()
                         response.data.tripResults?.forEach { result ->
                             result.trip?.legs?.forEach { leg ->
-                                when(leg.legType) {
+                                when (leg.legType) {
                                     is ContinuousLegDto -> {
-                                        val positions = leg.continuousLeg?.legTrack?.trackSection?.first()?.linkProjection?.positions
+                                        val positions =
+                                            leg.continuousLeg?.legTrack?.trackSection?.first()?.linkProjection?.positions
                                         if (!positions.isNullOrEmpty()) {
-                                            mapData.add(MapLibreData(
-                                                id = leg.id,
-                                                positions = positions
-                                            ))
+                                            mapData.add(
+                                                MapLibreData(
+                                                    id = leg.id,
+                                                    positions = positions
+                                                )
+                                            )
                                         }
                                     }
+
                                     is TransferLegDto -> {
-                                        val positions = leg.transferLeg?.pathGuidance?.pathGuidanceSection?.first()?.trackSection?.first()?.linkProjection?.positions
+                                        val positions =
+                                            leg.transferLeg?.pathGuidance?.pathGuidanceSection?.first()?.trackSection?.first()?.linkProjection?.positions
                                         if (!positions.isNullOrEmpty()) {
-                                            mapData.add(MapLibreData(
-                                                id = leg.id,
-                                                positions = positions
-                                            ))
+                                            mapData.add(
+                                                MapLibreData(
+                                                    id = leg.id,
+                                                    positions = positions
+                                                )
+                                            )
                                         }
                                     }
+
                                     is TimedLegDto -> {
                                         val positions = leg.timedLeg?.legTrack?.trackSection?.first()?.linkProjection?.positions
                                         if (!positions.isNullOrEmpty()) {
-                                            mapData.add(MapLibreData(
-                                                id = leg.id,
-                                                positions = positions
-                                            ))
+                                            mapData.add(
+                                                MapLibreData(
+                                                    id = leg.id,
+                                                    positions = positions
+                                                )
+                                            )
                                         }
                                     }
                                 }
@@ -333,6 +423,58 @@ class TripResultViewModel(
         state.update { it.copy(mapData = emptyList()) }
     }
 
+    fun updateWalkingSpeed(walkingSpeed: Int) {
+        state.update { it.copy(walkingSpeed = walkingSpeed) }
+    }
+
+    fun setDirectConnection() {
+        state.update { it.copy(isDirectConnection = !state.value.isDirectConnection) }
+    }
+
+    fun setFewerTransfers() {
+        state.update { it.copy(isFewerTransfers = !state.value.isFewerTransfers) }
+    }
+
+    fun toggleVehicle(vehicleType: String) {
+        state.update { current ->
+            val updated = current.vehicleOptions.map { option ->
+                if (option.vehicleType == vehicleType) option.copy(isSelected = !option.isSelected) else option
+            }
+            current.copy(vehicleOptions = updated)
+        }
+    }
+
+    fun toggleSubVehicle(vehicleType: String) {
+        state.update { current ->
+            val updated = current.vehicleSubOptions.map { option ->
+                if (option.vehicleType == vehicleType) option.copy(isSelected = !option.isSelected) else option
+            }
+            current.copy(vehicleSubOptions = updated)
+        }
+    }
+
+    fun setMinDistance(minDistance: Int?) {
+        state.update { it.copy(minDistance = minDistance) }
+    }
+
+    fun setMaxDistance(maxDistance: Int?) {
+        state.update { it.copy(maxDistance = maxDistance) }
+    }
+
+    fun setMinDuration(minDuration: Long?) {
+        state.update { it.copy(minDuration = minDuration) }
+
+    }
+
+    fun setMaxDuration(maxDuration: Long?) {
+        state.update { it.copy(maxDuration = maxDuration) }
+    }
+
+    fun setBikeTransport() {
+        state.update { it.copy(isBikeTransport = !state.value.isBikeTransport) }
+    }
+
+
     sealed class Event(val id: Long = UUID.randomUUID().mostSignificantBits) {
         data class ShowSnackBar(val message: String) : Event()
         data class ScrollToFirstTripItem(val offset: Int) : Event()
@@ -345,6 +487,16 @@ class TripResultViewModel(
         val isLoadingPrevious: Boolean = false,
         val isLoading: Boolean = false,
         val isLoadingNext: Boolean = false,
-        val mapData: List<MapLibreData> = emptyList()
+        val mapData: List<MapLibreData> = emptyList(),
+        val walkingSpeed: Int = 100,
+        val isDirectConnection: Boolean = false,
+        val isFewerTransfers: Boolean = false,
+        val isBikeTransport: Boolean = false,
+        val vehicleOptions: List<VehicleOption> = emptyList(),
+        val vehicleSubOptions: List<VehicleOption> = emptyList(),
+        val minDuration: Long? = null,
+        val maxDuration: Long? = null,
+        val minDistance: Int? = null,
+        val maxDistance: Int? = null,
     )
 }

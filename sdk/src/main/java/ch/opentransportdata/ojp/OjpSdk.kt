@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp
 
+import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
@@ -101,7 +102,8 @@ class OjpSdk(
         via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean = true,
-        params: TripParams?
+        params: TripParams?,
+        individualTransportOption: IndividualTransportOptionDto? = null
     ): Result<TripDeliveryDto> {
         OjpKoinContext.koinApp.koin.get<RequestTrips>().reset()
         return OjpKoinContext.koinApp.koin.get<RequestTrips>().invoke(
@@ -111,7 +113,8 @@ class OjpSdk(
             via = via,
             time = time,
             isSearchForDepartureTime = isSearchForDepartureTime,
-            params = params
+            params = params,
+            individualTransportOption = individualTransportOption
         )
     }
 
@@ -156,8 +159,9 @@ class OjpSdk(
         via: PlaceReferenceDto?,
         params: TripParams?,
         trip: TripDto,
+        individualTransportOption: IndividualTransportOptionDto?
     ): Result<TripDeliveryDto> {
-        return OjpKoinContext.koinApp.koin.get<UpdateTrip>().invoke(languageCode, origin, destination, via, params, trip)
+        return OjpKoinContext.koinApp.koin.get<UpdateTrip>().invoke(languageCode, origin, destination, via, params, trip, individualTransportOption)
     }
 
     /**

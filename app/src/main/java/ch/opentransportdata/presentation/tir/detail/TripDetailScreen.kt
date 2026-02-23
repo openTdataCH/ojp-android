@@ -62,6 +62,7 @@ import ch.opentransportdata.presentation.utils.toFormattedString
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 /**
  * Created by Michael Ruppen on 12.07.2024
@@ -75,7 +76,8 @@ fun TripDetailScreen(
     requestTripUpdate: (TripDto) -> Unit,
     refineTrip: (String) -> Unit,
     showMapText: String,
-    showMap: (String, Boolean) -> Unit
+    showMap: (String, Boolean) -> Unit,
+    walkingSpeed: Int,
 ) {
     val scrollState = rememberScrollState()
     val timedLegs = trip.legs.mapNotNull { it.legType as? TimedLegDto }
@@ -148,7 +150,7 @@ fun TripDetailScreen(
                 when (val legType = leg.legType) {
                     is TransferLegDto -> {
                         isZoomed = true
-                        TransferLeg(modifier = Modifier.padding(all = 16.dp), leg = legType)
+                        TransferLeg(modifier = Modifier.padding(all = 16.dp),walkingSpeed = walkingSpeed, leg = legType)
                     }
                     is ContinuousLegDto -> {
                         isZoomed = true
@@ -468,6 +470,7 @@ private fun ContinuousLeg(
 @Composable
 private fun TransferLeg(
     modifier: Modifier = Modifier,
+    walkingSpeed: Int,
     leg: TransferLegDto
 ) {
     Row(
@@ -483,6 +486,12 @@ private fun TransferLeg(
         Text(
             modifier = Modifier.padding(start = 4.dp),
             text = "Change to ${leg.legEnd.name?.text}",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Text(
+            modifier = Modifier.padding(start = 4.dp),
+            text = "Duration ${(leg.duration.toMinutes() / (walkingSpeed / 100.0)).roundToInt()} (min)",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
@@ -567,7 +576,8 @@ private fun TripDetailScreenPreview() {
             requestTripUpdate = {},
             refineTrip = {},
             showMapText = "Show way on map",
-            showMap = {_ , _ ->}
+            showMap = {_ , _ ->},
+            walkingSpeed = 100
         )
     }
 }

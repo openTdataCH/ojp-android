@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp.data.repository
 
+import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
@@ -73,7 +74,8 @@ internal class OjpRepositoryImpl(
         via: PlaceReferenceDto?,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
-        params: TripParams?
+        params: TripParams?,
+        individualTransportOption: IndividualTransportOptionDto?
     ): Result<TripDeliveryDto> {
         return try {
             val response = tripDataSource.requestTrips(
@@ -83,7 +85,8 @@ internal class OjpRepositoryImpl(
                 via = via,
                 time = time,
                 isSearchForDepartureTime = isSearchForDepartureTime,
-                params = params
+                params = params,
+                individualTransportOption = individualTransportOption
             )
             val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripDeliveryDto
             if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null")))

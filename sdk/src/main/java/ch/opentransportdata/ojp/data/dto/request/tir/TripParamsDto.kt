@@ -51,5 +51,21 @@ internal data class TripParamsDto(
 
     @XmlElement(true)
     @XmlSerialName("ModeAndModeOfOperationFilter", OJP_NAME_SPACE, "")
-    val modeAndModeOfOperationFilter: List<ModeAndModeOfOperationFilterDto>? = null
+    val modeAndModeOfOperationFilter: List<ModeAndModeOfOperationFilterDto>? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("WalkSpeed", OJP_NAME_SPACE, "")
+    val walkSpeed: Int?,
+
+    @XmlElement(true)
+    @XmlSerialName("TransferLimit", OJP_NAME_SPACE, "")
+    val transferLimit: Int?,
+
+    @XmlElement(true)
+    @XmlSerialName("OptimisationMethod", OJP_NAME_SPACE, "")
+    val optimisationMethod: String?,
+
+    @XmlElement(true)
+    @XmlSerialName("BikeTransport", OJP_NAME_SPACE, "")
+    val bikeTransport: Boolean?,
 )

@@ -1,5 +1,6 @@
 package ch.opentransportdata.ojp.domain.usecase
 
+import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
@@ -30,7 +31,8 @@ internal class RequestTrips(
         via: PlaceReferenceDto? = null,
         time: LocalDateTime,
         isSearchForDepartureTime: Boolean,
-        params: TripParams?
+        params: TripParams?,
+        individualTransportOption: IndividualTransportOptionDto?
     ): Result<TripDeliveryDto> {
         // do not return or overwrite state, if user canceled the request (long running task or something)
         if (!coroutineContext.isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
@@ -53,7 +55,8 @@ internal class RequestTrips(
                 via = via,
                 time = time,
                 isSearchForDepartureTime = isSearchForDepartureTime,
-                params = params
+                params = params,
+                individualTransportOption = individualTransportOption
             )
         ) {
             is Result.Success -> {
@@ -81,6 +84,7 @@ internal class RequestTrips(
                 numberOfResultsAfter = null,
                 numberOfResults = null
             ),
+            individualTransportOption = state.individualTransportOption
         )
     }
 
@@ -99,6 +103,7 @@ internal class RequestTrips(
                 numberOfResultsAfter = numberOfResultsAfter,
                 numberOfResults = null
             ),
+            individualTransportOption = state.individualTransportOption
         )
     }
 
@@ -140,6 +145,7 @@ internal class RequestTrips(
         val params: TripParams? = null,
         val minDateTime: LocalDateTime? = null,
         val maxDateTime: LocalDateTime? = null,
-        val existingHashes: MutableList<Int> = mutableListOf()
+        val existingHashes: MutableList<Int> = mutableListOf(),
+        val individualTransportOption: IndividualTransportOptionDto? = null
     )
 }
