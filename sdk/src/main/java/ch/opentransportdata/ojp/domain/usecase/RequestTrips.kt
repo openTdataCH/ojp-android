@@ -84,7 +84,7 @@ internal class RequestTrips(
                 numberOfResultsAfter = null,
                 numberOfResults = null
             ),
-            individualTransportOption = state.individualTransportOption!!
+            individualTransportOption = state.individualTransportOption
         )
     }
 
@@ -103,7 +103,7 @@ internal class RequestTrips(
                 numberOfResultsAfter = numberOfResultsAfter,
                 numberOfResults = null
             ),
-            individualTransportOption = state.individualTransportOption!!
+            individualTransportOption = state.individualTransportOption
         )
     }
 
