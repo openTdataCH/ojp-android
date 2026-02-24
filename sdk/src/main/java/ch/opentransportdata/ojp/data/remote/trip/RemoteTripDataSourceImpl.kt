@@ -19,6 +19,7 @@ import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
+import ch.opentransportdata.ojp.domain.model.serializedName
 import ch.opentransportdata.ojp.domain.model.shortName
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import kotlinx.coroutines.Dispatchers
@@ -134,13 +135,13 @@ internal class RemoteTripDataSourceImpl(
                 ModeAndModeOfOperationFilterDto(
                     ptMode = filter.ptMode,
                     exclude = filter.exclude,
-                    railSubmode = filter.railSubmode,
+                    railSubmode = filter.railSubmode?.serializedName(),
                     busSubmode = filter.busSubmode,
                     coachSubmode = filter.coachSubmode,
                     metroSubmode = filter.metroSubmode,
                     tramSubmode = filter.tramSubmode,
                     trolleyBusSubmode = filter.trolleyBusSubmode,
-                    telecabinSubmode = filter.trolleyBusSubmode,
+                    telecabinSubmode = filter.telecabinSubmode,
                     funicularSubmode = filter.funicularSubmode,
                     waterSubmode = filter.waterSubmode,
                     airSubmode = filter.airSubmode,
@@ -150,7 +151,7 @@ internal class RemoteTripDataSourceImpl(
             },
             walkSpeed = this.walkSpeed,
             transferLimit = this.transferLimit,
-            optimisationMethod = this.optimisationMethod,
+            optimisationMethod = this.optimisationMethod?.serializedName(),
             bikeTransport = this.bikeTransport,
         )
     }

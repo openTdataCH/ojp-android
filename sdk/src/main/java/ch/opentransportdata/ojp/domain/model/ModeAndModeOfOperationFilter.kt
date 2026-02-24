@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 data class ModeAndModeOfOperationFilter(
     val ptMode: List<PtMode>,
     val exclude: Boolean,
-    val railSubmode: String? = null,
+    val railSubmode: RailSubmode? = null,
     val busSubmode: String? = null,
     val coachSubmode: String? = null,
     val metroSubmode: String? = null,
