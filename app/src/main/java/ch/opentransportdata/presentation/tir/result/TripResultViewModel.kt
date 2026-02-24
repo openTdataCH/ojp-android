@@ -272,7 +272,7 @@ class TripResultViewModel(
                             ModeAndModeOfOperationFilter(
                                 exclude = false,
                                 ptMode = emptyList(),
-                                railSubmode = RailSubmode.entries.firstOrNull { it.serializedName() == vehicleOption.vehicleType }
+                                railSubmode = RailSubmode.fromSerializedName(vehicleOption.vehicleType)
                             )
                         }
                         .toMutableList()

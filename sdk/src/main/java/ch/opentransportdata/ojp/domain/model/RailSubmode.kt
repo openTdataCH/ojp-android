@@ -17,7 +17,12 @@ enum class RailSubmode {
     @SerialName("railShuttle") // Trains ATZ, PE
     RAIL_SHUTTLE,
     @SerialName("local") //Trains S, SN, RB, RE,
-    LOCAL,
+    LOCAL;
+
+    companion object {
+        fun fromSerializedName(name: String): RailSubmode? =
+            entries.firstOrNull { it.serializedName() == name }
+    }
 }
 
 fun RailSubmode.serializedName(): String = when (this) {
