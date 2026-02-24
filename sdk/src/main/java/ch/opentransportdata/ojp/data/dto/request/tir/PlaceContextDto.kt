@@ -23,5 +23,5 @@ internal data class PlaceContextDto(
 
     @XmlElement(true)
     @XmlSerialName("IndividualTransportOption", OJP_NAME_SPACE, "")
-    val individualTransportOption: IndividualTransportOptionDto?,
+    val individualTransportOption: IndividualTransportOptionDto? = null,
 )
