@@ -20,7 +20,7 @@ Compatible with Android 8+
 To integrate the SDK you have to add following dependency:
 ```
 dependencies {
-    implementation 'io.github.opentdatach:ojp-android:1.3.7'
+    implementation 'io.github.opentdatach:ojp-android:1.4.0'
 }
 ```
 
@@ -71,21 +71,21 @@ requestLocationsFromCoordinates(
 )      
 ```
 
-#### Get a list of trips including disruption messages
+#### Get a list of trips
 ```
 import ch.opentransportdata.ojp.OjpSdk
 
 requestTrips(
-    languageCode = LanguageCode.EN
+    languageCode = LanguageCode.EN,
     origin = PlaceReferenceDto(
         ref = "8507000",
-        stationName = NameDto(text = "Bern") ,
-        position =  null
+        stationName = NameDto(text = "Bern"),
+        position = null
     ),
     destination = PlaceReferenceDto(
         ref = "8500010",
-        stationName = NameDto(text = "Basel SBB") ,
-        position =  null
+        stationName = NameDto(text = "Basel SBB"),
+        position = null
     ),
     via = null,
     time = LocalDateTime.now(),
@@ -94,19 +94,63 @@ requestTrips(
         numberOfResults = 10,
         includeIntermediateStops = true,
         includeAllRestrictedLines = true,
-        useRealtimeData = RealtimeData.EXPLANATORY
+        useRealtimeData = RealtimeData.EXPLANATORY,
+        optimisationMethod = OptimisationMethod.FASTEST,
+        walkSpeed = 100,
+        transferLimit = 3,
+        bikeTransport = false,
+        modeAndModeOfOperationFilter = listOf(
+            ModeAndModeOfOperationFilter(
+                ptMode = listOf(PtMode.RAIL),
+                exclude = false,
+                railSubmode = RailSubmode.HIGH_SPEED_RAIL
+            )
+        )
     ),
-)     
+    individualTransportOption = IndividualTransportOptionDto(
+        itModeAndModeOfOperation = ItModeAndModeOfOperationDto(
+            personalMode = "walk"
+        ),
+        maxDistance = 500,
+        maxDuration = Duration.ofMinutes(10)
+    )
+)
 ```
 
-#### Get a list of mocked trips for testing purposes 
+The `individualTransportOption` parameter allows you to specify individual transport options (e.g. walking, cycling) for the first/last mile of a trip. It accepts an `IndividualTransportOptionDto` with the following optional fields:
+- `itModeAndModeOfOperation`: The personal mode and mode of operation (e.g. `walk`, `cycle`)
+- `minDistance` / `maxDistance`: Distance constraints in meters
+- `minDuration` / `maxDuration`: Duration constraints as `java.time.Duration`
+
+#### Load previous or next trips
+After a `requestTrips` call you can page through results without re-initialising the request:
 ```
 import ch.opentransportdata.ojp.OjpSdk
 
-requestMockTrips(stream = source)
+// Load trips before the first result of the current list
+requestPreviousTrips(numberOfResults = 5)
+
+// Load trips after the last result of the current list
+requestNextTrips(numberOfResults = 5)
 ```
 
 #### Update an existing trip
+Re-request a single trip with the same origin/destination to get fresh real-time data:
+```
+import ch.opentransportdata.ojp.OjpSdk
+
+updateTripData(
+    languageCode = LanguageCode.EN,
+    origin = PlaceReferenceDto(ref = "8507000", stationName = NameDto(text = "Bern"), position = null),
+    destination = PlaceReferenceDto(ref = "8500010", stationName = NameDto(text = "Basel SBB"), position = null),
+    via = null,
+    params = TripParams(useRealtimeData = RealtimeData.FULL),
+    trip = existingTrip,
+    individualTransportOption = null
+)
+```
+
+#### Refine a trip
 ```
 import ch.opentransportdata.ojp.OjpSdk
 
@@ -114,14 +158,21 @@ requestTripRefinement(
     languageCode = Locale.getDefault().language.toOjpLanguageCode(),
     tripResult = tripResult,
     params = TripRefineParam(
-    includeIntermediateStops = true,
-    includeAllRestrictedLines = true,
-    includeTurnDescription = true,
-    includeLegProjection = true,
-    includeTrackSections = true,
-    useRealtimeData = RealtimeData.FULL
+        includeIntermediateStops = true,
+        includeAllRestrictedLines = true,
+        includeTurnDescription = true,
+        includeLegProjection = true,
+        includeTrackSections = true,
+        useRealtimeData = RealtimeData.FULL
     )
 )
+```
+
+#### Get a list of mocked trips for testing purposes
+```
+import ch.opentransportdata.ojp.OjpSdk
+
+requestMockTrips(stream = source)
 ```
 
 ## Documentation
