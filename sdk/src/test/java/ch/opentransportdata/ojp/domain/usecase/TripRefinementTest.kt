@@ -24,7 +24,7 @@ import ch.opentransportdata.ojp.domain.model.RealtimeData
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
-import ch.opentransportdata.ojp.domain.model.serializedName
+
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -141,7 +141,7 @@ class TripRefinementXmlUtilTest {
                 useRealtimeData = RealtimeData.FULL,
                 walkSpeed = 100,
                 transferLimit = 0,
-                optimisationMethod = OptimisationMethod.MIN_CHANGES.serializedName(),
+                optimisationMethod = OptimisationMethod.MIN_CHANGES,
                 bikeTransport = false
             )
 

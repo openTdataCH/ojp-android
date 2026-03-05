@@ -92,6 +92,7 @@ class OjpSdk(
      * @param time The time the trip should start/end
      * @param isSearchForDepartureTime weather to search for trips that arrive at [time] or leave at [time]. Set to true if searching for trips that leave at [time].
      * @param params The params to get further information on each trip
+     * @param individualTransportOption Optional individual transport option for the trip request
      *
      * @return [TripDeliveryDto] object with related trip information
      */
@@ -152,6 +153,19 @@ class OjpSdk(
         return OjpKoinContext.koinApp.koin.get<RequestMockTrips>().invoke(stream)
     }
 
+    /**
+     * Updates the trip data for a given trip by re-requesting it with the same parameters
+     *
+     * @param languageCode The [LanguageCode] for the desired results, default is [LanguageCode.DE]
+     * @param origin The origin where the trip starts
+     * @param destination The destination where the trip ends
+     * @param via The via station which the trip should cover
+     * @param params The params to get further information on each trip
+     * @param trip The existing [TripDto] that should be updated
+     * @param individualTransportOption Optional individual transport option for the trip request
+     *
+     * @return [TripDeliveryDto] with the updated trip information
+     */
     suspend fun updateTripData(
         languageCode: LanguageCode = LanguageCode.DE,
         origin: PlaceReferenceDto,

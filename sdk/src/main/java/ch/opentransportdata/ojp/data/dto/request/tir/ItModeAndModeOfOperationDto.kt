@@ -13,9 +13,9 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 data class ItModeAndModeOfOperationDto(
     @XmlElement(true)
     @XmlSerialName("PersonalMode", OJP_NAME_SPACE, "")
-    val personalMode: String?,
+    val personalMode: String? = null,
 
     @XmlElement(true)
     @XmlSerialName("PersonalModeOfOperation", OJP_NAME_SPACE, "")
-    val personalModeOfOperation: String?,
+    val personalModeOfOperation: String? = null,
 )

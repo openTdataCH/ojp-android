@@ -45,6 +45,7 @@ internal class RequestTrips(
             time = time,
             isSearchForDepartureTime = isSearchForDepartureTime,
             params = params,
+            individualTransportOption = individualTransportOption,
         )
 
         return when (val response =

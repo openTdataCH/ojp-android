@@ -196,7 +196,7 @@ class TripResultViewModel(
                     useRealtimeData = RealtimeData.EXPLANATORY,
                     walkSpeed = state.value.walkingSpeed,
                     transferLimit = if (state.value.isDirectConnection) 0 else null,
-                    optimisationMethod = if (state.value.isFewerTransfers) OptimisationMethod.MIN_CHANGES.serializedName() else null,
+                    optimisationMethod = if (state.value.isFewerTransfers) OptimisationMethod.MIN_CHANGES else null,
                     bikeTransport = state.value.isBikeTransport,
                 ),
                 trip = trip,
@@ -272,7 +272,7 @@ class TripResultViewModel(
                             ModeAndModeOfOperationFilter(
                                 exclude = false,
                                 ptMode = emptyList(),
-                                railSubmode = vehicleOption.vehicleType
+                                railSubmode = RailSubmode.fromSerializedName(vehicleOption.vehicleType)
                             )
                         }
                         .toMutableList()
@@ -305,7 +305,7 @@ class TripResultViewModel(
                     useRealtimeData = RealtimeData.EXPLANATORY,
                     walkSpeed = state.value.walkingSpeed,
                     transferLimit = if (state.value.isDirectConnection) 0 else null,
-                    optimisationMethod = if (state.value.isFewerTransfers) OptimisationMethod.MIN_CHANGES.serializedName() else null,
+                    optimisationMethod = if (state.value.isFewerTransfers) OptimisationMethod.MIN_CHANGES else null,
                     bikeTransport = state.value.isBikeTransport,
                 ),
                 individualTransportOption = IndividualTransportOptionDto(
