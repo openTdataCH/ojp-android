@@ -9,9 +9,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class OptimisationMethod {
     @SerialName("minChanges")
-    MIN_CHANGES
+    MIN_CHANGES,
+    @SerialName("fastest")
+    FASTEST,
 }
 
 fun OptimisationMethod.serializedName(): String = when (this) {
     OptimisationMethod.MIN_CHANGES -> "minChanges"
+    OptimisationMethod.FASTEST -> "fastest"
 }
