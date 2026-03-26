@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.opentransportdata.domain.MapLibreData
 import ch.opentransportdata.domain.VehicleOption
-import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
-import ch.opentransportdata.ojp.data.dto.request.tir.ItModeAndModeOfOperationDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
+import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
+import ch.opentransportdata.ojp.data.dto.request.tr.ItModeAndModeOfOperationDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto

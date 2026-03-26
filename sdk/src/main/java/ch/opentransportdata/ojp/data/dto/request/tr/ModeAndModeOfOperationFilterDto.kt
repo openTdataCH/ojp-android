@@ -1,4 +1,4 @@
-package ch.opentransportdata.ojp.data.dto.request.tir
+package ch.opentransportdata.ojp.data.dto.request.tr
 
 import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE

@@ -1,4 +1,4 @@
-package ch.opentransportdata.ojp.data.dto.request.tir
+package ch.opentransportdata.ojp.data.dto.request.tr
 
 import android.os.Parcelable
 import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE

@@ -1,7 +1,7 @@
 package ch.opentransportdata.ojp
 
-import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
+import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto

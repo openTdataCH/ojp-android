@@ -11,7 +11,7 @@ import ch.opentransportdata.ojp.OjpSdk
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.converter.FareClassSerializer
 import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.GeoPositionDto
 import ch.opentransportdata.ojp.data.dto.response.NameDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
