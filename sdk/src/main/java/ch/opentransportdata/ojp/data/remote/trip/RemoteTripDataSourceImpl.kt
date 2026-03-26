@@ -4,13 +4,14 @@ import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
-import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
-import ch.opentransportdata.ojp.data.dto.request.tir.ModeAndModeOfOperationFilterDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceContextDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
-import ch.opentransportdata.ojp.data.dto.request.tir.TripParamsDto
-import ch.opentransportdata.ojp.data.dto.request.tir.TripRequestDto
-import ch.opentransportdata.ojp.data.dto.request.tir.TripVia
+import ch.opentransportdata.ojp.data.dto.request.tir.TripInfoParamsDto
+import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
+import ch.opentransportdata.ojp.data.dto.request.tr.ModeAndModeOfOperationFilterDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceContextDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
+import ch.opentransportdata.ojp.data.dto.request.tr.TripParamsDto
+import ch.opentransportdata.ojp.data.dto.request.tr.TripRequestDto
+import ch.opentransportdata.ojp.data.dto.request.tr.TripVia
 import ch.opentransportdata.ojp.data.dto.request.trr.TripRefineParamDto
 import ch.opentransportdata.ojp.data.dto.request.trr.TripRefineRequestDto
 import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
@@ -103,6 +104,14 @@ internal class RemoteTripDataSourceImpl(
             )
         )
         return@withContext ojpService.serviceRequest(url, tripRefineRequest)
+    }
+
+    override suspend fun requestTripInfo(
+        languageCode: LanguageCode,
+        tripResultDto: TripResultDto,
+        params: TripInfoParamsDto?
+    ): OjpDto {
+        TODO("Not yet implemented")
     }
 
     private fun createRequest(languageCode: LanguageCode, requestTime: LocalDateTime, tripRequest: TripRequestDto): OjpDto {

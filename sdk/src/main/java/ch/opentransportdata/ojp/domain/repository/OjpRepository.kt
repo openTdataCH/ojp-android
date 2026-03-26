@@ -1,7 +1,7 @@
 package ch.opentransportdata.ojp.domain.repository
 
-import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
+import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
@@ -44,6 +44,12 @@ internal interface OjpRepository {
     ): Result<TripDeliveryDto>
 
     suspend fun requestTripRefinement(
+        languageCode: LanguageCode,
+        tripResultDto: TripResultDto,
+        params: TripRefineParam
+    ): Result<TripRefineDeliveryDto>
+
+    suspend fun requestTripInfo(
         languageCode: LanguageCode,
         tripResultDto: TripResultDto,
         params: TripRefineParam

@@ -1,7 +1,7 @@
 package ch.opentransportdata.ojp.data.repository
 
-import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
+import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
@@ -124,6 +124,14 @@ internal class OjpRepositoryImpl(
             val error = handleError(exception)
             Result.Error(error)
         }
+    }
+
+    override suspend fun requestTripInfo(
+        languageCode: LanguageCode,
+        tripResultDto: TripResultDto,
+        params: TripRefineParam
+    ): Result<TripRefineDeliveryDto> {
+        TODO("Not yet implemented")
     }
 
     private fun handleError(exception: Exception): OjpError {
