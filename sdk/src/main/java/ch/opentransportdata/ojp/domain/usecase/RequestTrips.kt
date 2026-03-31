@@ -10,6 +10,7 @@ import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
 import java.time.LocalDateTime
 import java.util.concurrent.CancellationException
@@ -35,7 +36,7 @@ internal class RequestTrips(
         individualTransportOption: IndividualTransportOptionDto?
     ): Result<TripDeliveryDto> {
         // do not return or overwrite state, if user canceled the request (long running task or something)
-        if (!coroutineContext.isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
+        if (!currentCoroutineContext().isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
 
         state = state.copy(
             languageCode = languageCode,
