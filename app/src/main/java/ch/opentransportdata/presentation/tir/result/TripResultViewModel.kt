@@ -13,10 +13,10 @@ import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
-import ch.opentransportdata.ojp.data.dto.response.tir.leg.ContinuousLegDto
-import ch.opentransportdata.ojp.data.dto.response.tir.leg.TimedLegDto
-import ch.opentransportdata.ojp.data.dto.response.tir.leg.TransferLegDto
-import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
+import ch.opentransportdata.ojp.data.dto.response.tr.leg.ContinuousLegDto
+import ch.opentransportdata.ojp.data.dto.response.tr.leg.TimedLegDto
+import ch.opentransportdata.ojp.data.dto.response.tr.leg.TransferLegDto
+import ch.opentransportdata.ojp.data.dto.response.tr.trips.TripDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.ModeAndModeOfOperationFilter
 import ch.opentransportdata.ojp.domain.model.OptimisationMethod

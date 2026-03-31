@@ -1,7 +1,7 @@
 package ch.opentransportdata.presentation.utils
 
 import ch.opentransportdata.R
-import ch.opentransportdata.ojp.data.dto.response.tir.leg.AttributeDto
+import ch.opentransportdata.ojp.data.dto.response.tr.leg.AttributeDto
 
 /**
  * Created by Michael Ruppen on 26.09.2024

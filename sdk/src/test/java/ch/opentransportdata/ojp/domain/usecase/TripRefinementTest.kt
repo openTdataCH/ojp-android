@@ -15,8 +15,8 @@ import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.GeoPositionDto
 import ch.opentransportdata.ojp.data.dto.response.NameDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
-import ch.opentransportdata.ojp.data.dto.response.tir.minimalTripResult
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.minimalTripResult
 import ch.opentransportdata.ojp.domain.model.FareClass
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.OptimisationMethod

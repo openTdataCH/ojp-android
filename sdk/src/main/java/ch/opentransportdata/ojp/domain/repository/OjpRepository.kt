@@ -6,7 +6,7 @@ import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripInfoDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result

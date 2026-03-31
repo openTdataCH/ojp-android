@@ -3,8 +3,8 @@ package ch.opentransportdata.ojp.data.dto.response.delivery
 import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResponseContextDto
-import ch.opentransportdata.ojp.data.dto.response.tiri.TripInfoResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResponseContextDto
+import ch.opentransportdata.ojp.data.dto.response.tir.TripInfoResultDto
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement

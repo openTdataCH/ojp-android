@@ -1,7 +1,7 @@
 package ch.opentransportdata.ojp.domain.usecase
 
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripRefineParam

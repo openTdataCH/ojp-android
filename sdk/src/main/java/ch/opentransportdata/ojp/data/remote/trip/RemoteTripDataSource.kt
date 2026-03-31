@@ -3,7 +3,7 @@ package ch.opentransportdata.ojp.data.remote.trip
 import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.TripInfoParam
 import ch.opentransportdata.ojp.domain.model.TripParams

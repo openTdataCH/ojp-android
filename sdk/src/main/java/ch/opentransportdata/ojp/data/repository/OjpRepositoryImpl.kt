@@ -7,7 +7,7 @@ import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDe
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripInfoDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
 import ch.opentransportdata.ojp.data.local.trip.LocalTripDataSource
 import ch.opentransportdata.ojp.data.remote.location.RemoteLocationInformationDataSource
 import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource

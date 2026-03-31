@@ -15,8 +15,8 @@ import ch.opentransportdata.ojp.data.dto.request.tr.TripRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tr.TripVia
 import ch.opentransportdata.ojp.data.dto.request.trr.TripRefineParamDto
 import ch.opentransportdata.ojp.data.dto.request.trr.TripRefineRequestDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
-import ch.opentransportdata.ojp.data.dto.response.tir.minimalTripResult
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.minimalTripResult
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.TripInfoParam
