@@ -5,6 +5,7 @@ import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripInfoParamsDto
+import ch.opentransportdata.ojp.data.dto.request.tir.TripInfoRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tr.ModeAndModeOfOperationFilterDto
 import ch.opentransportdata.ojp.data.dto.request.tr.PlaceContextDto
@@ -18,6 +19,7 @@ import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
 import ch.opentransportdata.ojp.data.dto.response.tir.minimalTripResult
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.domain.model.LanguageCode
+import ch.opentransportdata.ojp.domain.model.TripInfoParam
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.ojp.domain.model.serializedName
@@ -108,10 +110,28 @@ internal class RemoteTripDataSourceImpl(
 
     override suspend fun requestTripInfo(
         languageCode: LanguageCode,
-        tripResultDto: TripResultDto,
-        params: TripInfoParamsDto?
-    ): OjpDto {
-        TODO("Not yet implemented")
+        journeyRef: String,
+        operatingDayRef: String,
+        params: TripInfoParam?
+    ): OjpDto = withContext(Dispatchers.IO) {
+        val requestTime = LocalDateTime.now()
+
+        val request = OjpDto(
+            ojpRequest = OjpRequestDto(
+                serviceRequest = ServiceRequestDto(
+                    serviceRequestContext = ServiceRequestContextDto(language = languageCode.shortName),
+                    requestTimestamp = requestTime,
+                    requestorRef = initializer.requesterReference,
+                    tripInfoRequestDto = TripInfoRequestDto(
+                        requestTimestamp = requestTime,
+                        journeyRef = journeyRef,
+                        operatingDayRef = operatingDayRef,
+                        params = params?.mapToBackendParams(),
+                    )
+                )
+            )
+        )
+        return@withContext ojpService.serviceRequest(url, request)
     }
 
     private fun createRequest(languageCode: LanguageCode, requestTime: LocalDateTime, tripRequest: TripRequestDto): OjpDto {
@@ -162,6 +182,20 @@ internal class RemoteTripDataSourceImpl(
             transferLimit = this.transferLimit,
             optimisationMethod = this.optimisationMethod?.serializedName(),
             bikeTransport = this.bikeTransport,
+        )
+    }
+
+    private fun TripInfoParam.mapToBackendParams(): TripInfoParamsDto {
+        return TripInfoParamsDto(
+            useRealtimeData = this.useRealtimeData,
+            includeCalls = if (this.includeCalls) true else null,
+            includePosition = if (this.includePosition) true else null,
+            includeService = if (this.includeService) true else null,
+            includeTrackSections = if (this.includeTrackSections) true else null,
+            includeTrackProjection = if (this.includeTrackProjection) true else null,
+            includePlacesContext = if (this.includePlacesContext) true else null,
+            includeFormation = if (this.includeFormation) true else null,
+            includeSituationsContext = if (this.includeSituationsContext) true else null,
         )
     }
 

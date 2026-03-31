@@ -15,9 +15,22 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 @XmlSerialName("TrackSection", OJP_NAME_SPACE, "")
 data class TrackSectionDto(
     @XmlElement(true)
+    @XmlSerialName("TrackSectionStart", OJP_NAME_SPACE, "")
+    val trackSectionStart: LegStartEndDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("TrackSectionEnd", OJP_NAME_SPACE, "")
+    val trackSectionEnd: LegStartEndDto? = null,
+
+    @XmlElement(true)
     @XmlSerialName("LinkProjection", OJP_NAME_SPACE, "")
     val linkProjection: LinearShapeDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("Duration", OJP_NAME_SPACE, "")
+    val duration: String? = null,
+
     @XmlElement(true)
     @XmlSerialName("Length", OJP_NAME_SPACE, "")
-    val length: Int? = null
+    val length: Int? = null,
 ) : Parcelable

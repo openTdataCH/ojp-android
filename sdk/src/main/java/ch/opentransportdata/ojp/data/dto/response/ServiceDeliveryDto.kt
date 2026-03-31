@@ -6,6 +6,7 @@ import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
 import ch.opentransportdata.ojp.data.dto.response.delivery.AbstractDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.TripInfoDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -39,9 +40,14 @@ internal data class ServiceDeliveryDto(
     @XmlElement(true)
     @XmlSerialName("OJPTripRefineDelivery", OJP_NAME_SPACE, "")
     val ojpTripRefineDelivery: TripRefineDeliveryDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("OJPTripInfoDelivery", OJP_NAME_SPACE, "")
+    val ojpTripInfoDelivery: TripInfoDeliveryDto? = null,
 ) {
     val ojpDelivery: AbstractDeliveryDto?
         get() = ojpLocationInformationDelivery
             ?: ojpTripDelivery
             ?: ojpTripRefineDelivery
+            ?: ojpTripInfoDelivery
 }
