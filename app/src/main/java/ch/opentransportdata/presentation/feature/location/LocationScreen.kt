@@ -1,10 +1,12 @@
 package ch.opentransportdata.presentation.feature.location
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -41,6 +43,7 @@ fun LirScreenComposable(
     val state = viewModel.state.collectAsState()
 
     Scaffold(
+        contentWindowInsets = WindowInsets.statusBars,
         snackbarHost = {
             SnackbarHost(modifier = Modifier.imePadding(), hostState = snackBarHostState)
         }
