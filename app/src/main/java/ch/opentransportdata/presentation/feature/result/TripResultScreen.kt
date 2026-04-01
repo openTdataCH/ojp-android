@@ -3,9 +3,11 @@ package ch.opentransportdata.presentation.feature.result
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -49,10 +51,10 @@ import ch.opentransportdata.ojp.data.dto.response.tr.situations.PublishingAction
 import ch.opentransportdata.ojp.data.dto.response.tr.trips.TripDto
 import ch.opentransportdata.presentation.components.TripItem
 import ch.opentransportdata.presentation.components.TripResultHeader
-import ch.opentransportdata.presentation.feature.location.name
-import ch.opentransportdata.presentation.navigation.TripMap
 import ch.opentransportdata.presentation.feature.detail.TripDetailScreen
 import ch.opentransportdata.presentation.feature.filter.FilterScreen
+import ch.opentransportdata.presentation.feature.location.name
+import ch.opentransportdata.presentation.navigation.TripMap
 import ch.opentransportdata.presentation.util.FileReader
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -184,6 +186,7 @@ fun TripResultScreen(
     }
 
     Scaffold(
+        contentWindowInsets = WindowInsets.statusBars,
         topBar = {
             TopAppBar(
                 title = { Text(text = "Trip results") },

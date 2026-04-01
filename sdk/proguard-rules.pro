@@ -22,7 +22,6 @@
 
 #Needed for minify to work properly for integrators (else can cause a classDuplicationError with different dependencies)
 -repackageclasses 'ch.opentransportdata.ojp'
--allowaccessmodification
 -keeppackagenames doNotKeepAThing
 
 -keep class ch.opentransportdata.ojp.domain.model.** { *; }
