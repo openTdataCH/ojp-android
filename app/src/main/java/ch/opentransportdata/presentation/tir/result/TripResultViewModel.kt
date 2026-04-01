@@ -13,6 +13,7 @@ import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
+import ch.opentransportdata.ojp.data.dto.response.tir.TripInfoResultDto
 import ch.opentransportdata.ojp.data.dto.response.tr.leg.ContinuousLegDto
 import ch.opentransportdata.ojp.data.dto.response.tr.leg.TimedLegDto
 import ch.opentransportdata.ojp.data.dto.response.tr.leg.TransferLegDto
@@ -24,6 +25,7 @@ import ch.opentransportdata.ojp.domain.model.PtMode
 import ch.opentransportdata.ojp.domain.model.RailSubmode
 import ch.opentransportdata.ojp.domain.model.RealtimeData
 import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.TripInfoParam
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.ojp.domain.model.serializedName
@@ -419,6 +421,33 @@ class TripResultViewModel(
         }
     }
 
+    fun requestTripInfo(journeyRef: String, operatingDayRef: String) {
+        if (state.value.tripInfoResults.containsKey(journeyRef)) {
+            state.update { it.copy(tripInfoResults = it.tripInfoResults - journeyRef) }
+            return
+        }
+        viewModelScope.launch {
+            when (val response = MainActivity.ojpSdk.requestTripInfo(
+                languageCode = Locale.getDefault().language.toOjpLanguageCode(),
+                journeyRef = journeyRef,
+                operatingDayRef = operatingDayRef,
+                params = TripInfoParam(includeCalls = true, useRealtimeData = RealtimeData.FULL)
+            )) {
+                is Result.Success -> {
+                    response.data.tripInfoResult?.let { result ->
+                        state.update { current ->
+                            current.copy(tripInfoResults = current.tripInfoResults + (journeyRef to result))
+                        }
+                    }
+                }
+                is Result.Error -> {
+                    Log.e("TripResultViewModel", "Error fetching trip info", response.error.exception)
+                    postEvent(Event.ShowSnackBar("Error: ${response.error.exception.message}"))
+                }
+            }
+        }
+    }
+
     fun resetMapData() {
         state.update { it.copy(mapData = emptyList()) }
     }
@@ -488,6 +517,7 @@ class TripResultViewModel(
         val isLoading: Boolean = false,
         val isLoadingNext: Boolean = false,
         val mapData: List<MapLibreData> = emptyList(),
+        val tripInfoResults: Map<String, TripInfoResultDto> = emptyMap(),
         val walkingSpeed: Int = 100,
         val isDirectConnection: Boolean = false,
         val isFewerTransfers: Boolean = false,

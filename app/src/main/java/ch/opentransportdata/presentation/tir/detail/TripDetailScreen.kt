@@ -44,6 +44,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import ch.opentransportdata.ojp.data.dto.response.tir.CallAtStopDto
+import ch.opentransportdata.ojp.data.dto.response.tir.TripInfoResultDto
 import ch.opentransportdata.ojp.data.dto.response.tr.leg.AttributeDto
 import ch.opentransportdata.ojp.data.dto.response.tr.leg.ContinuousLegDto
 import ch.opentransportdata.ojp.data.dto.response.tr.leg.LegAlightDto
@@ -72,9 +74,11 @@ import kotlin.math.roundToInt
 fun TripDetailScreen(
     trip: TripDto,
     situations: List<PtSituationDto>?,
+    tripInfoResults: Map<String, TripInfoResultDto>,
     showSituation: (PublishingActionDto) -> Unit,
     requestTripUpdate: (TripDto) -> Unit,
     refineTrip: (String) -> Unit,
+    onRequestTripInfo: (journeyRef: String, operatingDayRef: String) -> Unit,
     showMapText: String,
     showMap: (String, Boolean) -> Unit,
     walkingSpeed: Int,
@@ -168,6 +172,10 @@ fun TripDetailScreen(
                             leg = legType,
                             duration = leg.duration,
                             situations = legType.getPtSituationsForLeg(consideredSituations),
+                            tripInfoResult = tripInfoResults[legType.service.journeyRef],
+                            onRequestTripInfo = {
+                                onRequestTripInfo(legType.service.journeyRef, legType.service.operatingDayRef)
+                            },
                             showSituation = showSituation,
                         )
                     }
@@ -195,6 +203,8 @@ private fun TimedLeg(
     leg: TimedLegDto,
     duration: Duration?,
     situations: List<PtSituationDto>? = null,
+    tripInfoResult: TripInfoResultDto? = null,
+    onRequestTripInfo: () -> Unit = {},
     showSituation: (PublishingActionDto) -> Unit,
 ) {
     val attributes = leg.service.attributes?.filter { it.icon() != null } ?: emptyList()
@@ -236,6 +246,19 @@ private fun TimedLeg(
             }
 
             Column(modifier = Modifier.padding(end = 16.dp)) {
+                val allCalls = (tripInfoResult?.previousCalls ?: emptyList()) + (tripInfoResult?.onwardCalls ?: emptyList())
+                val boardTime = leg.legBoard.serviceDeparture.timetabledTime
+                val alightTime = leg.legAlight.serviceArrival.timetabledTime
+                val callsBefore = allCalls.filter { call ->
+                    val time = call.serviceDeparture?.timetabledTime ?: call.serviceArrival?.timetabledTime
+                    time != null && time.isBefore(boardTime)
+                }
+                val callsAfter = allCalls.filter { call ->
+                    val time = call.serviceArrival?.timetabledTime ?: call.serviceDeparture?.timetabledTime
+                    time != null && time.isAfter(alightTime)
+                }
+
+                callsBefore.forEach { call -> CallAtStop(call = call) }
                 LegBoard(legBoard = leg.legBoard)
                 Text(
                     modifier = Modifier.padding(start = 53.dp),
@@ -289,7 +312,7 @@ private fun TimedLeg(
                 publishingActions?.forEach { action ->
                     Situation(
                         modifier = Modifier.padding(start = 53.dp),
-                        icon = Icons.Rounded.WarningAmber, //todo find better solution
+                        icon = Icons.Rounded.WarningAmber,
                         text = action.passengerInformationAction?.textualContent?.summaryContent?.summaryText ?: "-",
                         onSituationClicked = { showSituation(action) }
                     )
@@ -297,6 +320,13 @@ private fun TimedLeg(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 LegAlight(legAlight = leg.legAlight)
+                callsAfter.forEach { call -> CallAtStop(call = call) }
+                Button(
+                    modifier = Modifier.padding(top = 8.dp),
+                    onClick = onRequestTripInfo
+                ) {
+                    Text("Trip Info")
+                }
             }
         }
     }
@@ -431,6 +461,46 @@ private fun LegAlight(
                 text = "Platform $platform",
                 style = MaterialTheme.typography.titleSmall,
                 color = if (legAlight.isPlatformChanged) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@Composable
+private fun CallAtStop(
+    modifier: Modifier = Modifier,
+    call: CallAtStopDto
+) {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    val time = call.serviceDeparture?.timetabledTime ?: call.serviceArrival?.timetabledTime
+    val platform = call.estimatedQuay?.text ?: call.plannedQuay?.text
+
+    Row(
+        modifier = modifier.padding(vertical = 2.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = time?.format(formatter) ?: "",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp),
+            text = buildString {
+                append(call.stopPointName.text ?: "")
+                if (call.requestStop == true) append(" (Halt auf Verlangen)")
+            },
+            style = MaterialTheme.typography.bodySmall,
+            color = if (call.notServicedStop == true) MaterialTheme.colorScheme.outline
+                    else MaterialTheme.colorScheme.onSurface
+        )
+        platform?.let {
+            Text(
+                text = "Gl. $it",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -572,9 +642,11 @@ private fun TripDetailScreenPreview() {
                 infeasible = false
             ),
             situations = emptyList(),
+            tripInfoResults = emptyMap(),
             showSituation = {},
             requestTripUpdate = {},
             refineTrip = {},
+            onRequestTripInfo = { _, _ -> },
             showMapText = "Show way on map",
             showMap = {_ , _ ->},
             walkingSpeed = 100

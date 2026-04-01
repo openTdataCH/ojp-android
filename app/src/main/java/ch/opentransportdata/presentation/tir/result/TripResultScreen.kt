@@ -95,9 +95,13 @@ fun TripResultScreen(
             TripDetailScreen(
                 trip = selectedTrip!!,
                 situations = state.value.tripDelivery?.responseContext?.situation?.ptSituation?.filter { it.publishingActions != null },
+                tripInfoResults = state.value.tripInfoResults,
                 showSituation = { selectedAction = it },
                 requestTripUpdate = { viewModel.requestTripUpdate(it) },
                 refineTrip = { id -> viewModel.refineTrip(id) },
+                onRequestTripInfo = { journeyRef, operatingDayRef ->
+                    viewModel.requestTripInfo(journeyRef, operatingDayRef)
+                },
                 showMapText = showMapText,
                 showMap = { id, isZoomed ->
                     val coordinates = viewModel.state.value.mapData.find { it.id == id }
