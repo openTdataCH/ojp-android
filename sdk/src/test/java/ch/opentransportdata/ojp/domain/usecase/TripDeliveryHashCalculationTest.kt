@@ -6,8 +6,8 @@ import assertk.assertions.isNotNull
 import ch.opentransportdata.ojp.data.dto.converter.FareClassSerializer
 import ch.opentransportdata.ojp.data.dto.converter.LocalDateTimeSerializer
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
-import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.trips.TripDto
 import ch.opentransportdata.ojp.domain.model.FareClass
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.modules.SerializersModule

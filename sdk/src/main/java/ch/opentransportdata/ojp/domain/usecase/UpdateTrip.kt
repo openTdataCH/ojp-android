@@ -1,10 +1,10 @@
 package ch.opentransportdata.ojp.domain.usecase
 
-import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
+import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
-import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.trips.TripDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams

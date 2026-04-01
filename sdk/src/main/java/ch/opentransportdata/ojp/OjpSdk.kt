@@ -1,22 +1,25 @@
 package ch.opentransportdata.ojp
 
-import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
+import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.TripInfoDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
-import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.trips.TripDto
 import ch.opentransportdata.ojp.di.context.OjpKoinContext
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
+import ch.opentransportdata.ojp.domain.model.TripInfoParam
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
 import ch.opentransportdata.ojp.domain.usecase.RequestMockTrips
+import ch.opentransportdata.ojp.domain.usecase.RequestTripInfo
 import ch.opentransportdata.ojp.domain.usecase.RequestTripRefinement
 import ch.opentransportdata.ojp.domain.usecase.RequestTrips
 import ch.opentransportdata.ojp.domain.usecase.UpdateTrip
@@ -188,6 +191,30 @@ class OjpSdk(
      * @return [TripRefineDeliveryDto] with the refined trip information
      *
      */
+    /**
+     * Requests detailed real-time information about a specific journey
+     *
+     * @param languageCode The [LanguageCode] for the desired results, default is [LanguageCode.DE]
+     * @param journeyRef The journey reference identifier
+     * @param operatingDayRef The operating day reference (ISO date, e.g. "2025-02-18")
+     * @param params Additional parameters to control included information
+     *
+     * @return [TripInfoDeliveryDto] with the journey's call information and service details
+     */
+    suspend fun requestTripInfo(
+        languageCode: LanguageCode = LanguageCode.DE,
+        journeyRef: String,
+        operatingDayRef: String,
+        params: TripInfoParam? = null,
+    ): Result<TripInfoDeliveryDto> {
+        return OjpKoinContext.koinApp.koin.get<RequestTripInfo>().invoke(
+            languageCode = languageCode,
+            journeyRef = journeyRef,
+            operatingDayRef = operatingDayRef,
+            params = params
+        )
+    }
+
     suspend fun requestTripRefinement(
         languageCode: LanguageCode,
         tripResult: TripResultDto,

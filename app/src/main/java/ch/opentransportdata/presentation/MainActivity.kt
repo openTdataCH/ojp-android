@@ -25,7 +25,10 @@ import ch.opentransportdata.ojp.BuildConfig
 import ch.opentransportdata.ojp.OjpSdk
 import ch.opentransportdata.ojp.data.dto.response.GeoPositionDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
-import ch.opentransportdata.presentation.lir.LirScreenComposable
+import ch.opentransportdata.presentation.feature.location.LirScreenComposable
+import ch.opentransportdata.presentation.feature.map.MapScreen
+import ch.opentransportdata.presentation.feature.result.TripResultScreen
+import ch.opentransportdata.presentation.feature.search.TripSearchScreen
 import ch.opentransportdata.presentation.navigation.BottomNavItem
 import ch.opentransportdata.presentation.navigation.LocationSearchMask
 import ch.opentransportdata.presentation.navigation.TripMap
@@ -34,9 +37,6 @@ import ch.opentransportdata.presentation.navigation.TripSearchMask
 import ch.opentransportdata.presentation.navigation.navtypes.PlaceResultType
 import ch.opentransportdata.presentation.navigation.navtypes.jsonNavType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
-import ch.opentransportdata.presentation.tir.TirScreenComposable
-import ch.opentransportdata.presentation.tir.map.MapScreen
-import ch.opentransportdata.presentation.tir.result.TripResultScreen
 import kotlin.reflect.typeOf
 
 class MainActivity : ComponentActivity() {
@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
 
         NavHost(navController = navController, startDestination = LocationSearchMask) {
-            composable<LocationSearchMask> { LirScreenComposable(navHostController = navController) }
+            composable<LocationSearchMask> { LirScreenComposable() }
         }
     }
 
@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
 
         NavHost(navController = navController, startDestination = TripSearchMask) {
-            composable<TripSearchMask> { TirScreenComposable(navHostController = navController) }
+            composable<TripSearchMask> { TripSearchScreen(navHostController = navController) }
             composable<TripResults>(
                 typeMap = mapOf(
                     typeOf<PlaceResultDto?>() to PlaceResultType,

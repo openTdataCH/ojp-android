@@ -1,18 +1,20 @@
 package ch.opentransportdata.ojp.data.repository
 
-import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
+import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.TripInfoDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
 import ch.opentransportdata.ojp.data.local.trip.LocalTripDataSource
 import ch.opentransportdata.ojp.data.remote.location.RemoteLocationInformationDataSource
 import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.TripInfoParam
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.ojp.domain.model.error.OjpError
@@ -120,6 +122,27 @@ internal class OjpRepositoryImpl(
             )
             val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripRefineDeliveryDto
             if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("Trip delivery is null")))
+        } catch (exception: Exception) {
+            val error = handleError(exception)
+            Result.Error(error)
+        }
+    }
+
+    override suspend fun requestTripInfo(
+        languageCode: LanguageCode,
+        journeyRef: String,
+        operatingDayRef: String,
+        params: TripInfoParam?
+    ): Result<TripInfoDeliveryDto> {
+        return try {
+            val response = tripDataSource.requestTripInfo(
+                languageCode = languageCode,
+                journeyRef = journeyRef,
+                operatingDayRef = operatingDayRef,
+                params = params
+            )
+            val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripInfoDeliveryDto
+            if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("TripInfo delivery is null")))
         } catch (exception: Exception) {
             val error = handleError(exception)
             Result.Error(error)

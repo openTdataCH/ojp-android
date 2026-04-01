@@ -1,19 +1,19 @@
 package ch.opentransportdata.ojp.domain.usecase
 
-import ch.opentransportdata.ojp.data.dto.request.tir.IndividualTransportOptionDto
-import ch.opentransportdata.ojp.data.dto.request.tir.PlaceReferenceDto
+import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
+import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
-import ch.opentransportdata.ojp.data.dto.response.tir.TripResultDto
-import ch.opentransportdata.ojp.data.dto.response.tir.trips.TripDto
+import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
+import ch.opentransportdata.ojp.data.dto.response.tr.trips.TripDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.ojp.domain.repository.OjpRepository
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
 import java.time.LocalDateTime
 import java.util.concurrent.CancellationException
-import kotlin.coroutines.coroutineContext
 
 /**
  * Created by Michael Ruppen on 27.06.2024
@@ -35,7 +35,7 @@ internal class RequestTrips(
         individualTransportOption: IndividualTransportOptionDto?
     ): Result<TripDeliveryDto> {
         // do not return or overwrite state, if user canceled the request (long running task or something)
-        if (!coroutineContext.isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
+        if (!currentCoroutineContext().isActive) return Result.Error(OjpError.RequestCancelled(CancellationException()))
 
         state = state.copy(
             languageCode = languageCode,

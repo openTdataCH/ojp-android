@@ -7,11 +7,11 @@ This SDK is targeting Android applications seeking to integrate [Open Journey Pl
 Available APIs:
 - [Location Information Request](https://opentransportdata.swiss/it/cookbook/ojplocationinformationrequest-ojp-2/)
 - [Trip Request](https://opentransportdata.swiss/en/cookbook/ojptriprequest/)
+- [Trip Info Request](https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp/ojptripinforequest/)
 - Trip Refinement Request
 
 Coming soon:
 - [Stop Event Request](https://opentransportdata.swiss/en/cookbook/ojp-stopeventservice/)
-- [TripInfo Request](https://opentransportdata.swiss/en/cookbook/ojptripinforequest/)
 
 ## Requirements
 Compatible with Android 8+
@@ -20,7 +20,7 @@ Compatible with Android 8+
 To integrate the SDK you have to add following dependency:
 ```
 dependencies {
-    implementation 'io.github.opentdatach:ojp-android:1.4.0'
+    implementation 'io.github.opentdatach:ojp-android:1.5.0'
 }
 ```
 
@@ -147,6 +147,24 @@ updateTripData(
     params = TripParams(useRealtimeData = RealtimeData.FULL),
     trip = existingTrip,
     individualTransportOption = null
+)
+```
+
+#### Get trip info for a specific journey
+```
+import ch.opentransportdata.ojp.OjpSdk
+
+requestTripInfo(
+    languageCode = LanguageCode.EN,
+    journeyRef = "ojp:91-2-Y-j24-1",
+    operatingDayRef = "2025-02-18",
+    params = TripInfoParam(
+        useRealtimeData = RealtimeData.FULL,
+        includeCalls = true,
+        includeService = true,
+        includeTrackSections = true,
+        includeSituationsContext = true
+    )
 )
 ```
 

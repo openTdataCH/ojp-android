@@ -4,7 +4,7 @@ import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
-import ch.opentransportdata.ojp.data.dto.response.tir.LegDto
+import ch.opentransportdata.ojp.data.dto.response.tr.LegDto
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable

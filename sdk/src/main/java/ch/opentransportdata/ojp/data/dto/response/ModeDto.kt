@@ -29,6 +29,10 @@ data class ModeDto(
     val name: NameDto? = null,
 
     @XmlElement(true)
+    @XmlSerialName("ShortName", OJP_NAME_SPACE, "")
+    val shortName: NameDto? = null,
+
+    @XmlElement(true)
     @XmlSerialName("RailSubmode", SIRI_NAME_SPACE, SIRI_PREFIX)
     val railSubmode: String? = null,
     @XmlElement(true)
