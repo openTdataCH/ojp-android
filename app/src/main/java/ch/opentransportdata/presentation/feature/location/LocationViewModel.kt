@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.lir
+package ch.opentransportdata.presentation.feature.location
 
 import android.content.Context
 import android.location.Location
@@ -13,17 +13,22 @@ import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.presentation.MainActivity
-import ch.opentransportdata.presentation.utils.toOjpLanguageCode
+import ch.opentransportdata.presentation.util.toOjpLanguageCode
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import java.util.Locale
 import java.util.UUID
 
 /**
  * Created by Michael Ruppen on 25.04.2024
  */
-class LirViewModel : ViewModel() {
+class LocationViewModel : ViewModel() {
 
     private lateinit var locationTracker: DefaultLocationTracker
 

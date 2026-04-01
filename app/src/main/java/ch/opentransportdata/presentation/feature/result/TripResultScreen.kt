@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.tir.result
+package ch.opentransportdata.presentation.feature.result
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -47,12 +47,13 @@ import androidx.navigation.NavHostController
 import ch.opentransportdata.R
 import ch.opentransportdata.ojp.data.dto.response.tr.situations.PublishingActionDto
 import ch.opentransportdata.ojp.data.dto.response.tr.trips.TripDto
+import ch.opentransportdata.presentation.components.TripItem
 import ch.opentransportdata.presentation.components.TripResultHeader
-import ch.opentransportdata.presentation.lir.name
+import ch.opentransportdata.presentation.feature.location.name
 import ch.opentransportdata.presentation.navigation.TripMap
-import ch.opentransportdata.presentation.tir.detail.TripDetailScreen
-import ch.opentransportdata.presentation.tir.filter.FilterScreen
-import ch.opentransportdata.presentation.utils.FileReader
+import ch.opentransportdata.presentation.feature.detail.TripDetailScreen
+import ch.opentransportdata.presentation.feature.filter.FilterScreen
+import ch.opentransportdata.presentation.util.FileReader
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -76,10 +77,8 @@ fun TripResultScreen(
     var selectedTrip by remember { mutableStateOf<TripDto?>(null) }
     var selectedAction by remember { mutableStateOf<PublishingActionDto?>(null) }
     val showMapText = if (viewModel.state.collectAsState().value.mapData.isEmpty()) "Refine Trip first" else "Show way on map"
-    var selectFilters = remember { mutableStateOf(false) }
+    val selectFilters = remember { mutableStateOf(false) }
     val filterBottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
-
 
     if (selectedTrip != null) {
         ModalBottomSheet(

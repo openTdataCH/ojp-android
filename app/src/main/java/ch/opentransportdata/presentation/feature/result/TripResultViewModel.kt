@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.tir.result
+package ch.opentransportdata.presentation.feature.result
 
 import android.util.Log
 import androidx.compose.runtime.Immutable
@@ -30,7 +30,7 @@ import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.ojp.domain.model.serializedName
 import ch.opentransportdata.presentation.MainActivity
-import ch.opentransportdata.presentation.utils.toOjpLanguageCode
+import ch.opentransportdata.presentation.util.toOjpLanguageCode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -62,7 +62,6 @@ class TripResultViewModel(
     ).map { vehicleType ->
         VehicleOption(vehicleType = vehicleType, isSelected = false)
     }
-
 
     val state = MutableStateFlow(
         UiState(

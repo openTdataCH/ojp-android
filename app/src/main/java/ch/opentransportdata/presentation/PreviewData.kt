@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.tir
+package ch.opentransportdata.presentation
 
 import ch.opentransportdata.ojp.data.dto.response.GeoPositionDto
 import ch.opentransportdata.ojp.data.dto.response.ModeDto

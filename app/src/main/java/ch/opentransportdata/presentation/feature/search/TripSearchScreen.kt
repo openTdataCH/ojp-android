@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.tir
+package ch.opentransportdata.presentation.feature.search
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,10 +27,10 @@ import kotlinx.coroutines.launch
  * Created by Michael Ruppen on 25.04.2024
  */
 @Composable
-fun TirScreenComposable(
+fun TripSearchScreen(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
-    viewModel: TirViewModel = viewModel()
+    viewModel: TripSearchViewModel = viewModel()
 ) {
     viewModel.initLocationTracker(LocalContext.current)
 
@@ -74,13 +74,13 @@ fun TirScreenComposable(
 
     state.value.events.forEach { event ->
         when (event) {
-            is TirViewModel.Event.ShowSnackBar -> {
+            is TripSearchViewModel.Event.ShowSnackBar -> {
                 coroutineScope.launch {
                     snackBarHostState.showSnackbar(message = event.message)
                 }
             }
 
-            is TirViewModel.Event.RequestTrip -> {
+            is TripSearchViewModel.Event.RequestTrip -> {
                 navHostController.navigate(
                     TripResults(
                         origin = event.origin,
@@ -99,11 +99,11 @@ fun TirScreenComposable(
 private fun Header(
     modifier: Modifier = Modifier,
     requestLocation: (Boolean, Boolean) -> Unit,
-    origin: TirViewModel.TextInput,
+    origin: TripSearchViewModel.TextInput,
     originTextValueChanged: (String) -> Unit,
-    destination: TirViewModel.TextInput,
+    destination: TripSearchViewModel.TextInput,
     destinationTextValueChanged: (String) -> Unit,
-    via: TirViewModel.TextInput,
+    via: TripSearchViewModel.TextInput,
     viaTextValueChanged: (String) -> Unit,
     updateFocus: (Boolean, Boolean, Boolean) -> Unit
 ) {
@@ -151,8 +151,8 @@ private fun Header(
 
 @PreviewLightDark
 @Composable
-private fun TirScreenPreview() {
+private fun TripSearchScreenPreview() {
     OJPAndroidSDKTheme {
-        TirScreenComposable(navHostController = rememberNavController())
+        TripSearchScreen(navHostController = rememberNavController())
     }
 }

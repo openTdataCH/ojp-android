@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.tir
+package ch.opentransportdata.presentation.feature.search
 
 import android.content.Context
 import android.location.Location
@@ -13,8 +13,8 @@ import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.error.OjpError
 import ch.opentransportdata.presentation.MainActivity
-import ch.opentransportdata.presentation.lir.name
-import ch.opentransportdata.presentation.utils.toOjpLanguageCode
+import ch.opentransportdata.presentation.feature.location.name
+import ch.opentransportdata.presentation.util.toOjpLanguageCode
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +24,7 @@ import java.util.UUID
 /**
  * Created by Michael Ruppen on 25.04.2024
  */
-class TirViewModel : ViewModel() {
+class TripSearchViewModel : ViewModel() {
 
     private lateinit var locationTracker: DefaultLocationTracker
 
@@ -249,7 +249,7 @@ class TirViewModel : ViewModel() {
 //    }
 
     companion object {
-        private const val TAG = "LirViewModel"
+        private const val TAG = "TripSearchViewModel"
     }
 
 }

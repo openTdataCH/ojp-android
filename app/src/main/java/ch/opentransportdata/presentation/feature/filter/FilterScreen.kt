@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.tir.filter
+package ch.opentransportdata.presentation.feature.filter
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

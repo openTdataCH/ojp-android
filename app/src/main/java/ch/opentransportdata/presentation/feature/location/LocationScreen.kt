@@ -1,6 +1,10 @@
-package ch.opentransportdata.presentation.lir
+package ch.opentransportdata.presentation.feature.location
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -15,8 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import ch.opentransportdata.ojp.data.dto.response.place.AbstractPlaceDto
 import ch.opentransportdata.ojp.data.dto.response.place.AddressDto
 import ch.opentransportdata.ojp.data.dto.response.place.StopPlaceDto
@@ -30,8 +32,7 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun LirScreenComposable(
-    navHostController: NavHostController,
-    viewModel: LirViewModel = viewModel()
+    viewModel: LocationViewModel = viewModel()
 ) {
     viewModel.initLocationTracker(LocalContext.current)
 
@@ -73,7 +74,7 @@ fun LirScreenComposable(
 
     state.value.events.forEach { event ->
         when (event) {
-            is LirViewModel.Event.ShowSnackBar -> {
+            is LocationViewModel.Event.ShowSnackBar -> {
                 coroutineScope.launch {
                     snackBarHostState.showSnackbar(message = event.message)
                 }
@@ -96,6 +97,6 @@ fun AbstractPlaceDto.name(): String {
 @Composable
 private fun LirScreenPreview() {
     OJPAndroidSDKTheme {
-        LirScreenComposable(navHostController = rememberNavController())
+        LirScreenComposable()
     }
 }

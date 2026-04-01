@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.tir.detail
+package ch.opentransportdata.presentation.feature.detail
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -58,9 +58,9 @@ import ch.opentransportdata.ojp.data.dto.response.tr.trips.TripDto
 import ch.opentransportdata.presentation.components.Label
 import ch.opentransportdata.presentation.components.LabelType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
-import ch.opentransportdata.presentation.tir.PreviewData
-import ch.opentransportdata.presentation.utils.icon
-import ch.opentransportdata.presentation.utils.toFormattedString
+import ch.opentransportdata.presentation.PreviewData
+import ch.opentransportdata.presentation.util.icon
+import ch.opentransportdata.presentation.util.toFormattedString
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.utils
+package ch.opentransportdata.presentation.util
 
 import ch.opentransportdata.R
 import ch.opentransportdata.ojp.data.dto.response.tr.leg.AttributeDto

@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.tir.result
+package ch.opentransportdata.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,11 +18,9 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import ch.opentransportdata.ojp.data.dto.response.tr.TripResponseContextDto
 import ch.opentransportdata.ojp.data.dto.response.tr.trips.TripDto
-import ch.opentransportdata.presentation.components.Label
-import ch.opentransportdata.presentation.components.LabelType
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
-import ch.opentransportdata.presentation.tir.PreviewData
-import ch.opentransportdata.presentation.utils.toFormattedString
+import ch.opentransportdata.presentation.PreviewData
+import ch.opentransportdata.presentation.util.toFormattedString
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

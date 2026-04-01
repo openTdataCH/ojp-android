@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.tir.map
+package ch.opentransportdata.presentation.feature.map
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface

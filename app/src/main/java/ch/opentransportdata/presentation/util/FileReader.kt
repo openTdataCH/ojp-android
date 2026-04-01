@@ -1,4 +1,4 @@
-package ch.opentransportdata.presentation.utils
+package ch.opentransportdata.presentation.util
 
 import android.content.res.Resources
 import androidx.annotation.RawRes

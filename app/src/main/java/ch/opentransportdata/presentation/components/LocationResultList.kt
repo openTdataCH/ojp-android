@@ -14,9 +14,9 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.domain.model.PtMode
-import ch.opentransportdata.presentation.lir.name
+import ch.opentransportdata.presentation.feature.location.name
 import ch.opentransportdata.presentation.theme.OJPAndroidSDKTheme
-import ch.opentransportdata.presentation.tir.PreviewData
+import ch.opentransportdata.presentation.PreviewData
 
 /**
  * Created by Michael Ruppen on 28.08.2024
