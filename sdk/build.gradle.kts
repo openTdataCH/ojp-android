@@ -78,10 +78,12 @@ dokka {
     dokkaPublications.html {
         outputDirectory.set(file("$rootDir/docs/html"))
     }
-}
-
-tasks.dokkaGeneratePublicationHtml {
-    dependsOn("kaptReleaseKotlin")
+    dokkaSourceSets.named("release") {
+        suppress.set(true)
+    }
+    dokkaSourceSets.named("debug") {
+        suppress.set(true)
+    }
 }
 
 dependencies {
