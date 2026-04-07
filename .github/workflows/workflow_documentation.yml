@@ -45,7 +45,7 @@ jobs:
           distribution: "temurin"
           
       - name: Generate Documentation
-        run: ./gradlew dokkaHtml
+        run: ./gradlew :sdk:dokkaGeneratePublicationHtml
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
