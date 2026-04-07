@@ -1,5 +1,6 @@
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
-import com.vanniktech.maven.publish.SonatypeHost
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.SourcesJar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
@@ -11,17 +12,17 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.kotlin.serialization)
     `maven-publish`
-    id("com.vanniktech.maven.publish") version "0.31.0"
+    id("com.vanniktech.maven.publish") version "0.36.0"
     id("signing")
 }
 
 android {
     namespace = "ch.opentransportdata.ojp"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 26
-        lint.targetSdk = 35
+        lint.targetSdk = 36
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         val properties = Properties()
@@ -62,9 +63,7 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
-        }
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xstring-concat=inline")
+            freeCompilerArgs.add("-Xstring-concat=inline")
         }
     }
 
@@ -72,10 +71,18 @@ android {
         buildConfig = true
     }
 
-    tasks.dokkaHtml {
+}
+
+dokka {
+    moduleName.set("OJP-Android-SDK")
+    dokkaPublications.html {
         outputDirectory.set(file("$rootDir/docs/html"))
-        moduleName.set("OJP-Android-SDK")
-        dependsOn("kaptReleaseKotlin")
+    }
+    dokkaSourceSets.named("release") {
+        suppress.set(true)
+    }
+    dokkaSourceSets.named("debug") {
+        suppress.set(true)
     }
 }
 
@@ -100,18 +107,18 @@ dependencies {
 
 tasks.register<Jar>("javadocJar") {
     archiveClassifier.set("javadoc")
-    from(tasks.dokkaHtml.get().outputDirectory)
+    from(tasks.dokkaGeneratePublicationHtml.flatMap { it.outputDirectory })
 }
 
 mavenPublishing {
     configure(
         AndroidSingleVariantLibrary(
             variant = "release",
-            sourcesJar = true,
-            publishJavadocJar = true,
+            sourcesJar = SourcesJar.Sources(),
+            javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
         )
     )
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral()
     signAllPublications()
     coordinates(
         project.property("GROUP_ID") as String,

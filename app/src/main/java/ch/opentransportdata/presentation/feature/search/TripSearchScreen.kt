@@ -39,6 +39,7 @@ fun TripSearchScreen(
     val state = viewModel.state.collectAsState()
 
     Scaffold(
+        contentWindowInsets = WindowInsets.statusBars,
         snackbarHost = {
             SnackbarHost(modifier = Modifier.imePadding(), hostState = snackBarHostState)
         }

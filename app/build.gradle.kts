@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "ch.opentransportdata"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "ch.opentransportdata"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -70,9 +70,9 @@ dependencies {
     implementation(libs.play.services)
     implementation(libs.viewModel.compose)
     implementation(libs.compose.icons)
+    //for displaying the map we use Ramani-Maps without modifying the SKD (Source: https://github.com/ramani-maps/ramani-maps)
+    implementation(libs.map.libre)
 
     testImplementation(libs.junit)
     debugImplementation(libs.ui.tooling)
-    //for displaying the map we use Ramani-Maps without modifying the SKD (Source: https://github.com/ramani-maps/ramani-maps)
-    implementation("org.ramani-maps:ramani-maplibre:0.9.2")
 }
