@@ -5,6 +5,7 @@ import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
 import ch.opentransportdata.ojp.data.dto.response.NameDto
+import ch.opentransportdata.ojp.data.dto.response.tr.leg.ExpectedDepartureOccupancyDto
 import ch.opentransportdata.ojp.data.dto.response.tr.leg.ServiceTimeDto
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -68,4 +69,8 @@ data class CallAtStopDto(
     @XmlElement(true)
     @XmlSerialName("NoAlightingAtStop", OJP_NAME_SPACE, "")
     val noAlightingAtStop: Boolean? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("ExpectedDepartureOccupancy", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val expectedDepartureOccupancy: List<ExpectedDepartureOccupancyDto>? = null
 ) : Parcelable
