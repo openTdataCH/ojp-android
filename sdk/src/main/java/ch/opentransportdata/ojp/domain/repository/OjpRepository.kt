@@ -1,8 +1,10 @@
 package ch.opentransportdata.ojp.domain.repository
 
+import ch.opentransportdata.ojp.data.dto.request.ser.LocationDto
 import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.StopEventDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripInfoDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
@@ -10,6 +12,7 @@ import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.StopEventParam
 import ch.opentransportdata.ojp.domain.model.TripInfoParam
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
@@ -61,8 +64,7 @@ internal interface OjpRepository {
 
     suspend fun requestStopEvent(
         languageCode: LanguageCode,
-        journeyRef: String,
-        operatingDayRef: String,
-        params: TripInfoParam?
-    ): Result<TripInfoDeliveryDto>
+        location: LocationDto,
+        params: StopEventParam?
+    ): Result<StopEventDeliveryDto>
 }
