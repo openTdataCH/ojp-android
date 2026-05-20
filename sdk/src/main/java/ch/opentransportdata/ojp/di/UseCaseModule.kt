@@ -17,4 +17,5 @@ internal val useCaseModule = module {
     factoryOf(::UpdateTrip)
     factoryOf(::RequestTripRefinement)
     factoryOf(::RequestTripInfo)
+    factoryOf(::RequestStopEvent)
 }

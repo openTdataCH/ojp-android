@@ -11,7 +11,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
  */
 @Serializable
 @XmlSerialName("Location", OJP_NAME_SPACE, "")
-internal data class LocationDto(
+data class LocationDto(
 
     @XmlElement(true)
     @XmlSerialName("PlaceRef", OJP_NAME_SPACE, "")
