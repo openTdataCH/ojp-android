@@ -57,4 +57,12 @@ internal interface OjpRepository {
         operatingDayRef: String,
         params: TripInfoParam?
     ): Result<TripInfoDeliveryDto>
+
+
+    suspend fun requestStopEvent(
+        languageCode: LanguageCode,
+        journeyRef: String,
+        operatingDayRef: String,
+        params: TripInfoParam?
+    ): Result<TripInfoDeliveryDto>
 }

@@ -4,6 +4,13 @@ import ch.opentransportdata.ojp.data.dto.OjpDto
 import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
+import ch.opentransportdata.ojp.data.dto.request.ser.LineDto
+import ch.opentransportdata.ojp.data.dto.request.ser.LineFilterDto
+import ch.opentransportdata.ojp.data.dto.request.ser.LocationDto
+import ch.opentransportdata.ojp.data.dto.request.ser.ModeFilterDto
+import ch.opentransportdata.ojp.data.dto.request.ser.OperatorFilterDto
+import ch.opentransportdata.ojp.data.dto.request.ser.StopEventParamsDto
+import ch.opentransportdata.ojp.data.dto.request.ser.StopEventRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripInfoParamsDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripInfoRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
@@ -19,6 +26,7 @@ import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
 import ch.opentransportdata.ojp.data.dto.response.tr.minimalTripResult
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.domain.model.LanguageCode
+import ch.opentransportdata.ojp.domain.model.StopEventParam
 import ch.opentransportdata.ojp.domain.model.TripInfoParam
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
@@ -134,6 +142,30 @@ internal class RemoteTripDataSourceImpl(
         return@withContext ojpService.serviceRequest(url, request)
     }
 
+    override suspend fun requestStopEvent(
+        languageCode: LanguageCode,
+        location: LocationDto,
+        params: StopEventParam?
+    ): OjpDto = withContext(Dispatchers.IO) {
+        val requestTime = LocalDateTime.now()
+
+        val request = OjpDto(
+            ojpRequest = OjpRequestDto(
+                serviceRequest = ServiceRequestDto(
+                    serviceRequestContext = ServiceRequestContextDto(language = languageCode.shortName),
+                    requestTimestamp = requestTime,
+                    requestorRef = initializer.requesterReference,
+                    stopEventRequestDto = StopEventRequestDto(
+                        requestTimestamp = requestTime,
+                        location = location,
+                        params = params?.mapToBackendParams(),
+                    )
+                )
+            )
+        )
+        return@withContext ojpService.serviceRequest(url, request)
+    }
+
     private fun createRequest(languageCode: LanguageCode, requestTime: LocalDateTime, tripRequest: TripRequestDto): OjpDto {
         return OjpDto(
             ojpRequest = OjpRequestDto(
@@ -206,6 +238,40 @@ internal class RemoteTripDataSourceImpl(
             includeTurnDescription = if (this.includeTurnDescription) true else null,
             includeIntermediateStops = if (this.includeIntermediateStops) true else null,
             includeAllRestrictedLines = if (this.includeAllRestrictedLines) true else null,
+            useRealtimeData = this.useRealtimeData,
+        )
+    }
+
+    private fun StopEventParam.mapToBackendParams(): StopEventParamsDto {
+        return StopEventParamsDto(
+            modeFilter = this.modeFilter?.let { filter ->
+                ModeFilterDto(
+                    ptMode = filter.ptMode,
+                    exclude = filter.exclude,
+                )
+            },
+            lineFilter = this.lineFilter?.let { filter ->
+                LineFilterDto(
+                    line = filter.line?.map { line ->
+                        LineDto(
+                            lineRef = line.lineRef,
+                            directionRef = line.directionRef,
+                        )
+                    },
+                    exclude = filter.exclude,
+                )
+            },
+            operatorFilter = this.operatorFilter?.let { filter ->
+                OperatorFilterDto(
+                    operatorRef = filter.operatorRef,
+                    exclude = filter.exclude,
+                )
+            },
+            numberOfResults = this.numberOfResults,
+            stopEventType = this.stopEventType,
+            includePreviousCalls = this.includePreviousCalls,
+            includeOnwardCalls = this.includeOnwardCalls,
+            includeOperatingDays = this.includeOperatingDays,
             useRealtimeData = this.useRealtimeData,
         )
     }
