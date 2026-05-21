@@ -25,12 +25,17 @@ import ch.opentransportdata.ojp.BuildConfig
 import ch.opentransportdata.ojp.OjpSdk
 import ch.opentransportdata.ojp.data.dto.response.GeoPositionDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import androidx.navigation.NavHostController
 import ch.opentransportdata.presentation.feature.location.LirScreenComposable
 import ch.opentransportdata.presentation.feature.map.MapScreen
 import ch.opentransportdata.presentation.feature.result.TripResultScreen
 import ch.opentransportdata.presentation.feature.search.TripSearchScreen
+import ch.opentransportdata.presentation.feature.stopevent.StopEventResultScreen
+import ch.opentransportdata.presentation.feature.stopevent.StopEventSearchScreen
 import ch.opentransportdata.presentation.navigation.BottomNavItem
 import ch.opentransportdata.presentation.navigation.LocationSearchMask
+import ch.opentransportdata.presentation.navigation.StopEventResults
+import ch.opentransportdata.presentation.navigation.StopEventSearchMask
 import ch.opentransportdata.presentation.navigation.TripMap
 import ch.opentransportdata.presentation.navigation.TripResults
 import ch.opentransportdata.presentation.navigation.TripSearchMask
@@ -49,7 +54,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun OjpDemoApp() {
-        val bottomNavigationItems = listOf(BottomNavItem.Lir, BottomNavItem.Tir)
+        val bottomNavigationItems = listOf(BottomNavItem.Lir, BottomNavItem.Tir, BottomNavItem.Ser)
         OJPAndroidSDKTheme {
             val navController = rememberNavController()
             var selectedBottomNavItem by remember { mutableIntStateOf(0) }
@@ -87,6 +92,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable<BottomNavItem.Lir> { LirNavHost() }
                     composable<BottomNavItem.Tir> { TirNavHost() }
+                    composable<BottomNavItem.Ser> { SerNavHost() }
                 }
             }
         }
@@ -127,6 +133,24 @@ class MainActivity : ComponentActivity() {
                     coordinates = parameters.coordinates.toList(),
                     zoom = parameters.zoom
                 )
+            }
+        }
+    }
+
+    @Composable
+    private fun SerNavHost() {
+        val navController: NavHostController = rememberNavController()
+
+        NavHost(navController = navController, startDestination = StopEventSearchMask) {
+            composable<StopEventSearchMask> { StopEventSearchScreen(navHostController = navController) }
+            composable<StopEventResults>(
+                typeMap = mapOf(
+                    typeOf<PlaceResultDto?>() to PlaceResultType,
+                    typeOf<PlaceResultDto>() to PlaceResultType,
+                )
+            ) { navBackstackEntry ->
+                val parameters = navBackstackEntry.toRoute<StopEventResults>()
+                StopEventResultScreen(stop = parameters.stop)
             }
         }
     }
