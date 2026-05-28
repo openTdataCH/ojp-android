@@ -18,7 +18,7 @@ Compatible with Android 8+
 To integrate the SDK you have to add following dependency:
 ```
 dependencies {
-    implementation 'io.github.opentdatach:ojp-android:1.5.1'
+    implementation 'io.github.opentdatach:ojp-android:1.6.0'
 }
 ```
 
