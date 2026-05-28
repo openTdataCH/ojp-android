@@ -267,12 +267,17 @@ internal class RemoteTripDataSourceImpl(
                     exclude = filter.exclude,
                 )
             },
+            includeAllRestrictedLines = this.includeAllRestrictedLines,
             numberOfResults = this.numberOfResults,
+            timeWindow = this.timeWindow,
             stopEventType = this.stopEventType,
             includePreviousCalls = this.includePreviousCalls,
             includeOnwardCalls = this.includeOnwardCalls,
             includeOperatingDays = this.includeOperatingDays,
             useRealtimeData = this.useRealtimeData,
+            includePlacesContext = this.includePlacesContext,
+            includeSituationsContext = this.includeSituationsContext,
+            includeStopHierarchy = this.includeStopHierarchy,
         )
     }
 }

@@ -17,6 +17,7 @@ import ch.opentransportdata.presentation.util.toOjpLanguageCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import java.util.Locale
 import java.util.UUID
 
@@ -44,7 +45,8 @@ class StopEventResultViewModel : ViewModel() {
             val result = MainActivity.ojpSdk.requestStopEvent(
                 languageCode = Locale.getDefault().language.toOjpLanguageCode(),
                 location = LocationDto(
-                    placeReference = PlaceReferenceDto(ref = ref)
+                    placeReference = PlaceReferenceDto(ref = ref),
+                    depArrTime = LocalDateTime.now(),
                 ),
                 params = StopEventParam(
                     numberOfResults = 20,
