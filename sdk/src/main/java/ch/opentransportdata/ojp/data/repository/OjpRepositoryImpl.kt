@@ -1,9 +1,11 @@
 package ch.opentransportdata.ojp.data.repository
 
+import ch.opentransportdata.ojp.data.dto.request.ser.LocationDto
 import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.StopEventDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripInfoDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
@@ -14,6 +16,7 @@ import ch.opentransportdata.ojp.data.remote.trip.RemoteTripDataSource
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
+import ch.opentransportdata.ojp.domain.model.StopEventParam
 import ch.opentransportdata.ojp.domain.model.TripInfoParam
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
@@ -143,6 +146,25 @@ internal class OjpRepositoryImpl(
             )
             val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? TripInfoDeliveryDto
             if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("TripInfo delivery is null")))
+        } catch (exception: Exception) {
+            val error = handleError(exception)
+            Result.Error(error)
+        }
+    }
+
+    override suspend fun requestStopEvent(
+        languageCode: LanguageCode,
+        location: LocationDto,
+        params: StopEventParam?
+    ): Result<StopEventDeliveryDto> {
+        return try {
+            val response = tripDataSource.requestStopEvent(
+                languageCode = languageCode,
+                location = location,
+                params = params
+            )
+            val delivery = response.ojpResponse?.serviceDelivery?.ojpDelivery as? StopEventDeliveryDto
+            if (delivery != null) Result.Success(delivery) else Result.Error(OjpError.Unknown(Exception("StopEvent delivery is null")))
         } catch (exception: Exception) {
             val error = handleError(exception)
             Result.Error(error)

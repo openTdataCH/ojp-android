@@ -4,6 +4,7 @@ import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
 import ch.opentransportdata.ojp.data.dto.request.lir.LocationInformationRequestDto
+import ch.opentransportdata.ojp.data.dto.request.ser.StopEventRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tir.TripInfoRequestDto
 import ch.opentransportdata.ojp.data.dto.request.tr.TripRequestDto
 import ch.opentransportdata.ojp.data.dto.request.trr.TripRefineRequestDto
@@ -47,4 +48,8 @@ internal data class ServiceRequestDto(
     @XmlElement(true)
     @XmlSerialName("OJPTripInfoRequest", OJP_NAME_SPACE, "ojp")
     val tripInfoRequestDto: TripInfoRequestDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("OJPStopEventRequest", OJP_NAME_SPACE, "ojp")
+    val stopEventRequestDto: StopEventRequestDto? = null,
 )

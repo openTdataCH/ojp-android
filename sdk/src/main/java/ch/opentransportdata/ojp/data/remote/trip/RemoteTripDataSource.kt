@@ -1,10 +1,13 @@
 package ch.opentransportdata.ojp.data.remote.trip
 
 import ch.opentransportdata.ojp.data.dto.OjpDto
+import ch.opentransportdata.ojp.data.dto.request.ser.LocationDto
+import ch.opentransportdata.ojp.data.dto.request.ser.StopEventParamsDto
 import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.tr.TripResultDto
 import ch.opentransportdata.ojp.domain.model.LanguageCode
+import ch.opentransportdata.ojp.domain.model.StopEventParam
 import ch.opentransportdata.ojp.domain.model.TripInfoParam
 import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
@@ -38,5 +41,11 @@ internal interface RemoteTripDataSource {
         journeyRef: String,
         operatingDayRef: String,
         params: TripInfoParam?
+    ): OjpDto
+
+    suspend fun requestStopEvent(
+        languageCode: LanguageCode,
+        location: LocationDto,
+        params: StopEventParam?
     ): OjpDto
 }

@@ -1,8 +1,10 @@
 package ch.opentransportdata.ojp
 
+import ch.opentransportdata.ojp.data.dto.request.ser.LocationDto
 import ch.opentransportdata.ojp.data.dto.request.tr.IndividualTransportOptionDto
 import ch.opentransportdata.ojp.data.dto.request.tr.PlaceReferenceDto
 import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.StopEventDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripInfoDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
@@ -12,13 +14,15 @@ import ch.opentransportdata.ojp.di.context.OjpKoinContext
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.Result
-import ch.opentransportdata.ojp.domain.model.TripParams
+import ch.opentransportdata.ojp.domain.model.StopEventParam
 import ch.opentransportdata.ojp.domain.model.TripInfoParam
+import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
 import ch.opentransportdata.ojp.domain.usecase.RequestMockTrips
+import ch.opentransportdata.ojp.domain.usecase.RequestStopEvent
 import ch.opentransportdata.ojp.domain.usecase.RequestTripInfo
 import ch.opentransportdata.ojp.domain.usecase.RequestTripRefinement
 import ch.opentransportdata.ojp.domain.usecase.RequestTrips
@@ -178,19 +182,10 @@ class OjpSdk(
         trip: TripDto,
         individualTransportOption: IndividualTransportOptionDto?
     ): Result<TripDeliveryDto> {
-        return OjpKoinContext.koinApp.koin.get<UpdateTrip>().invoke(languageCode, origin, destination, via, params, trip, individualTransportOption)
+        return OjpKoinContext.koinApp.koin.get<UpdateTrip>()
+            .invoke(languageCode, origin, destination, via, params, trip, individualTransportOption)
     }
 
-    /**
-     * Refines a previously requested trip by retrieving more detailed or updated trip information
-     *
-     * @param languageCode The [LanguageCode] for the desired results, default is [LanguageCode.DE]
-     * @param tripResult The result of a requested trip which should be refined
-     * @param params Additional refinement parameters
-     *
-     * @return [TripRefineDeliveryDto] with the refined trip information
-     *
-     */
     /**
      * Requests detailed real-time information about a specific journey
      *
@@ -215,14 +210,44 @@ class OjpSdk(
         )
     }
 
+    /**
+     * Refines a previously requested trip by retrieving more detailed or updated trip information
+     *
+     * @param languageCode The [LanguageCode] for the desired results, default is [LanguageCode.DE]
+     * @param tripResult The result of a requested trip which should be refined
+     * @param params Additional refinement parameters
+     *
+     * @return [TripRefineDeliveryDto] with the refined trip information
+     */
     suspend fun requestTripRefinement(
-        languageCode: LanguageCode,
+        languageCode: LanguageCode = LanguageCode.DE,
         tripResult: TripResultDto,
         params: TripRefineParam,
     ): Result<TripRefineDeliveryDto> {
         return OjpKoinContext.koinApp.koin.get<RequestTripRefinement>().invoke(
             languageCode = languageCode,
             tripResultDto = tripResult,
+            params = params
+        )
+    }
+
+    /**
+     * Requests stop event information (departures/arrivals) for a specific stop
+     *
+     * @param languageCode The [LanguageCode] for the desired results, default is [LanguageCode.DE]
+     * @param location The [LocationDto] describing the stop the request is about
+     * @param params Additional parameters to filter and control the included information
+     *
+     * @return [StopEventDeliveryDto] with the stop event results
+     */
+    suspend fun requestStopEvent(
+        languageCode: LanguageCode = LanguageCode.DE,
+        location: LocationDto,
+        params: StopEventParam? = null,
+    ): Result<StopEventDeliveryDto> {
+        return OjpKoinContext.koinApp.koin.get<RequestStopEvent>().invoke(
+            languageCode = languageCode,
+            location = location,
             params = params
         )
     }

@@ -5,6 +5,7 @@ import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
 import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
 import ch.opentransportdata.ojp.data.dto.response.delivery.AbstractDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.LocationInformationDeliveryDto
+import ch.opentransportdata.ojp.data.dto.response.delivery.StopEventDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripInfoDeliveryDto
 import ch.opentransportdata.ojp.data.dto.response.delivery.TripRefineDeliveryDto
@@ -44,10 +45,15 @@ internal data class ServiceDeliveryDto(
     @XmlElement(true)
     @XmlSerialName("OJPTripInfoDelivery", OJP_NAME_SPACE, "")
     val ojpTripInfoDelivery: TripInfoDeliveryDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("OJPStopEventDelivery", OJP_NAME_SPACE, "")
+    val ojpStopEventDelivery: StopEventDeliveryDto? = null,
 ) {
     val ojpDelivery: AbstractDeliveryDto?
         get() = ojpLocationInformationDelivery
             ?: ojpTripDelivery
             ?: ojpTripRefineDelivery
             ?: ojpTripInfoDelivery
+            ?: ojpStopEventDelivery
 }

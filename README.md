@@ -8,10 +8,8 @@ Available APIs:
 - [Location Information Request](https://opentransportdata.swiss/it/cookbook/ojplocationinformationrequest-ojp-2/)
 - [Trip Request](https://opentransportdata.swiss/en/cookbook/ojptriprequest/)
 - [Trip Info Request](https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp/ojptripinforequest/)
+- [Stop Event Request](https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp-landing-page/ojpstopeventrequest-2-0/)
 - Trip Refinement Request
-
-Coming soon:
-- [Stop Event Request](https://opentransportdata.swiss/en/cookbook/ojp-stopeventservice/)
 
 ## Requirements
 Compatible with Android 8+
@@ -164,6 +162,34 @@ requestTripInfo(
         includeService = true,
         includeTrackSections = true,
         includeSituationsContext = true
+    )
+)
+```
+
+#### Get stop events (departures/arrivals) for a stop
+```
+import ch.opentransportdata.ojp.OjpSdk
+
+requestStopEvent(
+    languageCode = LanguageCode.EN,
+    location = LocationDto(
+        placeReference = PlaceReferenceDto(
+            ref = "8507000",
+            stationName = NameDto(text = "Bern"),
+            position = null
+        )
+    ),
+    params = StopEventParam(
+        numberOfResults = 10,
+        stopEventType = StopEventType.DEPARTURE,
+        includePreviousCalls = false,
+        includeOnwardCalls = true,
+        includeOperatingDays = true,
+        useRealtimeData = RealtimeData.FULL,
+        modeFilter = ModeFilter(
+            ptMode = listOf(PtMode.RAIL),
+            exclude = false
+        )
     )
 )
 ```
