@@ -6,5 +6,7 @@ package ch.opentransportdata.ojp.domain.model
 data class LocationInformationParams(
     val types: List<PlaceTypeRestriction>,
     val numberOfResults: Int,
-    val ptModeIncluded: Boolean
+    val ptModeIncluded: Boolean,
+    val modeFilter: ModeFilter? = null,
+    val pointOfInterestFilter: PointOfInterestFilter? = null,
 )
