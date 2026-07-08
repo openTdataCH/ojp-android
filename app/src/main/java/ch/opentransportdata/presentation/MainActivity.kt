@@ -28,6 +28,7 @@ import ch.opentransportdata.ojp.data.dto.response.PlaceResultDto
 import androidx.navigation.NavHostController
 import ch.opentransportdata.presentation.feature.location.LirScreenComposable
 import ch.opentransportdata.presentation.feature.map.MapScreen
+import ch.opentransportdata.presentation.feature.map.SharedMobilityMapScreen
 import ch.opentransportdata.presentation.feature.result.TripResultScreen
 import ch.opentransportdata.presentation.feature.search.TripSearchScreen
 import ch.opentransportdata.presentation.feature.stopevent.StopEventResultScreen
@@ -54,7 +55,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun OjpDemoApp() {
-        val bottomNavigationItems = listOf(BottomNavItem.Lir, BottomNavItem.Tir, BottomNavItem.Ser)
+        val bottomNavigationItems = listOf(BottomNavItem.Lir, BottomNavItem.Tir, BottomNavItem.Ser, BottomNavItem.Map)
         OJPAndroidSDKTheme {
             val navController = rememberNavController()
             var selectedBottomNavItem by remember { mutableIntStateOf(0) }
@@ -93,6 +94,7 @@ class MainActivity : ComponentActivity() {
                     composable<BottomNavItem.Lir> { LirNavHost() }
                     composable<BottomNavItem.Tir> { TirNavHost() }
                     composable<BottomNavItem.Ser> { SerNavHost() }
+                    composable<BottomNavItem.Map> { SharedMobilityMapScreen() }
                 }
             }
         }
