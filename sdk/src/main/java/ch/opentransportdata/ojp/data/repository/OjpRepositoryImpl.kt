@@ -72,6 +72,32 @@ internal class OjpRepositoryImpl(
         }
     }
 
+    override suspend fun placeResultsFromRectangle(
+        languageCode: LanguageCode,
+        upperLeftLongitude: Double,
+        upperLeftLatitude: Double,
+        lowerRightLongitude: Double,
+        lowerRightLatitude: Double,
+        restrictions: LocationInformationParams
+    ): Result<List<PlaceResultDto>> {
+        return try {
+            val response = remoteDataSource.searchLocationByRectangle(
+                languageCode = languageCode,
+                upperLeftLongitude = upperLeftLongitude,
+                upperLeftLatitude = upperLeftLatitude,
+                lowerRightLongitude = lowerRightLongitude,
+                lowerRightLatitude = lowerRightLatitude,
+                restrictions = restrictions
+            ).ojpResponse
+            val delivery = response?.serviceDelivery?.ojpDelivery as? LocationInformationDeliveryDto
+            val result = delivery?.placeResults ?: emptyList()
+            Result.Success(result)
+        } catch (exception: Exception) {
+            val error = handleError(exception)
+            Result.Error(error)
+        }
+    }
+
     override suspend fun requestTrips(
         languageCode: LanguageCode,
         origin: PlaceReferenceDto,

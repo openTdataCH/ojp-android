@@ -21,4 +21,13 @@ internal interface RemoteLocationInformationDataSource {
         latitude: Double,
         restrictions: LocationInformationParams
     ): OjpDto
+
+    suspend fun searchLocationByRectangle(
+        languageCode: LanguageCode,
+        upperLeftLongitude: Double,
+        upperLeftLatitude: Double,
+        lowerRightLongitude: Double,
+        lowerRightLatitude: Double,
+        restrictions: LocationInformationParams
+    ): OjpDto
 }
