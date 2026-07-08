@@ -9,7 +9,7 @@ Available APIs:
 - [Trip Request](https://opentransportdata.swiss/en/cookbook/ojptriprequest/)
 - [Trip Info Request](https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp/ojptripinforequest/)
 - [Stop Event Request](https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp-landing-page/ojpstopeventrequest-2-0/)
-- Trip Refinement Request
+- [Trip Refinement Request](https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp-landing-page/ojptriprefinerequest-2-0/)
 
 ## Requirements
 Compatible with Android 8+
