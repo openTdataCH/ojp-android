@@ -138,13 +138,15 @@ fun SharedMobilityMapScreen(
         }
     }
 
-    state.events.forEach { event ->
-        when (event) {
-            is SharedMobilityMapViewModel.Event.ShowSnackBar -> coroutineScope.launch {
-                snackBarHostState.showSnackbar(message = event.message)
+    LaunchedEffect(state.events) {
+        state.events.forEach { event ->
+            when (event) {
+                is SharedMobilityMapViewModel.Event.ShowSnackBar -> coroutineScope.launch {
+                    snackBarHostState.showSnackbar(message = event.message)
+                }
             }
+            viewModel.eventHandled(event.id)
         }
-        viewModel.eventHandled(event.id)
     }
 }
 

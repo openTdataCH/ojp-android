@@ -261,26 +261,28 @@ fun TripResultScreen(
             }
         }
 
-        state.value.events.forEach { event ->
-            when (event) {
-                is TripResultViewModel.Event.ShowSnackBar -> {
-                    coroutineScope.launch { snackBarHostState.showSnackbar(message = event.message) }
-                }
+        LaunchedEffect(state.value.events) {
+            state.value.events.forEach { event ->
+                when (event) {
+                    is TripResultViewModel.Event.ShowSnackBar -> {
+                        coroutineScope.launch { snackBarHostState.showSnackbar(message = event.message) }
+                    }
 
-                is TripResultViewModel.Event.ScrollToFirstTripItem -> {
-                    coroutineScope.launch {
-                        val scrollItem = if (initialItemsLoaded) event.offset + 1 else 1
-                        try {
-                            listState.animateScrollToItem(index = scrollItem)
-                        } catch (e: Exception) {
-                            Log.d("TripResultScreen", "User is still dragging and that as higher priority")
-                            delay(2000) //delay the reset so it wont instantly load new items while still dragging
+                    is TripResultViewModel.Event.ScrollToFirstTripItem -> {
+                        coroutineScope.launch {
+                            val scrollItem = if (initialItemsLoaded) event.offset + 1 else 1
+                            try {
+                                listState.animateScrollToItem(index = scrollItem)
+                            } catch (e: Exception) {
+                                Log.d("TripResultScreen", "User is still dragging and that as higher priority")
+                                delay(2000) //delay the reset so it wont instantly load new items while still dragging
+                            }
+                            viewModel.resetPreviousItemsCounter()
                         }
-                        viewModel.resetPreviousItemsCounter()
                     }
                 }
+                viewModel.eventHandled(event.id)
             }
-            viewModel.eventHandled(event.id)
         }
     }
 
