@@ -388,7 +388,7 @@ private fun SharingCategory?.markerColor(): String {
 private const val STYLE_URL =
     "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.basemap.vt/style.json"
 private const val PROVIDER_INITIAL = "initial"
-private const val DEFAULT_ZOOM = 14.0
+private const val DEFAULT_ZOOM = 15.0
 private const val MIN_ZOOM = 1.0
 private const val MAX_ZOOM = 20.0
 private const val MIN_QUERY_ZOOM = 11.0

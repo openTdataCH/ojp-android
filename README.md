@@ -75,27 +75,27 @@ import ch.opentransportdata.ojp.OjpSdk
 
 requestLocationsFromRectangle(
     languageCode = LanguageCode.EN,
-    upperLeftLongitude = 7.415,
-    upperLeftLatitude = 46.970,
-    lowerRightLongitude = 7.480,
-    lowerRightLatitude = 46.926,
+    upperLeftLongitude = 7.431,
+    upperLeftLatitude = 46.945,
+    lowerRightLongitude = 7.446,
+    lowerRightLatitude = 46.950,
     restrictions = LocationInformationParams(
-        types = listOf(PlaceTypeRestriction.POI),
+        types = emptyList(),
         numberOfResults = 300,
-        ptModeIncluded = false,
-        pointOfInterestFilter = PointOfInterestFilter(
-            categories = listOf(
-                PointOfInterestCategory.sharing(SharingCategory.E_SCOOTER),
-                PointOfInterestCategory.sharing(SharingCategory.BIKE),
-                PointOfInterestCategory.sharing(SharingCategory.CAR),
-                PointOfInterestCategory.sharing(SharingCategory.CHARGING_STATION)
+        ptModeIncluded = true,
+        modeFilter = ModeFilter(
+            exclude = false,
+            personalModes = listOf(
+                PersonalMode.BICYCLE,
+                PersonalMode.SCOOTER,
+                PersonalMode.CAR
             )
         )
     )
 )
 ```
 
-The rectangle is defined by its upper left and lower right corners (WGS84) and is typically used to load points of interest (e.g. shared mobility vehicles) for the currently visible map region. Use `PointOfInterestFilter` to restrict the results to specific POI categories. Alternatively you can pass a `ModeFilter` with `personalModes` (e.g. `PersonalMode.BICYCLE`, `PersonalMode.SCOOTER`, `PersonalMode.CAR`).
+The rectangle is defined by its upper left and lower right corners (WGS84) and is typically used to load shared mobility points of interest (e.g. e-scooters, bikes, cars) for the currently visible map region. Filter the results with a `ModeFilter` on `personalModes`. Each returned `PointOfInterest` exposes its category via `sharingCategories`. A `PointOfInterestFilter` (with `PointOfInterestCategory` / OSM tags) can be passed as well.
 
 #### Get a list of trips
 ```

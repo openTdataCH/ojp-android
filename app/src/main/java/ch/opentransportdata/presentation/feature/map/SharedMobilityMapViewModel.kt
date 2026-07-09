@@ -5,9 +5,8 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
-import ch.opentransportdata.ojp.domain.model.PlaceTypeRestriction
-import ch.opentransportdata.ojp.domain.model.PointOfInterestCategory
-import ch.opentransportdata.ojp.domain.model.PointOfInterestFilter
+import ch.opentransportdata.ojp.domain.model.ModeFilter
+import ch.opentransportdata.ojp.domain.model.PersonalMode
 import ch.opentransportdata.ojp.domain.model.Result
 import ch.opentransportdata.ojp.domain.model.SharingCategory
 import ch.opentransportdata.ojp.domain.model.error.OjpError
@@ -62,11 +61,16 @@ class SharedMobilityMapViewModel : ViewModel() {
                 lowerRightLongitude = lowerRightLongitude,
                 lowerRightLatitude = lowerRightLatitude,
                 restrictions = LocationInformationParams(
-                    types = listOf(PlaceTypeRestriction.POI),
-                    numberOfResults = 100,
-                    ptModeIncluded = false,
-                    pointOfInterestFilter = PointOfInterestFilter(
-                        categories = SharingCategory.entries.map { PointOfInterestCategory.sharing(it) }
+                    types = emptyList(),
+                    numberOfResults = 300,
+                    ptModeIncluded = true,
+                    modeFilter = ModeFilter(
+                        exclude = false,
+                        personalModes = listOf(
+                            PersonalMode.BICYCLE,
+                            PersonalMode.SCOOTER,
+                            PersonalMode.CAR
+                        )
                     )
                 )
             )
@@ -77,13 +81,12 @@ class SharedMobilityMapViewModel : ViewModel() {
                         val place = placeResult.place ?: return@mapIndexedNotNull null
                         val position = place.position ?: return@mapIndexedNotNull null
                         val poi = place.pointOfInterest
-                        val name = poi?.name?.text ?: place.name?.text.orEmpty()
                         PoiMarker(
                             id = poi?.publicCode ?: "index_$index",
                             latitude = position.latitude,
                             longitude = position.longitude,
-                            name = name,
-                            category = poi?.sharingCategories?.firstOrNull() ?: classifyByName(name),
+                            name = poi?.name?.text ?: place.name?.text.orEmpty(),
+                            category = poi?.sharingCategories?.firstOrNull(),
                             additionalInformation = poi?.additionalInformation.orEmpty()
                         )
                     }
@@ -98,17 +101,6 @@ class SharedMobilityMapViewModel : ViewModel() {
                     state.update { it.copy(isLoading = false) }
                 }
             }
-        }
-    }
-
-    private fun classifyByName(name: String): SharingCategory? {
-        val value = name.lowercase(Locale.getDefault())
-        return when {
-            listOf("scooter", "trottinett").any { it in value } -> SharingCategory.E_SCOOTER
-            listOf("charg", "ladestation", "lade").any { it in value } -> SharingCategory.CHARGING_STATION
-            listOf("velo", "bike", "fahrrad", "zweirad", "cycle").any { it in value } -> SharingCategory.BIKE
-            listOf("car", "auto", "mobility", "sharing").any { it in value } -> SharingCategory.CAR
-            else -> null
         }
     }
 
