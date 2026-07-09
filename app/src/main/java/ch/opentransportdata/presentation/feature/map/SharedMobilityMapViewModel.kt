@@ -87,7 +87,6 @@ class SharedMobilityMapViewModel : ViewModel() {
                             additionalInformation = poi?.additionalInformation.orEmpty()
                         )
                     }
-                    Log.d(TAG, "Loaded ${result.data.size} place results -> ${markers.size} markers")
                     state.update { it.copy(pois = markers, isLoading = false) }
                 }
 
