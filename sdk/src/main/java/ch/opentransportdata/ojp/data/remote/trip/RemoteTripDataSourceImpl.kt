@@ -247,6 +247,7 @@ internal class RemoteTripDataSourceImpl(
             modeFilter = this.modeFilter?.let { filter ->
                 ModeFilterDto(
                     ptMode = filter.ptMode,
+                    personalModes = filter.personalModes,
                     exclude = filter.exclude,
                 )
             },

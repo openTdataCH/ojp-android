@@ -14,7 +14,6 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
  *
  * Either [ref] and [stationName] has to be set or [position].
  */
-//todo: normally should create all the reference objects
 @Parcelize
 @Serializable
 @XmlSerialName("PlaceRef", OJP_NAME_SPACE, "")
@@ -22,6 +21,12 @@ data class PlaceReferenceDto(
     @XmlElement(true)
     @XmlSerialName("StopPlaceRef", OJP_NAME_SPACE, "")
     val ref: String? = null,
+    @XmlElement(true)
+    @XmlSerialName("PointOfInterestRef", OJP_NAME_SPACE, "")
+    val pointOfInterestRef: String? = null,
+    @XmlElement(true)
+    @XmlSerialName("TopographicPlaceRef", OJP_NAME_SPACE, "")
+    val topographicPlaceRef: String? = null,
     @XmlElement(true)
     @XmlSerialName("Name", OJP_NAME_SPACE, "")
     val stationName: NameDto? = null,

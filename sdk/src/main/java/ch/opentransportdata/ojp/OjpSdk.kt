@@ -20,6 +20,7 @@ import ch.opentransportdata.ojp.domain.model.TripParams
 import ch.opentransportdata.ojp.domain.model.TripRefineParam
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromCoordinates
+import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromRectangle
 import ch.opentransportdata.ojp.domain.usecase.RequestLocationsFromSearchTerm
 import ch.opentransportdata.ojp.domain.usecase.RequestMockTrips
 import ch.opentransportdata.ojp.domain.usecase.RequestStopEvent
@@ -87,6 +88,40 @@ class OjpSdk(
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>> {
         return OjpKoinContext.koinApp.koin.get<RequestLocationsFromSearchTerm>().invoke(languageCode, term, restrictions)
+    }
+
+    /**
+     * Request a list of Place Results located within the given geographical rectangle (bounding
+     * box). This is typically used to load points of interest (e.g. shared mobility vehicles) for
+     * the currently visible map region.
+     *
+     * The rectangle is defined by its upper left and lower right corners.
+     *
+     * @param languageCode The [LanguageCode] for the desired results, default is [LanguageCode.DE]
+     * @param upperLeftLongitude The longitude of the upper left corner of the rectangle
+     * @param upperLeftLatitude The latitude of the upper left corner of the rectangle
+     * @param lowerRightLongitude The longitude of the lower right corner of the rectangle
+     * @param lowerRightLatitude The latitude of the lower right corner of the rectangle
+     * @param restrictions Restrictions that should be used for results (e.g. a [ch.opentransportdata.ojp.domain.model.PointOfInterestFilter])
+     * @return List of [PlaceResultDto] located within the given rectangle
+     */
+    suspend fun requestLocationsFromRectangle(
+        languageCode: LanguageCode = LanguageCode.DE,
+        upperLeftLongitude: Double,
+        upperLeftLatitude: Double,
+        lowerRightLongitude: Double,
+        lowerRightLatitude: Double,
+        restrictions: LocationInformationParams
+    ): Result<List<PlaceResultDto>> {
+        return OjpKoinContext.koinApp.koin.get<RequestLocationsFromRectangle>()
+            .invoke(
+                languageCode = languageCode,
+                upperLeftLongitude = upperLeftLongitude,
+                upperLeftLatitude = upperLeftLatitude,
+                lowerRightLongitude = lowerRightLongitude,
+                lowerRightLatitude = lowerRightLatitude,
+                restrictions = restrictions
+            )
     }
 
     /**

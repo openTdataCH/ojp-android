@@ -32,6 +32,20 @@ data class PointOfInterestDto(
     val nameSuffix: NameDto? = null,
 
     @XmlElement(true)
+    @XmlSerialName("PointOfInterestCategory", OJP_NAME_SPACE, "")
+    val pointOfInterestCategory: List<PointOfInterestCategoryDto>? = emptyList(),
+
+    @XmlElement(true)
+    @XmlSerialName("POIAdditionalInformation", OJP_NAME_SPACE, "")
+    val poiAdditionalInformation: PointOfInterestAdditionalInformationDto? = null,
+
+    @XmlElement(true)
     @XmlSerialName("TopographicPlaceRef", OJP_NAME_SPACE, "")
     val topographicPlaceRef: String? = null
-) : AbstractPlaceDto()
+) : AbstractPlaceDto() {
+
+    val additionalInformation: Map<String, String>
+        get() = poiAdditionalInformation?.additionalInformation
+            ?.associate { it.key to it.value }
+            ?: emptyMap()
+}

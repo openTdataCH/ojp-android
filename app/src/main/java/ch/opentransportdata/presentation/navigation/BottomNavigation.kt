@@ -3,6 +3,7 @@ package ch.opentransportdata.presentation.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DepartureBoard
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Contextual
@@ -30,5 +31,11 @@ sealed class BottomNavItem(@Contextual val icon: ImageVector, val label: String)
     data object Ser : BottomNavItem(
         icon = Icons.Default.DepartureBoard,
         label = "SER"
+    )
+
+    @Serializable
+    data object Map : BottomNavItem(
+        icon = Icons.Default.Map,
+        label = "Map"
     )
 }

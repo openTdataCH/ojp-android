@@ -121,15 +121,17 @@ fun StopEventResultScreen(
         }
     }
 
-    state.value.events.forEach { event ->
-        when (event) {
-            is StopEventResultViewModel.Event.ShowSnackBar -> {
-                coroutineScope.launch {
-                    snackBarHostState.showSnackbar(event.message)
+    LaunchedEffect(state.value.events) {
+        state.value.events.forEach { event ->
+            when (event) {
+                is StopEventResultViewModel.Event.ShowSnackBar -> {
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(event.message)
+                    }
                 }
             }
+            viewModel.eventHandled(event.id)
         }
-        viewModel.eventHandled(event.id)
     }
 }
 

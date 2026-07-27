@@ -33,6 +33,15 @@ internal interface OjpRepository {
         restrictions: LocationInformationParams
     ): Result<List<PlaceResultDto>>
 
+    suspend fun placeResultsFromRectangle(
+        languageCode: LanguageCode,
+        upperLeftLongitude: Double,
+        upperLeftLatitude: Double,
+        lowerRightLongitude: Double,
+        lowerRightLatitude: Double,
+        restrictions: LocationInformationParams
+    ): Result<List<PlaceResultDto>>
+
     suspend fun requestTrips(
         languageCode: LanguageCode,
         origin: PlaceReferenceDto,

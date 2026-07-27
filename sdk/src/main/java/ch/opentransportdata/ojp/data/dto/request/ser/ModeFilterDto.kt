@@ -1,6 +1,7 @@
 package ch.opentransportdata.ojp.data.dto.request.ser
 
 import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
+import ch.opentransportdata.ojp.domain.model.PersonalMode
 import ch.opentransportdata.ojp.domain.model.PtMode
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
@@ -16,6 +17,10 @@ internal data class ModeFilterDto(
     @XmlElement(true)
     @XmlSerialName("PtMode", OJP_NAME_SPACE, "")
     val ptMode: List<PtMode>? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("PersonalMode", OJP_NAME_SPACE, "")
+    val personalModes: List<PersonalMode>? = null,
 
     @XmlElement(true)
     @XmlSerialName("Exclude", OJP_NAME_SPACE, "")

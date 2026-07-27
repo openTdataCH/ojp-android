@@ -9,7 +9,7 @@ Available APIs:
 - [Trip Request](https://opentransportdata.swiss/en/cookbook/ojptriprequest/)
 - [Trip Info Request](https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp/ojptripinforequest/)
 - [Stop Event Request](https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp-landing-page/ojpstopeventrequest-2-0/)
-- Trip Refinement Request
+- [Trip Refinement Request](https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp-landing-page/ojptriprefinerequest-2-0/)
 
 ## Requirements
 Compatible with Android 8+
@@ -68,6 +68,34 @@ requestLocationsFromCoordinates(
     )
 )      
 ```
+
+#### Get a list of sharing POIs within a bounding box (rectangle)
+```
+import ch.opentransportdata.ojp.OjpSdk
+
+requestLocationsFromRectangle(
+    languageCode = LanguageCode.EN,
+    upperLeftLongitude = 7.431,
+    upperLeftLatitude = 46.945,
+    lowerRightLongitude = 7.446,
+    lowerRightLatitude = 46.950,
+    restrictions = LocationInformationParams(
+        types = emptyList(),
+        numberOfResults = 300,
+        ptModeIncluded = true,
+        modeFilter = ModeFilter(
+            exclude = false,
+            personalModes = listOf(
+                PersonalMode.BICYCLE,
+                PersonalMode.SCOOTER,
+                PersonalMode.CAR
+            )
+        )
+    )
+)
+```
+
+The rectangle is defined by its upper left and lower right corners (WGS84) and is typically used to load shared mobility points of interest (e.g. e-scooters, bikes, cars) for the currently visible map region. Filter the results with a `ModeFilter` on `personalModes`. Each returned `PointOfInterest` exposes its category via `sharingCategories`. A `PointOfInterestFilter` (with `PointOfInterestCategory` / OSM tags) can be passed as well.
 
 #### Get a list of trips
 ```

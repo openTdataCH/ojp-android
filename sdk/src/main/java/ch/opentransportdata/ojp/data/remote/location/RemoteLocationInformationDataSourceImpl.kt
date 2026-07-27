@@ -5,6 +5,9 @@ import ch.opentransportdata.ojp.data.dto.request.OjpRequestDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestContextDto
 import ch.opentransportdata.ojp.data.dto.request.ServiceRequestDto
 import ch.opentransportdata.ojp.data.dto.request.lir.*
+import ch.opentransportdata.ojp.data.dto.request.ser.ModeFilterDto
+import ch.opentransportdata.ojp.data.dto.response.place.OsmTagDto
+import ch.opentransportdata.ojp.data.dto.response.place.PointOfInterestCategoryDto
 import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
@@ -71,6 +74,36 @@ internal class RemoteLocationInformationDataSourceImpl(
         return@withContext ojpService.serviceRequest(url, request)
     }
 
+    override suspend fun searchLocationByRectangle(
+        languageCode: LanguageCode,
+        upperLeftLongitude: Double,
+        upperLeftLatitude: Double,
+        lowerRightLongitude: Double,
+        lowerRightLatitude: Double,
+        restrictions: LocationInformationParams
+    ): OjpDto = withContext(Dispatchers.IO) {
+        val requestTime = LocalDateTime.now()
+
+        val request = createRequest(
+            languageCode = languageCode,
+            requestTime = requestTime,
+            locationInformationRequest = LocationInformationRequestDto(
+                requestTimestamp = requestTime,
+                initialInput = InitialInputDto(
+                    geoRestriction = GeoRestrictionDto(
+                        rectangle = RectangleDto(
+                            upperLeft = PointDto(longitude = upperLeftLongitude, latitude = upperLeftLatitude),
+                            lowerRight = PointDto(longitude = lowerRightLongitude, latitude = lowerRightLatitude)
+                        )
+                    )
+                ),
+                restrictions = createRestrictions(restrictions)
+            )
+        )
+
+        return@withContext ojpService.serviceRequest(url, request)
+    }
+
     private fun createRequest(
         languageCode: LanguageCode,
         requestTime: LocalDateTime,
@@ -93,6 +126,24 @@ internal class RemoteLocationInformationDataSourceImpl(
     private fun createRestrictions(restrictions: LocationInformationParams): RestrictionsDto {
         return RestrictionsDto(
             types = restrictions.types,
+            modeFilter = restrictions.modeFilter?.let { filter ->
+                ModeFilterDto(
+                    ptMode = filter.ptMode,
+                    personalModes = filter.personalModes,
+                    exclude = filter.exclude
+                )
+            },
+            pointOfInterestFilter = restrictions.pointOfInterestFilter?.let { filter ->
+                PointOfInterestFilterDto(
+                    pointOfInterestCategory = filter.categories.map { category ->
+                        PointOfInterestCategoryDto(
+                            osmTag = category.osmTag?.let { OsmTagDto(tag = it.tag, value = it.value) },
+                            pointOfInterestClassification = category.classification
+                        )
+                    }.ifEmpty { null },
+                    exclude = filter.exclude
+                )
+            },
             numberOfResults = restrictions.numberOfResults,
             ptModeIncluded = restrictions.ptModeIncluded
         )

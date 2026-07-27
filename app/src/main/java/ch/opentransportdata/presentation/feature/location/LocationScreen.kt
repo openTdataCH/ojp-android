@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -75,15 +76,17 @@ fun LirScreenComposable(
         }
     }
 
-    state.value.events.forEach { event ->
-        when (event) {
-            is LocationViewModel.Event.ShowSnackBar -> {
-                coroutineScope.launch {
-                    snackBarHostState.showSnackbar(message = event.message)
+    LaunchedEffect(state.value.events) {
+        state.value.events.forEach { event ->
+            when (event) {
+                is LocationViewModel.Event.ShowSnackBar -> {
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(message = event.message)
+                    }
                 }
             }
+            viewModel.eventHandled(event.id)
         }
-        viewModel.eventHandled(event.id)
     }
 
 }

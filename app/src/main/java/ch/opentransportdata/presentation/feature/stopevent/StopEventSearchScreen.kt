@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -66,20 +67,22 @@ fun StopEventSearchScreen(
         }
     }
 
-    state.value.events.forEach { event ->
-        when (event) {
-            is StopEventSearchViewModel.Event.ShowSnackBar -> {
-                coroutineScope.launch {
-                    snackBarHostState.showSnackbar(message = event.message)
+    LaunchedEffect(state.value.events) {
+        state.value.events.forEach { event ->
+            when (event) {
+                is StopEventSearchViewModel.Event.ShowSnackBar -> {
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(message = event.message)
+                    }
+                }
+
+                is StopEventSearchViewModel.Event.OpenResults -> {
+                    navHostController.navigate(StopEventResults(stop = event.location))
+                    viewModel.resetData()
                 }
             }
-
-            is StopEventSearchViewModel.Event.OpenResults -> {
-                navHostController.navigate(StopEventResults(stop = event.location))
-                viewModel.resetData()
-            }
+            viewModel.eventHandled(event.id)
         }
-        viewModel.eventHandled(event.id)
     }
 }
 
