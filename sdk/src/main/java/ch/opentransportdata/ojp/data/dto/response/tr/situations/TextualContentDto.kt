@@ -72,7 +72,7 @@ data class ReasonContentDto(
 data class ConsequenceContentDto(
     @XmlElement(true)
     @XmlSerialName("ConsequenceText", SIRI_NAME_SPACE, SIRI_PREFIX)
-    val consequenceText: String? = null
+    val consequenceText: List<String>? = null
 ) : Parcelable
 
 @Parcelize
