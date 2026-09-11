@@ -61,5 +61,10 @@ data class PtSituationDto(
 
     @XmlElement(true)
     @XmlSerialName("PublishingActions", SIRI_NAME_SPACE, SIRI_PREFIX)
-    val publishingActions: PublishingActionsDto? = null
+    val publishingActions: PublishingActionsDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("Planned", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val planned: Boolean? = false,
+
 ) : Parcelable
