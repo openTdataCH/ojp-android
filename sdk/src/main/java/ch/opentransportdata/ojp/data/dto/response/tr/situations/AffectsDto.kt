@@ -17,5 +17,9 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 data class AffectsDto(
     @XmlElement(true)
     @XmlSerialName("StopPoints", SIRI_NAME_SPACE, SIRI_PREFIX)
-    val stopPoints: StopPointsDto? = null
+    val stopPoints: StopPointsDto? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("StopPlaces", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val stopPlaces: StopPlacesDto? = null
 ) : Parcelable
