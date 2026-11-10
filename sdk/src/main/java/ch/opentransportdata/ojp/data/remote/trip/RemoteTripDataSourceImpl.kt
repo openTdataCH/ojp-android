@@ -249,6 +249,7 @@ internal class RemoteTripDataSourceImpl(
                     ptMode = filter.ptMode,
                     personalModes = filter.personalModes,
                     exclude = filter.exclude,
+                    railSubmode = filter.railSubmode?.serializedName(),
                 )
             },
             lineFilter = this.lineFilter?.let { filter ->

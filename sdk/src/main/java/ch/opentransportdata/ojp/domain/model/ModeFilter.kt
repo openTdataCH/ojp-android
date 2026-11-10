@@ -11,4 +11,5 @@ data class ModeFilter(
     val ptMode: List<PtMode>? = null,
     val personalModes: List<PersonalMode>? = null,
     val exclude: Boolean? = null,
+    val railSubmode: RailSubmode? = null,
 ) : Parcelable

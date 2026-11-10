@@ -12,6 +12,7 @@ import ch.opentransportdata.ojp.data.remote.OjpService
 import ch.opentransportdata.ojp.domain.model.LanguageCode
 import ch.opentransportdata.ojp.domain.model.LocationInformationParams
 import ch.opentransportdata.ojp.domain.model.shortName
+import ch.opentransportdata.ojp.domain.model.serializedName
 import ch.opentransportdata.ojp.domain.usecase.Initializer
 import ch.opentransportdata.ojp.utils.GeoLocationUtil.initWithGeoLocationAndBoxSize
 import kotlinx.coroutines.Dispatchers
@@ -130,7 +131,8 @@ internal class RemoteLocationInformationDataSourceImpl(
                 ModeFilterDto(
                     ptMode = filter.ptMode,
                     personalModes = filter.personalModes,
-                    exclude = filter.exclude
+                    exclude = filter.exclude,
+                    railSubmode = filter.railSubmode?.serializedName(),
                 )
             },
             pointOfInterestFilter = restrictions.pointOfInterestFilter?.let { filter ->
