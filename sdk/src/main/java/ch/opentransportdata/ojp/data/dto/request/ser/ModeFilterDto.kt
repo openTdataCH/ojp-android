@@ -1,6 +1,8 @@
 package ch.opentransportdata.ojp.data.dto.request.ser
 
 import ch.opentransportdata.ojp.data.dto.OJP_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_NAME_SPACE
+import ch.opentransportdata.ojp.data.dto.SIRI_PREFIX
 import ch.opentransportdata.ojp.domain.model.PersonalMode
 import ch.opentransportdata.ojp.domain.model.PtMode
 import kotlinx.serialization.Serializable
@@ -25,4 +27,8 @@ internal data class ModeFilterDto(
     @XmlElement(true)
     @XmlSerialName("Exclude", OJP_NAME_SPACE, "")
     val exclude: Boolean? = null,
+
+    @XmlElement(true)
+    @XmlSerialName("RailSubmode", SIRI_NAME_SPACE, SIRI_PREFIX)
+    val railSubmode: String? = null,
 )
